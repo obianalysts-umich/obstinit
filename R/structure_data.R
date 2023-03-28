@@ -16,7 +16,7 @@ structure_data = function(df,
                           date_gran = c(year_mon, year_qtr),
                           num_var,
                           den_var) {
-  ctrl_cohort = df %>% filter(flg_complete == 1) %>% mutate(
+  ctrl_cohort = df %>% filter(flg_complete == 1, birth_year != 2019) %>% mutate(
     date_lub = lubridate::dmy_hms({
       {
         date_var
