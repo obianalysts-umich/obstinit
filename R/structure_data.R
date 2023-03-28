@@ -1,12 +1,4 @@
 
-# library(tidyverse)
-# library(zoo)
-# library(magrittr)
-# library(qicharts2)
-# library(qcc)
-# library(data.table)
-# library(OBI.color)
-
 #' Structure OBI data for plotting control charts
 #'
 #' @param df A data frame
@@ -14,6 +6,9 @@
 #' @param date_gran The granularity of dates we want to use for our control chart; monthly or quarterly
 #' @param num_var The variable to be summarized as the numerator of the rate we're interested in calculating - should be binary 0 1
 #' @param den_var The variable to be summarized as the denominator of the rate we're interested in calculating - should be binary 0 1
+#'
+#' @export
+#' @rdname structure_data
 
 structure_data = function(df,
                           date_var,
@@ -60,9 +55,11 @@ structure_data = function(df,
   )
 
   ## get CL
+
   CL_pre = summary(limits_pre)[, 12]
 
   ## rep values
+
   CL = rep(CL_pre, nrow(ctrl_cohort))
 
   ## bind to original
@@ -79,19 +76,23 @@ structure_data = function(df,
   )
 
   # get limits
+
   limits = qc_limits$limits
   rownames(limits) = c(1:nrow(limits))
 
   # bind limits to main dataset
+
   ctrl_cohort_fin = cbind(ctrl_w_CL, limits)
 
   # apply shift violations to prior rows ------------------------------------
+
   ctrl_cohort_fin = ctrl_cohort_fin %>% mutate(
     x3_sig_viol = ifelse(rate > UCL, 1, 0),
     n_pts_oneside_CL = ifelse(rate > CL, 1, 0)
   )
 
   ## make data.table and assign values for shift violations
+
   ctrl_cohort_fin = setDT(ctrl_cohort_fin)
   ctrl_cohort_fin[, rleid_pts := sum(n_pts_oneside_CL), by = rleid(n_pts_oneside_CL)]
 
