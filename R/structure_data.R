@@ -6,7 +6,8 @@
 #' @param date_gran The granularity of dates we want to use for our control chart; monthly or quarterly
 #' @param num_var The variable to be summarized as the numerator of the rate we're interested in calculating - should be binary 0 1
 #' @param den_var The variable to be summarized as the denominator of the rate we're interested in calculating - should be binary 0 1
-#'
+#' @import tidyverse
+#' @import data.table
 #' @export
 #' @rdname structure_data
 
@@ -45,7 +46,7 @@ structure_data = function(df,
 
   # qicharts2 package to get CL frozen @ 12 mo ------------------------------
 
-  limits_pre = qic(
+  limits_pre = qicharts2::qic(
     num,
     n = denom,
     x = date_var,
@@ -67,7 +68,7 @@ structure_data = function(df,
 
   # use qcc package to get limits -------------------------------------------
 
-  qc_limits = qcc(
+  qc_limits = qcc::qcc(
     type = "p",
     data = ctrl_w_CL$num,
     sizes = ctrl_w_CL$denom,
