@@ -13,5 +13,5 @@ devtools::install_github("obianalysts-umich/OBI.color")
 
 ## Status
 
-* 3/28/2023 - `structure_data` function is usable. Install package 
+* 3/28/2023 - `structure_data` function is usable. 
 * 3/23/2023 - under construction
