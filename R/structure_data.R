@@ -94,8 +94,8 @@ structure_data = function(df,
 
   ## make data.table and assign values for shift violations
 
-  ctrl_cohort_fin = setDT(ctrl_cohort_fin)
-  ctrl_cohort_fin[, rleid_pts := sum(n_pts_oneside_CL), by = rleid(n_pts_oneside_CL)]
+  ctrl_cohort_fin = data.table::setDT(ctrl_cohort_fin)
+  ctrl_cohort_fin[, rleid_pts := sum(n_pts_oneside_CL), by = data.table::rleid(n_pts_oneside_CL)]
 
   # final data manipulation -------------------------------------------------
   ## apply violations to N prior data points, note if point is above UCL or
