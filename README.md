@@ -24,3 +24,18 @@ The `plot_ctrl_chart()` function takes the data frame constructed by `structure_
 * 3/29/2023 - `plot_ctrl_chart()` function is usable
 * 3/28/2023 - `structure_data()` function is usable. 
 * 3/23/2023 - under construction
+
+## Example workflow
+
+```r
+library(obstinit)
+library(tidyverse)
+
+obi = data.table::fread("obi_filepath")
+
+obi_cohort = obi %>% mutate(infant_dob_dt = lubridate::dmy_hms(infant_dob_dt)) %>% filter(flg_complete == 1, birth_year > 2019, locked == 1)
+
+ctrl_cohort = obi_cohort %>% structure_data(infant_dob_dt, year_mon, overall_dystocia_compliance_num, overall_dystocia_den_all, increase_is_bad = F)
+
+ctrl_chart = ctrl_cohort %>% plot_ctrl_chart()
+```
