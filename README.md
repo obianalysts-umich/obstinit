@@ -2,13 +2,13 @@
 
 ## Background
 
-This is the "draft" space for creating our OBI data processing package.
+This is the "draft" space for our OBI "tools" package.
 
 Install the development version directly from GitHub:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("obianalysts-umich/OBI.color")
+devtools::install_github("obianalysts-umich/obstinit")
 ```
 
 ## Status
