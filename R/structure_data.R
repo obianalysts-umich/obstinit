@@ -21,13 +21,16 @@ structure_data = function(df,
                           long = T,
                           increase_is_bad = T) {
   ctrl_cohort = df %>% filter(flg_complete == 1, birth_year != 2019) %>% mutate(
-    date_lub = lubridate::dmy_hms({
+    year_mon = zoo::as.yearmon({
       {
         date_var
       }
     }),
-    year_mon = zoo::as.yearmon(date_lub),
-    year_qtr = zoo::as.yearqtr(date_lub),
+    year_qtr = zoo::as.yearqtr({
+      {
+        date_var
+      }
+    }),
     date_var = {
       {
         date_gran
