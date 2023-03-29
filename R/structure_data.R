@@ -66,6 +66,7 @@ structure_data = function(df,
   CL = rep(CL_pre, nrow(ctrl_cohort))
 
   ## bind to original
+
   ctrl_w_CL = cbind(ctrl_cohort, CL)
 
   # use qcc package to get limits -------------------------------------------
@@ -125,7 +126,7 @@ structure_data = function(df,
     )
   ) %>% select(-c(x3_sig_viol:above_or_below))
 
-# pivot longer if long = yes ----------------------------------------------
+# pivot longer if long = true ---------------------------------------------
 
   if (long){
     ctrl_dt_long = ctrl_cohort_alerts %>% select(
