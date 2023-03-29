@@ -7,6 +7,7 @@
 #' @param num_var The variable to be summarized as the numerator of the rate we're interested in calculating - should be binary 0 1
 #' @param den_var The variable to be summarized as the denominator of the rate we're interested in calculating - should be binary 0 1
 #' @param long Whether to pivot the data to long format - default is T as this is the data structure needed for ggplot2
+#' @param increase_is_bad If TRUE, this is a trend that would ideally be decreasing over time; if FALSE, ideally increasing
 #' @import tidyverse
 #' @import data.table
 #' @export
@@ -17,7 +18,8 @@ structure_data = function(df,
                           date_gran = c(year_mon, year_qtr),
                           num_var,
                           den_var,
-                          long = T) {
+                          long = T,
+                          increase_is_bad = T) {
   ctrl_cohort = df %>% filter(flg_complete == 1, birth_year != 2019) %>% mutate(
     date_lub = lubridate::dmy_hms({
       {
@@ -118,35 +120,36 @@ structure_data = function(df,
       violations == 4 ~ "Shift",
       TRUE ~ "No alert"
     ),
-    p_chart_color = case_when(
-      p_chart_alert == "Above UCL" ~ OBI.color::prim_pink(),
-      p_chart_alert == "Below LCL" ~ OBI.color::prim_teal(),
-      p_chart_alert == "Shift" ~ "#f8b434",
-      p_chart_alert == "No alert" ~ OBI.color::prim_dark_blue()
-    )
+    p_chart_color =
+      case_when(
+        increase_is_bad & p_chart_alert == "Above UCL" ~ "#b64083",
+        increase_is_bad == F &
+          p_chart_alert == "Above UCL" ~ OBI.color::prim_teal(),
+        increase_is_bad &
+          p_chart_alert == "Below LCL" ~ OBI.color::prim_teal(),
+        increase_is_bad == F &
+          p_chart_alert == "Below LCL" ~ "#b64083",
+        p_chart_alert == "Shift" ~ "#f8b434",
+        TRUE ~ OBI.color::prim_dark_blue()
+      ),
   ) %>% select(-c(x3_sig_viol:above_or_below))
 
-# pivot longer if long = true ---------------------------------------------
+  # pivot longer if long = true ---------------------------------------------
 
-  if (long){
-    ctrl_dt_long = ctrl_cohort_alerts %>% select(
-      -c(
-        num,
-        denom
-      )
-    ) %>% pivot_longer(
-      cols = c(rate, CL, LCL, UCL),
-      names_to = "ctrl_chart_part",
-      values_to = "ctrl_chart_value"
-    ) %>% mutate(
-      ctrl_chart_part = factor(
-        ctrl_chart_part,
-        levels = c("UCL", "CL", "LCL", "rate"),
-        ordered = T
-      )
-    )
+  if (long) {
+    ctrl_dt_long = ctrl_cohort_alerts %>% select(-c(num,
+                                                    denom)) %>% pivot_longer(
+                                                      cols = c(rate, CL, LCL, UCL),
+                                                      names_to = "ctrl_chart_part",
+                                                      values_to = "ctrl_chart_value"
+                                                    ) %>% mutate(ctrl_chart_part = factor(
+                                                      ctrl_chart_part,
+                                                      levels = c("UCL", "CL", "LCL", "rate"),
+                                                      ordered = T
+                                                    ))
   }
 
-  else (return(ctrl_cohort_alerts))
+  else
+    (return(ctrl_cohort_alerts))
 
 }

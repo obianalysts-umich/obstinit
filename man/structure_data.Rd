@@ -10,7 +10,8 @@ structure_data(
   date_gran = c(year_mon, year_qtr),
   num_var,
   den_var,
-  long = F
+  long = T,
+  increase_is_bad = T
 )
 }
 \arguments{
@@ -24,7 +25,9 @@ structure_data(
 
 \item{den_var}{The variable to be summarized as the denominator of the rate we're interested in calculating - should be binary 0 1}
 
-\item{long}{Whether to pivot the data long - note, data must be in long format for ggplot2}
+\item{long}{Whether to pivot the data to long format - default is T as this is the data structure needed for ggplot2}
+
+\item{increase_is_bad}{If TRUE, this is a trend that would ideally be decreasing over time; if FALSE, ideally increasing}
 }
 \description{
 Structure OBI data for plotting control charts
