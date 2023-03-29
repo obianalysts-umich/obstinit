@@ -9,7 +9,8 @@ structure_data(
   date_var,
   date_gran = c(year_mon, year_qtr),
   num_var,
-  den_var
+  den_var,
+  long = F
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ structure_data(
 \item{num_var}{The variable to be summarized as the numerator of the rate we're interested in calculating - should be binary 0 1}
 
 \item{den_var}{The variable to be summarized as the denominator of the rate we're interested in calculating - should be binary 0 1}
+
+\item{long}{Whether to pivot the data long - note, data must be in long format for ggplot2}
 }
 \description{
 Structure OBI data for plotting control charts

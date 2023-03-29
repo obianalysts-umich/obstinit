@@ -6,6 +6,7 @@
 #' @param date_gran The granularity of dates we want to use for our control chart; monthly or quarterly
 #' @param num_var The variable to be summarized as the numerator of the rate we're interested in calculating - should be binary 0 1
 #' @param den_var The variable to be summarized as the denominator of the rate we're interested in calculating - should be binary 0 1
+#' @param long Whether to pivot the data long - note, data must be in long format for ggplot2
 #' @import tidyverse
 #' @import data.table
 #' @export
@@ -15,7 +16,8 @@ structure_data = function(df,
                           date_var,
                           date_gran = c(year_mon, year_qtr),
                           num_var,
-                          den_var) {
+                          den_var,
+                          long = F) {
   ctrl_cohort = df %>% filter(flg_complete == 1, birth_year != 2019) %>% mutate(
     date_lub = lubridate::dmy_hms({
       {
@@ -122,5 +124,28 @@ structure_data = function(df,
       p_chart_alert == "No alert" ~ OBI.color::prim_dark_blue()
     )
   ) %>% select(-c(x3_sig_viol:above_or_below))
+
+# pivot longer if long = yes ----------------------------------------------
+
+  if (long){
+    ctrl_dt_long = ctrl_cohort_alerts %>% select(
+      -c(
+        num,
+        denom
+      )
+    ) %>% pivot_longer(
+      cols = c(rate, CL, LCL, UCL),
+      names_to = "ctrl_chart_part",
+      values_to = "ctrl_chart_value"
+    ) %>% mutate(
+      ctrl_chart_part = factor(
+        ctrl_chart_part,
+        levels = c("UCL", "CL", "LCL", "rate"),
+        ordered = T
+      )
+    )
+  }
+
+  else (return(ctrl_cohort_alerts))
 
 }
