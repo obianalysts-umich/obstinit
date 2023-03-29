@@ -20,7 +20,7 @@ structure_data = function(df,
                           den_var,
                           long = T,
                           increase_is_bad = T) {
-  ctrl_cohort = df %>% filter(flg_complete == 1, birth_year != 2019) %>% mutate(
+  ctrl_cohort = df %>% filter(flg_complete == 1) %>% mutate(
     year_mon = zoo::as.yearmon({
       {
         date_var
