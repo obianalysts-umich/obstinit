@@ -10,10 +10,15 @@
 
 plot_ctrl_chart = function(df) {
   # first get LCL and UCL for area ------------------------------------------
+  area_LCL = df %>%
+    filter(ctrl_chart_part == "LCL") %>%
+    select(date_var, ctrl_chart_value) %>%
+    rename(LCL_long = ctrl_chart_value)
 
-  area_LCL = df %>% filter(ctrl_chart_part == "LCL") %>% select(date_var, ctrl_chart_value) %>% rename(LCL_long = ctrl_chart_value)
-
-  area_UCL = df %>% filter(ctrl_chart_part == "UCL") %>% select(date_var, ctrl_chart_value) %>% rename(UCL_long = ctrl_chart_value)
+  area_UCL <- df %>%
+    filter(ctrl_chart_part == "UCL") %>%
+    select(date_var, ctrl_chart_value) %>%
+    rename(UCL_long = ctrl_chart_value)
 
   ## join LCL and UCL together
 
@@ -23,9 +28,9 @@ plot_ctrl_chart = function(df) {
 
   dt_for_plot = left_join(df, area_limits, by = c("date_var"))
 
-# plot --------------------------------------------------------------------
+  # plot --------------------------------------------------------------------
 
-  control_chart = ggplot(aes(x = date_var), data = dt_for_plot) +
+  control_chart <- ggplot(aes(x = date_var), data = dt_for_plot) +
     geom_ribbon(
       aes(x = date_var, ymin = LCL_long, ymax = UCL_long),
       data = dt_for_plot %>% filter(ctrl_chart_part %in% c("LCL", "UCL")),

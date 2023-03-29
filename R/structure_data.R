@@ -91,7 +91,8 @@ structure_data = function(df,
   ## apply violations to N prior data points, note if point is above UCL or
   ## below LCL, apply colors for ggplot
 
-  ctrl_cohort_alerts = ctrl_cohort_fin %>% mutate(
+  ctrl_cohort_alerts <- ctrl_cohort_fin %>%
+  mutate(
     violations = ifelse(x3_sig_viol == 1, 1, ifelse(rleid_pts >= 8, 4, 0)),
     above_or_below = ifelse(
       violations == 1,
@@ -117,7 +118,8 @@ structure_data = function(df,
         p_chart_alert == "Shift" ~ "#f8b434",
         TRUE ~ OBI.color::prim_dark_blue()
       ),
-  ) %>% select(-c(x3_sig_viol:above_or_below))
+  ) %>%
+  select(-c(x3_sig_viol:above_or_below))
 
   # pivot longer if long = true ---------------------------------------------
 
