@@ -17,7 +17,8 @@ structure_data(
 \arguments{
 \item{df}{A data frame}
 
-\item{date_var}{The date variable to be used for grouping; usually infant_dob_dt}
+\item{date_var}{The date variable to be used for grouping; usually infant_dob_dt;
+Make use this variable is in a date format, for example: lubridate::dmy_hms(infant_dob_dt)}
 
 \item{date_gran}{The granularity of dates we want to use for our control chart; monthly or quarterly}
 

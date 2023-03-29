@@ -2,7 +2,8 @@
 #' Structure OBI data for plotting control charts
 #'
 #' @param df A data frame
-#' @param date_var The date variable to be used for grouping; usually infant_dob_dt
+#' @param date_var The date variable to be used for grouping; usually infant_dob_dt;
+#'                 Make use this variable is in a date format, for example: lubridate::dmy_hms(infant_dob_dt)
 #' @param date_gran The granularity of dates we want to use for our control chart; monthly or quarterly
 #' @param num_var The variable to be summarized as the numerator of the rate we're interested in calculating - should be binary 0 1
 #' @param den_var The variable to be summarized as the denominator of the rate we're interested in calculating - should be binary 0 1
@@ -20,36 +21,22 @@ structure_data = function(df,
                           den_var,
                           long = T,
                           increase_is_bad = T) {
-  ctrl_cohort = df %>% filter(flg_complete == 1) %>% mutate(
-    year_mon = zoo::as.yearmon({
-      {
-        date_var
-      }
-    }),
-    year_qtr = zoo::as.yearqtr({
-      {
-        date_var
-      }
-    }),
-    date_var = {
-      {
-        date_gran
-      }
-    }
-  ) %>% group_by(date_var) %>% summarize(
-    num = sum({
-      {
-        num_var
-      }
-    }),
-    denom = sum({
-      {
-        den_var
-      }
-    }),
-    rate = num / denom,
-    .groups = "drop"
-  )
+
+  # outcome rates by time table--------------------------------------------------
+
+  ctrl_cohort = df %>%
+    mutate(
+      year_mon = zoo::as.yearmon({{date_var}}),
+      year_qtr = zoo::as.yearqtr({{date_var}}),
+      date_var = {{date_gran}}
+    ) %>%
+    group_by(date_var) %>%
+    summarize(
+      num = sum({{num_var}}),
+      denom = sum({{den_var}}),
+      rate = num / denom,
+      .groups = "drop"
+    )
 
   # qicharts2 package to get CL frozen @ 12 mo ------------------------------
 
@@ -62,19 +49,15 @@ structure_data = function(df,
     chart    = 'p'
   )
 
-  ## get CL
+  ## get CL values
 
-  CL_pre = summary(limits_pre)[, 12]
-
-  ## rep values
-
-  CL = rep(CL_pre, nrow(ctrl_cohort))
+  CL = summary(limits_pre)[, 12]
 
   ## bind to original
 
-  ctrl_w_CL = cbind(ctrl_cohort, CL)
+  ctrl_w_CL = ctrl_cohort %>% mutate(CL = as.numeric(CL))
 
-  # use qcc package to get limits -------------------------------------------
+  # use qcc package to get limits (for the gray area) -------------------------------------------
 
   qc_limits = qcc::qcc(
     type = "p",
@@ -95,10 +78,9 @@ structure_data = function(df,
 
   # apply shift violations to prior rows ------------------------------------
 
-  ctrl_cohort_fin = ctrl_cohort_fin %>% mutate(
-    x3_sig_viol = ifelse(rate > UCL, 1, 0),
-    n_pts_oneside_CL = ifelse(rate > CL, 1, 0)
-  )
+  ctrl_cohort_fin = ctrl_cohort_fin %>%
+    mutate(x3_sig_viol = ifelse(rate > UCL, 1, 0),
+           n_pts_oneside_CL = ifelse(rate > CL, 1, 0))
 
   ## make data.table and assign values for shift violations
 
@@ -140,16 +122,20 @@ structure_data = function(df,
   # pivot longer if long = true ---------------------------------------------
 
   if (long) {
-    ctrl_dt_long = ctrl_cohort_alerts %>% select(-c(num,
-                                                    denom)) %>% pivot_longer(
-                                                      cols = c(rate, CL, LCL, UCL),
-                                                      names_to = "ctrl_chart_part",
-                                                      values_to = "ctrl_chart_value"
-                                                    ) %>% mutate(ctrl_chart_part = factor(
-                                                      ctrl_chart_part,
-                                                      levels = c("UCL", "CL", "LCL", "rate"),
-                                                      ordered = T
-                                                    ))
+    ctrl_dt_long = ctrl_cohort_alerts %>%
+      select(-c(num, denom)) %>%
+      pivot_longer(
+        cols = c(rate, CL, LCL, UCL),
+        names_to = "ctrl_chart_part",
+        values_to = "ctrl_chart_value"
+      ) %>%
+      mutate(ctrl_chart_part = factor(
+        ctrl_chart_part,
+        levels = c("UCL", "CL", "LCL", "rate"),
+        ordered = T
+      ))
+
+    ctrl_dt_long
   }
 
   else
