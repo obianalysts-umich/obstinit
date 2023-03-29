@@ -6,7 +6,7 @@
 #' @param date_gran The granularity of dates we want to use for our control chart; monthly or quarterly
 #' @param num_var The variable to be summarized as the numerator of the rate we're interested in calculating - should be binary 0 1
 #' @param den_var The variable to be summarized as the denominator of the rate we're interested in calculating - should be binary 0 1
-#' @param long Whether to pivot the data long - note, data must be in long format for ggplot2
+#' @param long Whether to pivot the data to long format - default is T as this is the data structure needed for ggplot2
 #' @import tidyverse
 #' @import data.table
 #' @export
@@ -17,7 +17,7 @@ structure_data = function(df,
                           date_gran = c(year_mon, year_qtr),
                           num_var,
                           den_var,
-                          long = F) {
+                          long = T) {
   ctrl_cohort = df %>% filter(flg_complete == 1, birth_year != 2019) %>% mutate(
     date_lub = lubridate::dmy_hms({
       {
