@@ -4,9 +4,10 @@
 #' @param df A data frame
 #' @param date_var The date variable to be used for grouping; usually infant_dob_dt;
 #'                 Make use this variable is in a date format, for example: lubridate::dmy_hms(infant_dob_dt)
-#' @param date_gran The granularity of dates we want to use for our control chart; monthly or quarterly
+#' @param date_gran The granularity of dates we want to use for our control chart; year_mon or year_qtr
 #' @param num_var The variable to be summarized as the numerator of the rate we're interested in calculating - should be binary 0 1
 #' @param den_var The variable to be summarized as the denominator of the rate we're interested in calculating - should be binary 0 1
+#' @param nsigmas a numeric value specifying the number of sigmas to use for computing control limits.
 #' @param long Whether to pivot the data to long format - default is T as this is the data structure needed for ggplot2
 #' @param increase_is_bad If TRUE, this is a trend that would ideally be decreasing over time; if FALSE, ideally increasing
 #' @import tidyverse
@@ -16,9 +17,10 @@
 
 structure_data = function(df,
                           date_var,
-                          date_gran = c(year_mon, year_qtr),
+                          date_gran = year_mon,
                           num_var,
                           den_var,
+                          nsigmas = 3,
                           long = T,
                           increase_is_bad = T) {
 
@@ -64,7 +66,8 @@ structure_data = function(df,
     data = ctrl_w_CL$num,
     sizes = ctrl_w_CL$denom,
     center = ctrl_w_CL$CL,
-    plot = F
+    plot = F,
+    nsigmas = nsigmas
   )
 
   # get limits
@@ -93,20 +96,20 @@ structure_data = function(df,
 
   ctrl_cohort_alerts <- ctrl_cohort_fin %>%
   mutate(
-    violations = ifelse(x3_sig_viol == 1, 1, ifelse(rleid_pts >= 8, 4, 0)),
+    violations = ifelse(x3_sig_viol == 1, 1, 0),
     above_or_below = ifelse(
       violations == 1,
       ifelse(rate > UCL, "Above", "Below"),
       as.character(NA)
     ),
+    shift_line = ifelse(rleid_pts >= 8, 1, 0),
     p_chart_alert = case_when(
       violations == 1 & above_or_below == "Above" ~ "Above UCL",
       violations == 1 &
         above_or_below == "Below" ~ "Below LCL",
-      violations == 4 ~ "Shift",
       TRUE ~ "No alert"
     ),
-    p_chart_color =
+    point_color =
       case_when(
         increase_is_bad & p_chart_alert == "Above UCL" ~ "#b64083",
         increase_is_bad == F &
@@ -115,10 +118,9 @@ structure_data = function(df,
           p_chart_alert == "Below LCL" ~ OBI.color::prim_teal(),
         increase_is_bad == F &
           p_chart_alert == "Below LCL" ~ "#b64083",
-        p_chart_alert == "Shift" ~ "#f8b434",
         TRUE ~ OBI.color::prim_dark_blue()
-      ),
-  ) %>%
+      )
+  )  %>%
   select(-c(x3_sig_viol:above_or_below))
 
   # pivot longer if long = true ---------------------------------------------
