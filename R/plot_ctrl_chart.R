@@ -9,7 +9,6 @@
 
 
 plot_ctrl_chart = function(df) {
-  
   # get LCL and UCL for area
   area_LCL = df %>% filter(ctrl_chart_part == "LCL") %>% select(date_var, ctrl_chart_value) %>% rename(LCL_long = ctrl_chart_value)
   
@@ -20,17 +19,19 @@ plot_ctrl_chart = function(df) {
   
   ## join LCL and UCL to original
   dt_for_plot = left_join(df, area_limits, by = c("date_var"))
-
+  
   # assign color based on value
-  line_color <- c("No alert" = OBI.color::prim_dark_blue(), "Shift" = "#f8b434")
-
+  line_color <-
+    c("No alert" = OBI.color::prim_dark_blue(),
+      "Shift" = "#f8b434")
+  
   dot_color_df <- dt_for_plot %>%
     distinct(p_chart_alert, point_color)
   dot_color <- dot_color_df$point_color
   names(dot_color) <- dot_color_df$p_chart_alert
-
+  
   # plot --------------------------------------------------------------------
-
+  
   ggplot(aes(x = date_var),
          data = dt_for_plot) +
     geom_ribbon(
