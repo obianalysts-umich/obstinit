@@ -32,35 +32,40 @@ plot_ctrl_chart = function(df) {
   # plot --------------------------------------------------------------------
 
   ggplot(aes(x = date_var),
-           data = dt_for_plot) +
+         data = dt_for_plot) +
     geom_ribbon(
       aes(ymin = LCL_long, ymax = UCL_long),
-      data = dt_for_plot %>% filter(ctrl_chart_part %in% c("LCL", "UCL"),
-      fill = "#CAC4CE",
-      alpha = 0.3
-    ) +
-    geom_line(
-      aes(y = CL),
-      color = OBI.color::prim_dark_blue(),
-      linetype = "dashed",
-      linewidth = 0.75,
-      alpha = 0.5
-    ) +
-    geom_line(
-      aes(y = rate, color = as.factor(shift_line), group = 1),
-      linewidth = 0.8
-    ) +
-    scale_colour_manual(values = line_color,
-                        guide = guide_legend(NULL)) +
-    geom_point(
-      aes(y = rate, fill = p_chart_alert),
-      size = 3,
-      shape = 21,
-      stroke = 0
-    ) +
-    scale_fill_manual(values=dot_color,
-                      guide = guide_legend("Control chart alert", reverse = T)) +
-    theme_bw() +
-    scale_y_continuous(labels = scales::percent)
-
+      data = dt_for_plot %>% filter(
+        ctrl_chart_part %in% c("LCL", "UCL"),
+        fill = "#CAC4CE",
+        alpha = 0.3
+      ) +
+        geom_line(
+          aes(y = CL),
+          color = OBI.color::prim_dark_blue(),
+          linetype = "dashed",
+          linewidth = 0.75,
+          alpha = 0.5
+        ) +
+        geom_line(aes(
+          y = rate,
+          color = as.factor(shift_line),
+          group = 1
+        ),
+        linewidth = 0.8) +
+        scale_colour_manual(values = line_color,
+                            guide = guide_legend(NULL)) +
+        geom_point(
+          aes(y = rate, fill = p_chart_alert),
+          size = 3,
+          shape = 21,
+          stroke = 0
+        ) +
+        scale_fill_manual(
+          values = dot_color,
+          guide = guide_legend("Control chart alert", reverse = T)
+        ) +
+        theme_bw() +
+        scale_y_continuous(labels = scales::percent)
+      
 }
