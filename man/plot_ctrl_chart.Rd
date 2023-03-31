@@ -7,7 +7,7 @@
 plot_ctrl_chart(df)
 }
 \arguments{
-\item{df}{A data frame in long format, created by the structure_data function}
+\item{df}{A data frame in wide format, created by the structure_data function}
 }
 \description{
 Plot control chart

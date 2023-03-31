@@ -11,7 +11,7 @@ structure_data(
   num_var,
   den_var,
   nsigmas = 3,
-  long = T,
+  long = F,
   increase_is_bad = T
 )
 }

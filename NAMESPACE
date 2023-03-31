@@ -2,3 +2,4 @@
 
 export(plot_ctrl_chart)
 export(structure_data)
+import(data.table)
