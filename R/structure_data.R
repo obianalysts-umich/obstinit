@@ -102,7 +102,7 @@ structure_data = function(df,
       ifelse(rate > UCL, "Above", "Below"),
       as.character(NA)
     ),
-    shift_line = ifelse(rleid_pts >= 8, 1, 0),
+    shift_line = ifelse(rleid_pts >= 8, "Shift", "No alert"),
     p_chart_alert = case_when(
       violations == 1 & above_or_below == "Above" ~ "Above UCL",
       violations == 1 &

@@ -11,7 +11,7 @@
 plot_ctrl_chart = function(df) {
 
   # assign collor based on value
-  line_color <- c("0" = OBI.color::prim_dark_blue(), "1" = "#f8b434")
+  line_color <- c("No alert" = OBI.color::prim_dark_blue(), "Shift" = "#f8b434")
 
   dot_color_df <- df %>%
     distinct(p_chart_alert, point_color)
@@ -20,13 +20,12 @@ plot_ctrl_chart = function(df) {
 
   # plot --------------------------------------------------------------------
 
-  # control_chart <-
-    ggplot(aes(x = date_var),
+  ggplot(aes(x = date_var),
            data = df) +
     geom_ribbon(
       aes(ymin = LCL, ymax = UCL),
       fill = "#CAC4CE",
-      alpha = 0.4
+      alpha = 0.3
     ) +
     geom_line(
       aes(y = CL),
@@ -40,7 +39,7 @@ plot_ctrl_chart = function(df) {
       linewidth = 0.8
     ) +
     scale_colour_manual(values = line_color,
-                        guide = guide_legend("")) +
+                        guide = guide_legend(NULL)) +
     geom_point(
       aes(y = rate, fill = p_chart_alert),
       size = 3,
@@ -51,7 +50,5 @@ plot_ctrl_chart = function(df) {
                       guide = guide_legend("Control chart alert", reverse = T)) +
     theme_bw() +
     scale_y_continuous(labels = scales::percent)
-
-  return(control_chart)
 
 }
