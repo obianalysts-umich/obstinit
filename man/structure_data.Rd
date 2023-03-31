@@ -7,9 +7,9 @@
 structure_data(
   df,
   date_var,
-  date_gran = year_mon,
   num_var,
   den_var,
+  date_gran = year_mon,
   nsigmas = 3,
   long = F,
   increase_is_bad = T
@@ -21,11 +21,11 @@ structure_data(
 \item{date_var}{The date variable to be used for grouping; usually infant_dob_dt;
 Make use this variable is in a date format, for example: lubridate::dmy_hms(infant_dob_dt)}
 
-\item{date_gran}{The granularity of dates we want to use for our control chart; year_mon or year_qtr}
-
 \item{num_var}{The variable to be summarized as the numerator of the rate we're interested in calculating - should be binary 0 1}
 
 \item{den_var}{The variable to be summarized as the denominator of the rate we're interested in calculating - should be binary 0 1}
+
+\item{date_gran}{The granularity of dates we want to use for our control chart; year_mon or year_qtr}
 
 \item{nsigmas}{a numeric value specifying the number of sigmas to use for computing control limits.}
 
