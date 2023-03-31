@@ -1,8 +1,7 @@
 
 #' Plot control chart
 #'
-#' @param df A data frame in long format, created by the structure_data function
-#' @import tidyverse
+#' @param df A data frame in wide format, created by the structure_data function
 #' @import data.table
 #' @export
 #' @rdname plot_ctrl_chart

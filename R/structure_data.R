@@ -10,7 +10,6 @@
 #' @param nsigmas a numeric value specifying the number of sigmas to use for computing control limits.
 #' @param long Whether to pivot the data to long format - default is T as this is the data structure needed for ggplot2
 #' @param increase_is_bad If TRUE, this is a trend that would ideally be decreasing over time; if FALSE, ideally increasing
-#' @import tidyverse
 #' @import data.table
 #' @export
 #' @rdname structure_data
@@ -21,7 +20,7 @@ structure_data = function(df,
                           num_var,
                           den_var,
                           nsigmas = 3,
-                          long = T,
+                          long = F,
                           increase_is_bad = T) {
 
   # outcome rates by time table--------------------------------------------------

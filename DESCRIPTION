@@ -15,4 +15,5 @@ Imports:
     ggplot2,
     qcc,
     qicharts2,
-    tidyr
+    tidyr,
+    data.table
