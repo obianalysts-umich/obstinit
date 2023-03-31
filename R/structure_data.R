@@ -15,9 +15,9 @@
 
 structure_data = function(df,
                           date_var,
-                          date_gran = year_mon,
                           num_var,
                           den_var,
+                          date_gran = year_mon,
                           nsigmas = 3,
                           long = F,
                           increase_is_bad = T) {
