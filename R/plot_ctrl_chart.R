@@ -9,11 +9,22 @@
 
 
 plot_ctrl_chart = function(df) {
+  
+  # get LCL and UCL for area
+  area_LCL = df %>% filter(ctrl_chart_part == "LCL") %>% select(date_var, ctrl_chart_value) %>% rename(LCL_long = ctrl_chart_value)
+  
+  area_UCL = df %>% filter(ctrl_chart_part == "UCL") %>% select(date_var, ctrl_chart_value) %>% rename(UCL_long = ctrl_chart_value)
+  
+  ## join LCL and UCL together
+  area_limits = left_join(area_LCL, area_UCL, by = c("date_var"))
+  
+  ## join LCL and UCL to original
+  dt_for_plot = left_join(df, area_limits, by = c("date_var"))
 
-  # assign collor based on value
+  # assign color based on value
   line_color <- c("No alert" = OBI.color::prim_dark_blue(), "Shift" = "#f8b434")
 
-  dot_color_df <- df %>%
+  dot_color_df <- dt_for_plot %>%
     distinct(p_chart_alert, point_color)
   dot_color <- dot_color_df$point_color
   names(dot_color) <- dot_color_df$p_chart_alert
@@ -21,9 +32,10 @@ plot_ctrl_chart = function(df) {
   # plot --------------------------------------------------------------------
 
   ggplot(aes(x = date_var),
-           data = df) +
+           data = dt_for_plot) +
     geom_ribbon(
-      aes(ymin = LCL, ymax = UCL),
+      aes(ymin = LCL_long, ymax = UCL_long),
+      data = dt_for_plot %>% filter(ctrl_chart_part %in% c("LCL", "UCL"),
       fill = "#CAC4CE",
       alpha = 0.3
     ) +
