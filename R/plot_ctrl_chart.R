@@ -4,6 +4,7 @@
 #' @param df A data frame in wide format, created by the structure_data function
 #' @param increase_is_bad If TRUE, this is a trend that would ideally be decreasing over time; if FALSE, ideally increasing
 #' @import data.table
+#' @importFrom ggforce geom_link2
 #' @export
 #' @rdname plot_ctrl_chart
 
