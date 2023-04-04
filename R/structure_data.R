@@ -123,7 +123,7 @@ structure_data = function(df,
                            p_chart_alert == "Below UCL" ~ -2,
                            p_chart_alert == "Shift" ~ 1,
                            TRUE ~ 0)
-  ))  
+  )  
   # %>%
   # select(-c(x3_sig_viol:above_or_below))
 
