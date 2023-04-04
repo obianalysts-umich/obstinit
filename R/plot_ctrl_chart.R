@@ -35,7 +35,7 @@ plot_ctrl_chart = function(df, increase_is_bad = T) {
     OBI.color::prim_teal()
   })
   
-  line_values = c(unique(df$line_value))
+  line_values = c(as.numeric(unique(df$line_value)))
   
   # plot --------------------------------------------------------------------
   
