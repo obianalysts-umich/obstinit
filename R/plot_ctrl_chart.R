@@ -36,7 +36,7 @@ plot_ctrl_chart = function(df, increase_is_bad = T) {
     OBI.color::prim_teal()
   })
   
-  line_values = c(as.numeric(unique(df$line_value)))
+  line_values = c(unique(df$line_value))
   
   # plot --------------------------------------------------------------------
   
@@ -61,7 +61,7 @@ plot_ctrl_chart = function(df, increase_is_bad = T) {
     scale_fill_identity(guide = guide_legend("Control chart alert"),
                         labels = levels(factor(df$p_chart_alert))) +
     geom_link2(aes(y = rate, color = line_value), linewidth = 0.8) +
-    scale_color_gradientn(colors = line_color_pal, values = line_values) +
+    scale_color_gradientn(colors = line_color_pal, values = scales::rescale(line_values)) +
     theme_bw() +
     scale_y_continuous(labels = scales::percent)
   
