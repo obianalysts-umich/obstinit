@@ -122,9 +122,9 @@ structure_data = function(df,
     line_value = case_when(p_chart_alert == "Above UCL" ~ 2,
                            p_chart_alert == "Below UCL" ~ -2,
                            p_chart_alert == "Shift" ~ 1,
-                           TRUE ~ 0))
-  # )  %>%
-  # select(-c(x3_sig_viol:above_or_below))
+                           TRUE ~ 0)
+  )  %>%
+  select(-c(x3_sig_viol:above_or_below))
 
   # pivot longer if long = true ---------------------------------------------
 
