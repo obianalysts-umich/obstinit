@@ -12,8 +12,11 @@ plot_ctrl_chart = function(df, increase_is_bad = T) {
   
   # assign line color based on value
   
-  line_color_pal = c(if (increase_is_bad &
-                         any(df$p_chart_alert == "Below UCL")) {
+  line_color_pal = c(if (any(df$p_chart_alert == "No alert")) {
+    OBI.color::prim_dark_blue()
+  },
+  if (increase_is_bad &
+      any(df$p_chart_alert == "Below UCL")) {
     OBI.color::prim_teal()
   },
   if (increase_is_bad == F &
@@ -30,9 +33,6 @@ plot_ctrl_chart = function(df, increase_is_bad = T) {
   if (increase_is_bad == F &
       any(df$p_chart_alert == "Below UCL")) {
     OBI.color::prim_teal()
-  },
-  if (any(df$p_chart_alert == "No alert")) {
-    OBI.color::prim_dark_blue()
   })
   
   # plot --------------------------------------------------------------------
