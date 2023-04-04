@@ -100,11 +100,12 @@ structure_data = function(df,
       ifelse(rate > UCL, "Above", "Below"),
       as.character(NA)
     ),
-    shift_line = ifelse(rleid_pts >= 8, "Shift", "No alert"),
+    # shift_line = ifelse(rleid_pts >= 8, "Shift", "No alert"),
     p_chart_alert = case_when(
       violations == 1 & above_or_below == "Above" ~ "Above UCL",
       violations == 1 &
         above_or_below == "Below" ~ "Below LCL",
+      violations == 4 ~ "Shift",
       TRUE ~ "No alert"
     ),
     point_color =
@@ -116,8 +117,13 @@ structure_data = function(df,
           p_chart_alert == "Below LCL" ~ OBI.color::prim_teal(),
         increase_is_bad == F &
           p_chart_alert == "Below LCL" ~ "#b64083",
+        p_chart_alert == "Shift" ~ "#f8b434",
         TRUE ~ OBI.color::prim_dark_blue()
-      )
+      ),
+    line_value = case_when(p_chart_alert == "Above UCL" ~ 2,
+                           p_chart_alert == "Below UCL" ~ -2,
+                           p_chart_alert == "Shift" ~ 1,
+                           TRUE ~ 0)
   )  %>%
   select(-c(x3_sig_viol:above_or_below))
 
