@@ -4,10 +4,12 @@
 \alias{plot_ctrl_chart}
 \title{Plot control chart}
 \usage{
-plot_ctrl_chart(df)
+plot_ctrl_chart(df, increase_is_bad = T)
 }
 \arguments{
 \item{df}{A data frame in wide format, created by the structure_data function}
+
+\item{increase_is_bad}{If TRUE, this is a trend that would ideally be decreasing over time; if FALSE, ideally increasing}
 }
 \description{
 Plot control chart
