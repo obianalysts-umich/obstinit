@@ -58,7 +58,7 @@ plot_ctrl_chart = function(df, increase_is_bad = T) {
     scale_fill_identity(guide = guide_legend("Control chart alert", reverse = T),
                         labels = levels(factor(df$p_chart_alert))) +
     geom_link2(aes(y = rate, color = line_value), linewidth = 0.8) +
-    scale_color_gradientn(colors = line_color_pal, guide = "none") +
+    scale_color_gradientn(colors = line_color_pal, values = c(unique(df$line_value)), guide = "none") +
     theme_bw() +
     scale_y_continuous(labels = scales::percent)
   
