@@ -2,6 +2,8 @@
 library(obstinit)
 library(ggforce)
 
+source("C:/repos/Semi_annual_meetings/spring_2023/code/thea/data_processing.R")
+
 ctrl_df = obi_cohort %>% structure_data(infant_dob_dt, cesarean, birth) %>% mutate(test_alert = ifelse(
   p_chart_alert == "Above UCL",
   "Above UCL",
@@ -13,21 +15,10 @@ ctrl_df = obi_cohort %>% structure_data(infant_dob_dt, cesarean, birth) %>% muta
                             test_alert == "Shift" ~ "#f8b434",
                             TRUE ~ OBI.color::prim_dark_blue()))
 
-                                                                                   
-                                                                                   
-ctrl_chart = ctrl_df %>% plot_ctrl_chart() +
-  #scale_color_gradient(low = OBI.color::prim_med_blue(), high = "red")
-  scale_color_steps2(low = OBI.color::prim_dark_blue(),
-                     mid = "#f8b434",
-                     high = OBI.color::prim_pink())
-
-ctrl_chart
 
 test = ggplot(aes(x = date_var), data = ctrl_df) +
   geom_link2(aes(y = rate, color = text_color), linewidth = 1) +
-  scale_color_gradient2(low = OBI.color::prim_dark_blue(),
-                        mid = "#f8b434",
-                        high = OBI.color::prim_pink()) +
+  scale_color_gradientn(colors = c(OBI.color::prim_dark_blue(), "#f8b434", OBI.color::prim_pink())) +
   geom_point(aes(y = rate, fill = point_color_2), size = 3, shape = 21, stroke = 0) + 
   scale_fill_identity() +
   theme_bw()
