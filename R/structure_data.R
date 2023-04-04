@@ -93,39 +93,39 @@ structure_data = function(df,
   ## below LCL, apply colors for ggplot
 
   ctrl_cohort_alerts <- ctrl_cohort_fin %>%
-  mutate(
-    violations = ifelse(x3_sig_viol == 1, 1, ifelse(rleid_pts >= 8, 4, 0)),
-    above_or_below = ifelse(
-      violations == 1,
-      ifelse(rate > UCL, "Above", "Below"),
-      as.character(NA)
-    ),
-    p_chart_alert = case_when(
-      violations == 1 & above_or_below == "Above" ~ "Above UCL",
-      violations == 1 &
-        above_or_below == "Below" ~ "Below LCL",
-      violations == 4 ~ "Shift",
-      TRUE ~ "No alert"
-    ),
-    point_color =
-      case_when(
-        increase_is_bad & p_chart_alert == "Above UCL" ~ "#b64083",
-        increase_is_bad == F &
-          p_chart_alert == "Above UCL" ~ OBI.color::prim_teal(),
-        increase_is_bad &
-          p_chart_alert == "Below LCL" ~ OBI.color::prim_teal(),
-        increase_is_bad == F &
-          p_chart_alert == "Below LCL" ~ "#b64083",
-        p_chart_alert == "Shift" ~ "#f8b434",
-        TRUE ~ OBI.color::prim_dark_blue()
+    mutate(
+      violations = ifelse(x3_sig_viol == 1, 1, ifelse(rleid_pts >= 8, 4, 0)),
+      above_or_below = ifelse(
+        violations == 1,
+        ifelse(rate > UCL, "Above", "Below"),
+        as.character(NA)
       ),
-    line_value = case_when(p_chart_alert == "Above UCL" ~ 2,
-                           p_chart_alert == "Below UCL" ~ -2,
-                           p_chart_alert == "Shift" ~ 1,
-                           TRUE ~ 0)
-  )  
-  # %>%
-  # select(-c(x3_sig_viol:above_or_below))
+      p_chart_alert = case_when(
+        violations == 1 & above_or_below == "Above" ~ "Above UCL",
+        violations == 1 &
+          above_or_below == "Below" ~ "Below LCL",
+        violations == 4 ~ "Shift",
+        TRUE ~ "No alert"
+      ),
+      point_color =
+        case_when(
+          increase_is_bad & p_chart_alert == "Above UCL" ~ "#b64083",
+          increase_is_bad == F &
+            p_chart_alert == "Above UCL" ~ OBI.color::prim_teal(),
+          increase_is_bad &
+            p_chart_alert == "Below LCL" ~ OBI.color::prim_teal(),
+          increase_is_bad == F &
+            p_chart_alert == "Below LCL" ~ "#b64083",
+          p_chart_alert == "Shift" ~ "#f8b434",
+          TRUE ~ OBI.color::prim_dark_blue()
+        ),
+      line_value = case_when(
+        p_chart_alert == "Above UCL" ~ 2,
+        p_chart_alert == "Below UCL" ~ -2,
+        p_chart_alert == "Shift" ~ 1,
+        TRUE ~ 0
+      )
+    ) %>% select(-c(x3_sig_viol:above_or_below))
 
   # pivot longer if long = true ---------------------------------------------
 

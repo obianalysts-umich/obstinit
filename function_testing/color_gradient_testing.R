@@ -1,10 +1,13 @@
 
 library(obstinit)
 library(ggforce)
+library(tidyverse)
 
 source("C:/repos/Semi_annual_meetings/spring_2023/code/thea/data_processing.R")
 
-ctrl_df = obi_cohort %>% structure_data(infant_dob_dt, cesarean, birth) %>% mutate(test_alert = ifelse(
+ctrl_df = obi_cohort %>% structure_data(infant_dob_dt, cesarean, birth) 
+
+ctrl_df_test = ctrl_df %>% mutate(test_alert = ifelse(
   p_chart_alert == "Above UCL",
   "Above UCL",
   ifelse(shift_line == "Shift", "Shift", "No alert")),
@@ -26,4 +29,5 @@ test = ggplot(aes(x = date_var), data = ctrl_df) +
   test
 
   ggsave(test, filename = "C:/Users/Althea Bourdeau/Desktop/images/geom_link_test.png")
+  
   
