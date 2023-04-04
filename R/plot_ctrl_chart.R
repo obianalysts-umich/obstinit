@@ -35,15 +35,6 @@ plot_ctrl_chart = function(df, increase_is_bad = T) {
     OBI.color::prim_dark_blue()
   })
   
-  # line_color <-
-  #   c("No alert" = OBI.color::prim_dark_blue(),
-  #     "Shift" = "#f8b434")
-  
-  # dot_color_df <- df %>%
-  #   distinct(p_chart_alert, point_color)
-  # dot_color <- dot_color_df$point_color
-  # names(dot_color) <- dot_color_df$p_chart_alert
-  
   # plot --------------------------------------------------------------------
   
   ggplot(aes(x = date_var),
@@ -58,14 +49,6 @@ plot_ctrl_chart = function(df, increase_is_bad = T) {
       linewidth = 0.75,
       alpha = 0.5
     ) +
-    # geom_line(aes(
-    #   y = rate,
-    #   color = as.factor(shift_line),
-    #   group = 1
-    # ),
-    #linewidth = 0.8) +
-    # scale_colour_manual(values = line_color,
-    #                     guide = guide_legend(NULL)) +
     geom_point(
       aes(y = rate, fill = point_color),
       size = 3,
@@ -75,7 +58,7 @@ plot_ctrl_chart = function(df, increase_is_bad = T) {
     scale_fill_identity(guide = guide_legend("Control chart alert", reverse = T),
                         labels = levels(factor(df$p_chart_alert))) +
     geom_link2(aes(y = rate, color = line_value), linewidth = 0.8) +
-    scale_color_gradientn(colors = line_color_pal) +
+    scale_color_gradientn(colors = line_color_pal, guide = "none") +
     theme_bw() +
     scale_y_continuous(labels = scales::percent)
   
