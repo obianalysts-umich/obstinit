@@ -94,7 +94,7 @@ structure_data = function(df,
 
   ctrl_cohort_alerts <- ctrl_cohort_fin %>%
   mutate(
-    violations = ifelse(x3_sig_viol == 1, 1, 0),
+    violations = ifelse(x3_sig_viol == 1, 1, ifelse(rleid_pts >= 8, 4, 0)),
     above_or_below = ifelse(
       violations == 1,
       ifelse(rate > UCL, "Above", "Below"),
