@@ -32,7 +32,7 @@ plot_ctrl_chart = function(df, increase_is_bad = T) {
     "#b64083"
   },
   if (increase_is_bad == F &
-      any(df$p_chart_alert == "Below UCL")) {
+      any(df$p_chart_alert == "Above UCL")) {
     OBI.color::prim_teal()
   })
   
