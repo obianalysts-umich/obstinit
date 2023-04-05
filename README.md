@@ -21,7 +21,8 @@ The `plot_ctrl_chart()` function takes the data frame constructed by `structure_
 
 ## Status
 
-* 3/29/2023 - `plot_ctrl_chart()` function is usable
+* 4/5/2023 - Added color gradient and new OBI colors to `plot_ctrl_chart()`. Note that there is still some debugging that needs to be done, primarily in regards to the color legend which is often incorrect.
+* 3/29/2023 - `plot_ctrl_chart()` function is usable.
 * 3/28/2023 - `structure_data()` function is usable. 
 * 3/23/2023 - under construction
 
