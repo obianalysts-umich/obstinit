@@ -63,7 +63,7 @@ plot_ctrl_chart = function(df, increase_is_bad = T) {
     theme_bw() +
     scale_y_continuous(labels = scales::percent)
   
-    if (length(line_values == 1)) {
+    if (length(line_values) == 1) {
       plot_1 +
       geom_line(aes(y = rate, color = point_color), linewidth = 0.8) +
         scale_color_identity(guide = "none")
