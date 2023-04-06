@@ -40,7 +40,7 @@ plot_ctrl_chart = function(df, increase_is_bad = T) {
   
   # plot --------------------------------------------------------------------
   
-  ggplot(aes(x = date_var),
+  plot_1 = ggplot(aes(x = date_var),
          data = df) +
     geom_ribbon(aes(ymin = LCL, ymax = UCL),
                 fill = "#CAC4CE",
@@ -61,12 +61,15 @@ plot_ctrl_chart = function(df, increase_is_bad = T) {
     scale_fill_identity(guide = guide_legend("Control chart alert"),
                         labels = levels(factor(df$p_chart_alert))) +
     theme_bw() +
-    scale_y_continuous(labels = scales::percent) +
+    scale_y_continuous(labels = scales::percent)
+  
     if (length(line_values == 1)) {
+      plot_1 +
       geom_line(aes(y = rate, color = point_color), linewidth = 0.8) +
         scale_color_identity(guide = "none")
     }
   else{
+    plot_1 +
     geom_link2(aes(y = rate, color = line_value), linewidth = 0.8) +
       scale_color_gradientn(
         colors = line_color_pal,
