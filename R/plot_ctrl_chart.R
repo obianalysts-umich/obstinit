@@ -38,6 +38,11 @@ plot_ctrl_chart = function(df, increase_is_bad = T) {
   
   line_values = c(unique(df$line_value))
   
+  # rep values if there is only one alert for ctrl chart gradient
+  
+  if(length(line_values) == 1){line_values = rep(line_values, 2)
+                               line_color_pal = rep(line_color_pal, 2)}
+  
   # plot --------------------------------------------------------------------
   
   ggplot(aes(x = date_var),
