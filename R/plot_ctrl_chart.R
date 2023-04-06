@@ -42,6 +42,7 @@ plot_ctrl_chart = function(df, increase_is_bad = T) {
   
   if(length(line_values) == 1){line_values = rep(line_values, 2)
                                line_color_pal = rep(line_color_pal, 2)}
+  else{line_values = scales::rescale(line_values)}
   
   # plot --------------------------------------------------------------------
   
@@ -66,7 +67,7 @@ plot_ctrl_chart = function(df, increase_is_bad = T) {
     scale_fill_identity(guide = guide_legend("Control chart alert"),
                         labels = levels(factor(df$p_chart_alert))) +
     geom_link2(aes(y = rate, color = line_value), linewidth = 0.8) +
-    scale_color_gradientn(colors = line_color_pal, values = scales::rescale(line_values), guide = "none") +
+    scale_color_gradientn(colors = line_color_pal, values = line_values, guide = "none") +
     theme_bw() +
     scale_y_continuous(labels = scales::percent)
   
