@@ -38,6 +38,10 @@ plot_ctrl_chart = function(df, increase_is_bad = T) {
   
   line_values = c(unique(df$line_value))
   
+  # sort value for line color assignment
+  # make sure if violation happened before shift, color assignments are correct
+  line_values_sort = line_values[order(line_values)]
+  
   # plot --------------------------------------------------------------------
   
   plot_1 = ggplot(aes(x = date_var),
@@ -73,7 +77,8 @@ plot_ctrl_chart = function(df, increase_is_bad = T) {
     geom_link2(aes(y = rate, color = line_value), linewidth = 0.8) +
       scale_color_gradientn(
         colors = line_color_pal,
-        values = scales::rescale(line_values),
+        # values = scales::rescale(line_values),
+        values = scales::rescale(line_values_sort),
         guide = "none"
       )
   }
