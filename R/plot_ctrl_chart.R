@@ -3,13 +3,14 @@
 #'
 #' @param df A data frame in wide format, created by the structure_data function
 #' @param increase_is_bad If TRUE, this is a trend that would ideally be decreasing over time; if FALSE, ideally increasing
+#' @param plot_center_line If TRUE, the center line will be added to the plot
 #' @import data.table
 #' @importFrom ggforce geom_link2
 #' @export
 #' @rdname plot_ctrl_chart
 
 
-plot_ctrl_chart = function(df, increase_is_bad = T) {
+plot_ctrl_chart = function(df, plot_center_line = T, increase_is_bad = T) {
   
   # assign line color based on value
   
@@ -49,13 +50,6 @@ plot_ctrl_chart = function(df, increase_is_bad = T) {
     geom_ribbon(aes(ymin = LCL, ymax = UCL),
                 fill = "#CAC4CE",
                 alpha = 0.4) +
-    geom_line(
-      aes(y = CL),
-      color = OBI.color::prim_dark_blue(),
-      linetype = "dashed",
-      linewidth = 0.75,
-      alpha = 0.5
-    ) +
     geom_point(
       aes(y = rate, fill = point_color),
       size = 3,
@@ -67,7 +61,7 @@ plot_ctrl_chart = function(df, increase_is_bad = T) {
     theme_bw() +
     scale_y_continuous(labels = scales::percent)
   
-    if (length(line_values) == 1) {
+    plot_2 = if (length(line_values) == 1) {
       plot_1 +
       geom_line(aes(y = rate, color = point_color), linewidth = 0.8) +
         scale_color_identity(guide = "none")
@@ -82,6 +76,15 @@ plot_ctrl_chart = function(df, increase_is_bad = T) {
         guide = "none"
       )
   }
+    
+    if (plot_center_line){plot_2 + geom_line(
+      aes(y = CL),
+      color = OBI.color::prim_dark_blue(),
+      linetype = "dashed",
+      linewidth = 0.75,
+      alpha = 0.5
+    )}
+    else{plot_2}
   
   
 }
