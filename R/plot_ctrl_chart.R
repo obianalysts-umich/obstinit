@@ -43,6 +43,10 @@ plot_ctrl_chart = function(df, plot_center_line = T, increase_is_bad = T) {
   # make sure if violation happened before shift, color assignments are correct
   line_values_sort = line_values[order(line_values)]
   
+  # assign labels for legend
+  
+  legend_lab = df %>% select(point_color, p_chart_alert) %>% group_by(point_color, p_chart_alert) %>% slice_head() %>% select(p_chart_alert) %>% pull()
+  
   # plot --------------------------------------------------------------------
   
   plot_1 = ggplot(aes(x = date_var),
@@ -57,7 +61,7 @@ plot_ctrl_chart = function(df, plot_center_line = T, increase_is_bad = T) {
       stroke = 0
     ) +
     scale_fill_identity(guide = guide_legend("Control chart alert"),
-                        labels = levels(factor(df$p_chart_alert))) +
+                        labels = legend_lab) +
     theme_bw() +
     scale_y_continuous(labels = scales::percent)
   
