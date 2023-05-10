@@ -18,11 +18,11 @@ plot_ctrl_chart = function(df, plot_center_line = T, increase_is_bad = T) {
     OBI.color::prim_dark_blue()
   },
   if (increase_is_bad &
-      any(df$p_chart_alert == "Below UCL")) {
+      any(df$p_chart_alert == "Below LCL")) {
     OBI.color::prim_teal()
   },
   if (increase_is_bad == F &
-      any(df$p_chart_alert == "Below UCL")) {
+      any(df$p_chart_alert == "Below LCL")) {
     "#b64083"
   },
   if (any(df$p_chart_alert == "Shift")) {
@@ -76,7 +76,7 @@ plot_ctrl_chart = function(df, plot_center_line = T, increase_is_bad = T) {
       scale_color_gradientn(
         colors = line_color_pal,
         # values = scales::rescale(line_values),
-        values = scales::rescale(line_values_sort),
+        values = scales::rescale(line_values),
         guide = "none"
       )
   }
