@@ -80,7 +80,7 @@ structure_data = function(df,
   # apply shift violations to prior rows ------------------------------------
 
   ctrl_cohort_fin = ctrl_cohort_fin %>%
-    mutate(x3_sig_viol = ifelse(rate > UCL, 1, 0),
+    mutate(x3_sig_viol = ifelse(rate > UCL | rate < LCL, 1, 0),
            n_pts_oneside_CL = ifelse(rate > CL, 1, 0))
 
   ## make data.table and assign values for shift violations
