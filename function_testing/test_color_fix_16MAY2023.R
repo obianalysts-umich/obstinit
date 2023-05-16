@@ -121,6 +121,7 @@ structure_data = function(df,
         violations == 4 ~ "Shift",
         TRUE ~ "No alert"
       ),
+      p_chart_alert = factor(p_chart_alert, levels = unique(p_chart_alert)),
       point_color =
         case_when(
           increase_is_bad & p_chart_alert == "Above UCL" ~ "#b64083",
@@ -132,14 +133,8 @@ structure_data = function(df,
             p_chart_alert == "Below LCL" ~ "#b64083",
           p_chart_alert == "Shift" ~ "#f8b434",
           TRUE ~ OBI.color::prim_dark_blue()
-        ),
-      line_value = case_when(
-        p_chart_alert == "Above UCL" ~ 1.5,
-        p_chart_alert == "Below LCL" ~ 0,
-        p_chart_alert == "Shift" ~ 1,
-        TRUE ~ 0.5
-      )
-    ) %>% select(-c(x3_sig_viol:above_or_below))
+        )
+    ) %>% select(-c(x3_sig_viol:above_or_below)) %>% group_by(p_chart_alert) %>% mutate(col_ID = cur_group_id())
   
   # pivot longer if long = true ---------------------------------------------
   
@@ -165,44 +160,46 @@ structure_data = function(df,
   
 }
 
-plot_ctrl_chart = function(df, plot_center_line = T, increase_is_bad = T) {
+plot_ctrl_chart = function(df, plot_center_line = T) {
   
   # assign line color based on value
   
-  line_color_pal = c(if (any(df$p_chart_alert == "No alert")) {
-    OBI.color::prim_dark_blue()
-  },
-  if (increase_is_bad &
-      any(df$p_chart_alert == "Below LCL")) {
-    OBI.color::prim_teal()
-  },
-  if (increase_is_bad == F &
-      any(df$p_chart_alert == "Below LCL")) {
-    "#b64083"
-  },
-  if (any(df$p_chart_alert == "Shift")) {
-    "#f8b434"
-  },
-  if (increase_is_bad &
-      any(df$p_chart_alert == "Above UCL")) {
-    "#b64083"
-  },
-  if (increase_is_bad == F &
-      any(df$p_chart_alert == "Above UCL")) {
-    OBI.color::prim_teal()
-  })
+  # line_color_pal = c(if (any(df$p_chart_alert == "No alert")) {
+  #   OBI.color::prim_dark_blue()
+  # },
+  # if (increase_is_bad &
+  #     any(df$p_chart_alert == "Below LCL")) {
+  #   OBI.color::prim_teal()
+  # },
+  # if (increase_is_bad == F &
+  #     any(df$p_chart_alert == "Below LCL")) {
+  #   "#b64083"
+  # },
+  # if (any(df$p_chart_alert == "Shift")) {
+  #   "#f8b434"
+  # },
+  # if (increase_is_bad &
+  #     any(df$p_chart_alert == "Above UCL")) {
+  #   "#b64083"
+  # },
+  # if (increase_is_bad == F &
+  #     any(df$p_chart_alert == "Above UCL")) {
+  #   OBI.color::prim_teal()
+  # })
   
-  unique_alerts = c(unique(failed_IOL_dt$p_chart_alert))
-  line_values = seq(0, 1, length.out = length(unique_alerts))
-  #line_values = c(unique(df$line_value))
+  line_values = unique(df$col_ID)
   
   # sort value for line color assignment
   # make sure if violation happened before shift, color assignments are correct
-  #line_values_sort = line_values[order(line_values)]
+  line_values_sort = line_values[order(line_values)]
   
   # assign labels for legend
   
   legend_lab = df %>% select(point_color, p_chart_alert) %>% group_by(point_color, p_chart_alert) %>% slice_head() %>% select(p_chart_alert) %>% pull()
+  
+  # line color palette
+  
+  line_color_pal = unique(df$point_color)
   
   # plot --------------------------------------------------------------------
   
@@ -229,11 +226,10 @@ plot_ctrl_chart = function(df, plot_center_line = T, increase_is_bad = T) {
   }
   else{
     plot_1 +
-      geom_link2(aes(y = rate, color = line_value), linewidth = 0.8) +
+      geom_link2(aes(y = rate, color = col_ID), linewidth = 0.8) +
       scale_color_gradientn(
         colors = line_color_pal,
-        # values = scales::rescale(line_values),
-        values = scales::rescale(line_values),
+        values = scales::rescale(line_values_sort),
         guide = "none"
       )
   }
@@ -259,17 +255,11 @@ failed_IOL_dt = obi_cohort %>% filter(
   failed_induction_num_compliance,
   failed_induction_den_all,
   increase_is_bad = F
-) %>% mutate(test = data.table::rleid(p_chart_alert),
-             test2 = data.table::rowid(p_chart_alert),
-             text3 = consecutive_id(p_chart_alert)) %>% group_by(p_chart_alert) %>% mutate(test4 = cur_group_id())
+)
 
-failed_iol_ctrl_chart = failed_IOL_dt %>% plot_ctrl_chart(increase_is_bad = F)
+failed_iol_ctrl_chart = failed_IOL_dt %>% plot_ctrl_chart()
 
 failed_iol_ctrl_chart
-
-unique_alerts = c(unique(failed_IOL_dt$p_chart_alert))
-line_values = seq(0, 1, length.out = length(unique_alerts))
-
 
 obi_unplanned_ces = obi_cohort %>% filter(planned_mode_of_delivery_cd == 1, mode_of_delivery_cd == 4) %>% mutate(
   ces_for_dystocia = ifelse(ces_primary_indication_cd %in% c(1:5), 1, 0),
@@ -282,3 +272,15 @@ ces_ind_dys_dt = obi_unplanned_ces %>% structure_data(infant_dob_dt, ces_for_dys
 ces_for_dys_ctrl_chart = ces_ind_dys_dt %>% plot_ctrl_chart()
 
 ces_for_dys_ctrl_chart
+
+ces_ind_FHT_dt = obi_unplanned_ces %>% structure_data(infant_dob_dt, ces_for_FHT, cesarean, increase_is_bad = F)
+
+ces_ind_FHT_plot = ces_ind_FHT_dt %>% plot_ctrl_chart()
+
+ces_ind_FHT_plot
+
+SMM_dt = obi_cohort %>% structure_data(infant_dob_dt, SevereMaternalMorbidity, birth)
+
+SMM_ctrl_chart = plot_ctrl_chart(SMM_dt)
+
+SMM_ctrl_chart
