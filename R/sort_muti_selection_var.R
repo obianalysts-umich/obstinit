@@ -11,7 +11,7 @@
 #' sort_muti_selection(val)
 
 sort_muti_selection <- function(var) {
-  set = unlist(str_extract_all(var, "\\d+"))
+  set = as.numeric(unlist(str_extract_all(var, "\\d+")))
   paste(sort(set), collapse = ",")
 }
 
