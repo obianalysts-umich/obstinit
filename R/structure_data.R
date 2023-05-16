@@ -107,6 +107,7 @@ structure_data = function(df,
         violations == 4 ~ "Shift",
         TRUE ~ "No alert"
       ),
+      p_chart_alert = factor(p_chart_alert, levels = unique(p_chart_alert)),
       point_color =
         case_when(
           increase_is_bad & p_chart_alert == "Above UCL" ~ "#b64083",
@@ -118,14 +119,8 @@ structure_data = function(df,
             p_chart_alert == "Below LCL" ~ "#b64083",
           p_chart_alert == "Shift" ~ "#f8b434",
           TRUE ~ OBI.color::prim_dark_blue()
-        ),
-      line_value = case_when(
-        p_chart_alert == "Above UCL" ~ 2,
-        p_chart_alert == "Below LCL" ~ -2,
-        p_chart_alert == "Shift" ~ 1,
-        TRUE ~ 0
-      )
-    ) %>% select(-c(x3_sig_viol:above_or_below))
+        )
+    ) %>% select(-c(x3_sig_viol:above_or_below)) %>% group_by(p_chart_alert) %>% mutate(col_ID = cur_group_id())
 
   # pivot longer if long = true ---------------------------------------------
 
