@@ -7,7 +7,7 @@
 sort_muti_selection(var)
 }
 \arguments{
-\item{var}{}
+\item{var}{variable you want to sort}
 }
 \description{
 multiple selected varibales shouldn't have different values based on order

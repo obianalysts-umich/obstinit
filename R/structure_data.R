@@ -10,6 +10,7 @@
 #' @param nsigmas a numeric value specifying the number of sigmas to use for computing control limits.
 #' @param long Whether to pivot the data to long format - default is T as this is the data structure needed for ggplot2
 #' @param increase_is_bad If TRUE, this is a trend that would ideally be decreasing over time; if FALSE, ideally increasing
+#' @param for_highchart If TRUE, multiplies all rates by 100 for highchart
 #' @export
 #' @rdname structure_data
 
@@ -20,7 +21,8 @@ structure_data = function(df,
                           date_gran = year_mon,
                           nsigmas = 3,
                           long = F,
-                          increase_is_bad = T) {
+                          increase_is_bad = T,
+                          for_highchart = F) {
 
   # outcome rates by time table--------------------------------------------------
 
@@ -87,6 +89,18 @@ structure_data = function(df,
 
   ctrl_cohort_fin = data.table::setDT(ctrl_cohort_fin)
   ctrl_cohort_fin[, rleid_pts := sum(n_pts_oneside_CL), by = data.table::rleid(n_pts_oneside_CL)]
+  
+  if (for_highchart) {
+    ctrl_cohort_fin = ctrl_cohort_fin %>% mutate(
+      rate = round(rate * 100, digits = 1),
+      CL = round(CL *
+                   100, digits = 1),
+      LCL = round(LCL *
+                    100, digits = 1),
+      UCL = round(UCL *
+                    100, digits = 1)
+    )
+  }
 
   # final data manipulation -------------------------------------------------
   ## apply violations to N prior data points, note if point is above UCL or

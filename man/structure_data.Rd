@@ -12,7 +12,8 @@ structure_data(
   date_gran = year_mon,
   nsigmas = 3,
   long = F,
-  increase_is_bad = T
+  increase_is_bad = T,
+  for_highchart = F
 )
 }
 \arguments{
@@ -32,6 +33,8 @@ Make use this variable is in a date format, for example: lubridate::dmy_hms(infa
 \item{long}{Whether to pivot the data to long format - default is T as this is the data structure needed for ggplot2}
 
 \item{increase_is_bad}{If TRUE, this is a trend that would ideally be decreasing over time; if FALSE, ideally increasing}
+
+\item{for_highchart}{If TRUE, multiplies all rates by 100 for highchart}
 }
 \description{
 Structure OBI data for plotting control charts
