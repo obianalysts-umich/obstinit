@@ -126,7 +126,7 @@ structure_data = function(df,
 
   if (long) {
     ctrl_dt_long = ctrl_cohort_alerts %>%
-      select(-c(num, denom)) %>%
+      #select(-c(num, denom)) %>%
       pivot_longer(
         cols = c(rate, CL, LCL, UCL),
         names_to = "ctrl_chart_part",
