@@ -89,18 +89,6 @@ structure_data = function(df,
 
   ctrl_cohort_fin = data.table::setDT(ctrl_cohort_fin)
   ctrl_cohort_fin[, rleid_pts := sum(n_pts_oneside_CL), by = data.table::rleid(n_pts_oneside_CL)]
-  
-  if (for_highchart) {
-    ctrl_cohort_fin = ctrl_cohort_fin %>% mutate(
-      rate = round(rate * 100, digits = 1),
-      CL = round(CL *
-                   100, digits = 1),
-      LCL = round(LCL *
-                    100, digits = 1),
-      UCL = round(UCL *
-                    100, digits = 1)
-    )
-  }
 
   # final data manipulation -------------------------------------------------
   ## apply violations to N prior data points, note if point is above UCL or
@@ -135,6 +123,20 @@ structure_data = function(df,
           TRUE ~ OBI.color::prim_dark_blue()
         )
     ) %>% select(-c(x3_sig_viol:above_or_below)) %>% group_by(p_chart_alert) %>% mutate(col_ID = cur_group_id())
+  
+  ## multiply all rates by 100 for higchart
+  
+  if (for_highchart) {
+    ctrl_cohort_alerts <- ctrl_cohort_alerts %>% mutate(
+      rate = round(rate * 100, digits = 1),
+      CL = round(CL *
+                   100, digits = 1),
+      LCL = round(LCL *
+                    100, digits = 1),
+      UCL = round(UCL *
+                    100, digits = 1)
+    )
+  }
 
   # pivot longer if long = true ---------------------------------------------
 
