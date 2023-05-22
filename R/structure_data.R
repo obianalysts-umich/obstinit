@@ -124,7 +124,7 @@ structure_data = function(df,
         )
     ) %>% select(-c(x3_sig_viol:above_or_below)) %>% group_by(p_chart_alert) %>% mutate(col_ID = cur_group_id())
   
-  ## multiply all rates by 100, change date_var format for higchart
+  ## multiply all rates by 100
   
   if (for_highchart) {
     ctrl_cohort_alerts <- ctrl_cohort_alerts %>% mutate(
@@ -134,8 +134,7 @@ structure_data = function(df,
       LCL = round(LCL *
                     100, digits = 1),
       UCL = round(UCL *
-                    100, digits = 1),
-      date_var = as.Date(date_var)
+                    100, digits = 1)
     )
   }
 
