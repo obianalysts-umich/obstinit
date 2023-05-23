@@ -9,7 +9,7 @@
 create_obi_cohort = function(df) {
   sys_lock_dt_90 = format(Sys.Date() - lubridate::days(91), "%m/%d/%Y")
   
-  obi_cohort = df %>% mutate(
+  df %>% mutate(
     infant_dob_dt = lubridate::dmy_hms(infant_dob_dt),
     case_lock_dt = data.table::fifelse(
       infant_dob_dt >= lubridate::ymd_hms("2023-01-01 00:00:00"),
