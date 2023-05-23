@@ -8,6 +8,7 @@
 
 create_obi_cohort = function(df) {
   sys_lock_dt_90 = format(Sys.Date() - lubridate::days(91), "%m/%d/%Y")
+  sys_lock_dt_120 = format(Sys.Date() - lubridate::days(121), "%m/%d/%Y")
   
   df %>% mutate(
     infant_dob_dt = lubridate::dmy_hms(infant_dob_dt),
