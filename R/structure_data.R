@@ -134,7 +134,8 @@ structure_data = function(df,
       LCL = round(LCL *
                     100, digits = 1),
       UCL = round(UCL *
-                    100, digits = 1)
+                    100, digits = 1),
+      date_var = lubridate::my(date_var)
     )
   }
 
