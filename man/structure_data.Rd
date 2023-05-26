@@ -9,7 +9,7 @@ structure_data(
   date_var,
   num_var,
   den_var,
-  date_gran = year_mon,
+  date_gran = "month",
   nsigmas = 3,
   long = F,
   increase_is_bad = T,
@@ -26,7 +26,7 @@ Make use this variable is in a date format, for example: lubridate::dmy_hms(infa
 
 \item{den_var}{The variable to be summarized as the denominator of the rate we're interested in calculating - should be binary 0 1}
 
-\item{date_gran}{The granularity of dates we want to use for our control chart; year_mon or year_qtr}
+\item{date_gran}{The granularity of dates we want to use for our control chart; "month" or "quarter"}
 
 \item{nsigmas}{a numeric value specifying the number of sigmas to use for computing control limits.}
 

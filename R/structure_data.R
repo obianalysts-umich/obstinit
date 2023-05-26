@@ -4,7 +4,7 @@
 #' @param df A data frame
 #' @param date_var The date variable to be used for grouping; usually infant_dob_dt;
 #'                 Make use this variable is in a date format, for example: lubridate::dmy_hms(infant_dob_dt)
-#' @param date_gran The granularity of dates we want to use for our control chart; year_mon or year_qtr
+#' @param date_gran The granularity of dates we want to use for our control chart; "month" or "quarter"
 #' @param num_var The variable to be summarized as the numerator of the rate we're interested in calculating - should be binary 0 1
 #' @param den_var The variable to be summarized as the denominator of the rate we're interested in calculating - should be binary 0 1
 #' @param nsigmas a numeric value specifying the number of sigmas to use for computing control limits.
@@ -18,30 +18,57 @@ structure_data = function(df,
                           date_var,
                           num_var,
                           den_var,
-                          date_gran = year_mon,
+                          date_gran = "month",
                           nsigmas = 3,
                           long = F,
                           increase_is_bad = T,
                           for_highchart = F) {
-
-  # outcome rates by time table--------------------------------------------------
-
+  
+  # outcome rates by time table--------------------------------------------
+  
   ctrl_cohort = df %>%
-    mutate(
-      year_mon = zoo::as.yearmon({{date_var}}),
-      year_qtr = zoo::as.yearqtr({{date_var}}),
-      date_var = {{date_gran}}
-    ) %>%
-    group_by(date_var) %>%
+    mutate(year_mon = zoo::as.yearmon({
+      {
+        date_var
+      }
+    }),
+    year_qtr = zoo::as.yearqtr({
+      {
+        date_var
+      }
+    })) 
+  
+  ## date granularity + for_highchart date formatting
+  
+  if(date_gran == "month"){
+    ctrl_cohort <- ctrl_cohort %>% mutate(date_var = year_mon)
+    
+    if(for_highchart){ctrl_cohort <- ctrl_cohort %>% mutate(date_var = lubridate::my(date_var))}
+  }
+  else if(date_gran == "quarter"){ctrl_cohort <- ctrl_cohort %>% mutate(date_var = year_qtr)
+  
+  if(for_highchart){ctrl_cohort <- ctrl_cohort %>% mutate(date_var = as.character(date_var))}}
+  
+  ## group by date_var and calculate numerator and denominator rates
+  
+  ctrl_cohort <- ctrl_cohort %>% group_by(date_var) %>%
     summarize(
-      num = sum({{num_var}}),
-      denom = sum({{den_var}}),
+      num = sum({
+        {
+          num_var
+        }
+      }),
+      denom = sum({
+        {
+          den_var
+        }
+      }),
       rate = num / denom,
       .groups = "drop"
     )
-
+  
   # qicharts2 package to get CL frozen @ 12 mo ------------------------------
-
+  
   limits_pre = qicharts2::qic(
     num,
     n = denom,
@@ -50,17 +77,17 @@ structure_data = function(df,
     data = ctrl_cohort,
     chart    = 'p'
   )
-
+  
   ## get CL values
-
+  
   CL = summary(limits_pre)[, 12]
-
+  
   ## bind to original
-
+  
   ctrl_w_CL = ctrl_cohort %>% mutate(CL = as.numeric(CL))
-
-  # use qcc package to get limits (for the gray area) -------------------------------------------
-
+  
+  # use qcc package to get limits (for the gray area) ---------------------
+  
   qc_limits = qcc::qcc(
     type = "p",
     data = ctrl_w_CL$num,
@@ -69,31 +96,31 @@ structure_data = function(df,
     plot = F,
     nsigmas = nsigmas
   )
-
+  
   # get limits
-
+  
   limits = qc_limits$limits
   rownames(limits) = c(1:nrow(limits))
-
+  
   # bind limits to main dataset
-
+  
   ctrl_cohort_fin = cbind(ctrl_w_CL, limits)
-
-  # apply shift violations to prior rows ------------------------------------
-
+  
+  # apply shift violations to prior rows ----------------------------------
+  
   ctrl_cohort_fin = ctrl_cohort_fin %>%
     mutate(x3_sig_viol = ifelse(rate > UCL | rate < LCL, 1, 0),
            n_pts_oneside_CL = ifelse(rate > CL, 1, 0))
-
+  
   ## make data.table and assign values for shift violations
-
+  
   ctrl_cohort_fin = data.table::setDT(ctrl_cohort_fin)
   ctrl_cohort_fin[, rleid_pts := sum(n_pts_oneside_CL), by = data.table::rleid(n_pts_oneside_CL)]
-
-  # final data manipulation -------------------------------------------------
+  
+  # final data manipulation -----------------------------------------------
   ## apply violations to N prior data points, note if point is above UCL or
   ## below LCL, apply colors for ggplot
-
+  
   ctrl_cohort_alerts <- ctrl_cohort_fin %>%
     mutate(
       violations = ifelse(x3_sig_viol == 1, 1, ifelse(rleid_pts >= 8, 4, 0)),
@@ -124,7 +151,7 @@ structure_data = function(df,
         )
     ) %>% select(-c(x3_sig_viol:above_or_below)) %>% group_by(p_chart_alert) %>% mutate(col_ID = cur_group_id())
   
-  ## multiply all rates by 100
+  ## multiply all rates by 100 for highchart
   
   if (for_highchart) {
     ctrl_cohort_alerts <- ctrl_cohort_alerts %>% mutate(
@@ -134,13 +161,11 @@ structure_data = function(df,
       LCL = round(LCL *
                     100, digits = 1),
       UCL = round(UCL *
-                    100, digits = 1),
-      date_var = lubridate::my(date_var)
-    )
+                    100, digits = 1))
   }
-
-  # pivot longer if long = true ---------------------------------------------
-
+  
+  # pivot longer if long = true -------------------------------------------
+  
   if (long) {
     ctrl_dt_long = ctrl_cohort_alerts %>%
       #select(-c(num, denom)) %>%
@@ -154,11 +179,11 @@ structure_data = function(df,
         levels = c("UCL", "CL", "LCL", "rate"),
         ordered = T
       ))
-
+    
     ctrl_dt_long
   }
-
+  
   else
     (return(ctrl_cohort_alerts))
-
+  
 }
