@@ -3,24 +3,51 @@ structure_data = function(df,
                           date_var,
                           num_var,
                           den_var,
-                          date_gran = year_mon,
+                          date_gran = "month",
                           nsigmas = 3,
                           long = F,
                           increase_is_bad = T,
                           for_highchart = F) {
   
-  # outcome rates by time table----------------------------------------------
+  # outcome rates by time table--------------------------------------------
   
   ctrl_cohort = df %>%
-    mutate(
-      year_mon = zoo::as.yearmon({{date_var}}),
-      year_qtr = zoo::as.yearqtr({{date_var}}),
-      date_var = {{date_gran}}
-    ) %>%
-    group_by(date_var) %>%
+    mutate(year_mon = zoo::as.yearmon({
+      {
+        date_var
+      }
+    }),
+    year_qtr = zoo::as.yearqtr({
+      {
+        date_var
+      }
+    })) 
+  
+  ## date granularity + for_highchart date formatting
+  
+  if(date_gran == "month"){
+    ctrl_cohort <- ctrl_cohort %>% mutate(date_var = year_mon)
+    
+    if(for_highchart){ctrl_cohort <- ctrl_cohort %>% mutate(date_var = lubridate::my(date_var))}
+  }
+  else if(date_gran == "quarter"){ctrl_cohort <- ctrl_cohort %>% mutate(date_var = year_qtr)
+       
+       if(for_highchart){ctrl_cohort <- ctrl_cohort %>% mutate(date_var = as.character(date_var))}}
+  
+  ## group by date_var and calculate numerator and denominator rates
+  
+  ctrl_cohort <- ctrl_cohort %>% group_by(date_var) %>%
     summarize(
-      num = sum({{num_var}}),
-      denom = sum({{den_var}}),
+      num = sum({
+        {
+          num_var
+        }
+      }),
+      denom = sum({
+        {
+          den_var
+        }
+      }),
       rate = num / denom,
       .groups = "drop"
     )
@@ -44,7 +71,7 @@ structure_data = function(df,
   
   ctrl_w_CL = ctrl_cohort %>% mutate(CL = as.numeric(CL))
   
-  # use qcc package to get limits (for the gray area) -------------------------------------------
+  # use qcc package to get limits (for the gray area) ---------------------
   
   qc_limits = qcc::qcc(
     type = "p",
@@ -64,7 +91,7 @@ structure_data = function(df,
   
   ctrl_cohort_fin = cbind(ctrl_w_CL, limits)
   
-  # apply shift violations to prior rows ------------------------------------
+  # apply shift violations to prior rows ----------------------------------
   
   ctrl_cohort_fin = ctrl_cohort_fin %>%
     mutate(x3_sig_viol = ifelse(rate > UCL | rate < LCL, 1, 0),
@@ -75,7 +102,7 @@ structure_data = function(df,
   ctrl_cohort_fin = data.table::setDT(ctrl_cohort_fin)
   ctrl_cohort_fin[, rleid_pts := sum(n_pts_oneside_CL), by = data.table::rleid(n_pts_oneside_CL)]
   
-  # final data manipulation -------------------------------------------------
+  # final data manipulation -----------------------------------------------
   ## apply violations to N prior data points, note if point is above UCL or
   ## below LCL, apply colors for ggplot
   
@@ -109,9 +136,7 @@ structure_data = function(df,
         )
     ) %>% select(-c(x3_sig_viol:above_or_below)) %>% group_by(p_chart_alert) %>% mutate(col_ID = cur_group_id())
   
-  ## for highchart
-  
-  #date_level_for_highchart = deparse(substitute({{date_gran}}))
+  ## multiply all rates by 100 for highchart
   
   if (for_highchart) {
     ctrl_cohort_alerts <- ctrl_cohort_alerts %>% mutate(
@@ -121,22 +146,10 @@ structure_data = function(df,
       LCL = round(LCL *
                     100, digits = 1),
       UCL = round(UCL *
-                    100, digits = 1),
-      test = ifelse(deparse(substitute({{date_gran}})) == "year_mon", lubridate::my(date_var), as.character(date_var))
-    )
+                    100, digits = 1))
   }
   
-  
-  
-  # if(for_highchart &
-  #    {{date_gran}} == year_mon) {
-  #   ctrl_cohort_alerts <- ctrl_cohort_alerts %>% mutate(date_var = lubridate::my(date_var))
-  # }
-  # else
-  #   (ctrl_cohort_alerts <- ctrl_cohort_alerts %>% mutate(date_var = as.character(date_var))
-  #   )
-  
-  # pivot longer if long = true ---------------------------------------------
+  # pivot longer if long = true -------------------------------------------
   
   if (long) {
     ctrl_dt_long = ctrl_cohort_alerts %>%
