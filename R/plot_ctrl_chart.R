@@ -3,6 +3,7 @@
 #'
 #' @param df A data frame in wide format, created by the structure_data function
 #' @param plot_center_line If TRUE, the center line will be added to the plot
+#' @param increase_is_bad If FALSE, changes the color of points that are above the UCL or below the LCL
 #' @import data.table
 #' @importFrom ggforce geom_link2
 #' @export

@@ -10,6 +10,8 @@ plot_ctrl_chart(df, plot_center_line = T)
 \item{df}{A data frame in wide format, created by the structure_data function}
 
 \item{plot_center_line}{If TRUE, the center line will be added to the plot}
+
+\item{increase_is_bad}{If FALSE, changes the color of points that are above the UCL or below the LCL}
 }
 \description{
 Plot control chart
