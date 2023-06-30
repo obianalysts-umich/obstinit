@@ -5,5 +5,5 @@
 #' @rdname create_obi_cohort
 
 create_90_day_lock_dt = function() {
-  format(Sys.Date() - lubridate::days(91), "%m/%d/%Y")
+  format(lubridate::today() - lubridate::days(91), "%m/%d/%Y")
 }
