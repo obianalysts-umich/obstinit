@@ -110,12 +110,14 @@ structure_data = function(df,
   
   ctrl_cohort_fin = ctrl_cohort_fin %>%
     mutate(x3_sig_viol = ifelse(rate > UCL | rate < LCL, 1, 0),
-           n_pts_oneside_CL = ifelse(rate > CL, 1, 0))
+           n_pts_above_CL = ifelse(rate > CL, 1, 0),
+           n_pts_below_CL = ifelse(rate < CL, 1, 0))
   
   ## make data.table and assign values for shift violations
   
   ctrl_cohort_fin = data.table::setDT(ctrl_cohort_fin)
-  ctrl_cohort_fin[, rleid_pts := sum(n_pts_oneside_CL), by = data.table::rleid(n_pts_oneside_CL)]
+  ctrl_cohort_fin[, rleid_pts_above := sum(n_pts_above_CL), by = data.table::rleid(n_pts_above_CL)]
+  ctrl_cohort_fin[, rleid_pts_below := sum(n_pts_below_CL), by = data.table::rleid(n_pts_below_CL)]
   
   # final data manipulation -----------------------------------------------
   ## apply violations to N prior data points, note if point is above UCL or
@@ -123,7 +125,7 @@ structure_data = function(df,
   
   ctrl_cohort_alerts <- ctrl_cohort_fin %>%
     mutate(
-      violations = ifelse(x3_sig_viol == 1, 1, ifelse(rleid_pts >= 8, 4, 0)),
+      violations = ifelse(x3_sig_viol == 1, 1, ifelse(rleid_pts_above >= 8 | rleid_pts_below >= 8, 4, 0)),
       above_or_below = ifelse(
         violations == 1,
         ifelse(rate > UCL, "Above", "Below"),
