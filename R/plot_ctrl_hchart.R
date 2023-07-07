@@ -21,7 +21,7 @@ plot_ctrl_hchart = function(df, title) {
       lineWidth = 1,
       dashStyle = "longdash",
       marker = F,
-      tooltip = list(headerFormat = "", pointFormat = "<b>Frozen 2020 rate:</b> {point.CL}%")
+      tooltip = list(headerFormat = "", pointFormat = "<b>Frozen rate (based on first 12 data points:</b> {point.CL}%")
     ) %>%
     highcharter::hc_yAxis(labels = list(format = "{value}%")) %>%
     highcharter::hc_plotOptions(
