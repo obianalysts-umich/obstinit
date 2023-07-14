@@ -29,7 +29,7 @@ add_CI_values <- function(data,
     mutate(
       LC = !!var - (1.96 * sqrt((!!var * (1-!!var))/!!n_cases)),
       UC = !!var + (1.96 * sqrt((!!var * (1-!!var))/!!n_cases)),
-      LC = round(LC,4)*100,
-      UC= round(UC,4)*100)
+      LC = round(LC,4),
+      UC= round(UC,4))
   
 }
