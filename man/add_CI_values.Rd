@@ -22,4 +22,5 @@ tb = tibble::tibble(cs_rate = c(0.1, 0.3),
 tb \%>\% 
  add_CI_values(var = cs_rate,
                n_cases = n_pt_cases)
+               
 }

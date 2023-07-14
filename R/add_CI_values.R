@@ -5,7 +5,6 @@
 #' the formula is based on 95% CI: rate+/- 1.96 x sqrt((!!var x (1-!!var))/!!n_cases)
 #' 
 #' 
-#'
 #' @param var variable you want to sort
 #' @param n_cases number of cases used to calculate CI
 #'
@@ -15,6 +14,8 @@
 #'tb %>% 
 #'  add_CI_values(var = cs_rate,
 #'                n_cases = n_pt_cases)
+#'                
+#' @export
 
 
 add_CI_values <- function(data,
