@@ -28,6 +28,8 @@ The `create_obi_cohort()` function limits an OBI nightly export dataset to locke
 ### Data processing functions
 `sort_muti_selection_var()` takes in variable name and sort multiple selection values. For example sort {10,5,3,4} to {3,4,5,10}. use `?sort_muti_selection_var` to see examples to run
 
+`add_CI_values`: This function create upper and lower CI for observed rate. Two new variables will be added LC and UC variables. use `?add_CI_values` to see examples to run
+
 
 ## Example workflow
 
