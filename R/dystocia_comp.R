@@ -4,7 +4,7 @@
 #' @param df A data frame, preferably one that has already been run through obstint::create_obi_cohort()
 #' @param include_types If TRUE, calculates compliance for individual types of dystocia
 
-calculate_dys_comp_rate = function(df, include_types = F) {
+calculate_dys_comp = function(df, include_types = F) {
   df1 = df %>% summarize(
     dys_comp_num = sum(overall_dystocia_compliance_num),
     dys_comp_denom = sum(overall_dystocia_den_all),
