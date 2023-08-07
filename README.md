@@ -15,7 +15,9 @@ devtools::install_github("obianalysts-umich/obstinit")
 
 ## Functions
 
-The `structure_data()` function creates a data frame containing the numerator, denominator, rate, CL (center line) UCL (upper control limit) and LCL (lower control limit) for a variable of interest (ex. Cesarean); the data frame is in long format by default so it can be piped directly into the `plot_ctrl_chart()` function. The dataset is limited to complete cases; additional date or other constraints must be added manually. To use this function with `plot_ctrl_hchart()`, set `for_highchart == T`.
+The `calculate_dys_comp()` function calculates dystocia compliance, overall and by type (if `include_types == T`).
+
+The `structure_data()` function creates a data frame containing the numerator, denominator, rate, CL (center line) UCL (upper control limit) and LCL (lower control limit) for a variable of interest (ex. Cesarean). The dataset is limited to complete cases; additional date or other constraints must be added manually. To use this function with `plot_ctrl_hchart()`, set `for_highchart == T`.
 
 The `plot_ctrl_chart()` function takes the data frame constructed by `structure_data()` and plots it using ggplot2. Plot title, axis titles, and caption must be added manually.
 
@@ -49,6 +51,7 @@ ctrl_chart = ctrl_cohort %>% plot_ctrl_chart()
 
 ## Status
 
+* 8/7/2023 - added `calculate_dys_comp()`
 * 5/23/2023 - `create_90_day_lock_dt()` and `create_obi_cohort()` are live
 * 5/19/2023 - `plot_ctrl_hchart()` is live
 * 5/10/2023 - color legend fix added to plot_ctrl_chart
