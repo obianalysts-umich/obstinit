@@ -1,8 +1,12 @@
 
-#' Dystocia compliance functions
+#' Calculate dystocia compliance
+#' 
 #' To calculate dystocia compliance, overall and by type
 #' @param df A data frame, preferably one that has already been run through obstint::create_obi_cohort()
 #' @param include_types If TRUE, calculates compliance for individual types of dystocia
+#' @import tidyverse
+#' @export
+#' @rdname calculate_dys_comp
 
 calculate_dys_comp = function(df, include_types = F) {
   df1 = df %>% summarize(

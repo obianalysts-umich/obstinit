@@ -2,8 +2,7 @@
 % Please edit documentation in R/calculate_dys_comp.R
 \name{calculate_dys_comp}
 \alias{calculate_dys_comp}
-\title{Dystocia compliance functions
-To calculate dystocia compliance, overall and by type}
+\title{Calculate dystocia compliance}
 \usage{
 calculate_dys_comp(df, include_types = F)
 }
@@ -13,6 +12,5 @@ calculate_dys_comp(df, include_types = F)
 \item{include_types}{If TRUE, calculates compliance for individual types of dystocia}
 }
 \description{
-Dystocia compliance functions
 To calculate dystocia compliance, overall and by type
 }
