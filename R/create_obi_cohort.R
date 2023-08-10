@@ -12,10 +12,11 @@ create_obi_cohort = function(df) {
   
   df %>% mutate(
     infant_dob_dt = lubridate::dmy_hms(infant_dob_dt),
+    #case locks at MIDNIGHT AFTER THIS DATE
     case_lock_dt = data.table::fifelse(
       infant_dob_dt >= lubridate::ymd_hms("2023-01-01 00:00:00"),
-      infant_dob_dt + days(90),
-      infant_dob_dt + days(120)
+      lubridate::date(infant_dob_dt) + days(90),
+      lubridate::date(infant_dob_dt) + days(120)
     ),
     case_locked = ifelse(case_lock_dt < lubridate::today(), 1, 0)
   ) %>% filter(
