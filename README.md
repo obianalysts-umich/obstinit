@@ -25,7 +25,7 @@ The `plot_ctrl_hchart()` function is identical to the `plot_ctrl_chart()` functi
 
 The `create_90_day_lock_dt()` function doesn't take any arguments but provides the date at which cases pulled on a given day will lock. Can be used with `create_obi_cohort()`.
 
-The `create_obi_cohort()` function limits an OBI nightly export dataset to locked, complete cases with a delivery date after 2019.
+The `create_obi_cohort()` function limits an OBI nightly export dataset to locked, complete cases with a delivery date after 2019. Note that `case_lock_dt` is programmed to match what is in the AMx workstation and represents the LAST DAY a case can be edited by a hospital; the case LOCKS at midnight that night. Therefore, cases are considered locked when `case_lock_dt` < `today()`.
 
 ### Data processing functions
 `sort_muti_selection_var()` takes in variable name and sort multiple selection values. For example sort {10,5,3,4} to {3,4,5,10}. use `?sort_muti_selection_var` to see examples to run
