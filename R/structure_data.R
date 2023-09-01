@@ -80,7 +80,7 @@ structure_data = function(df,
   
   ## get CL values
   
-  CL = summary(limits_pre)[, 12]
+  CL = summary(limits_pre)$CL
   
   ## bind to original
   
