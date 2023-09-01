@@ -35,6 +35,4 @@ vignettes/*.pdf
 *.utf8.md
 *.knit.md
 
-*.Rproj
-
 .DS_Store
