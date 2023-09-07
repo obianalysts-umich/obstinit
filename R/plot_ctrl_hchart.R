@@ -7,7 +7,7 @@
 #' @rdname plot_ctrl_hchart
 #' @import tidyverse
 
-plot_ctrl_hchart = function(df, title) {
+plot_ctrl_hchart = function(df, title, ymin = NA, ymax = NA) {
   plot_1 = highcharter::hchart(df,
                                "arearange",
                                hcaes(x = date_var, low = LCL, high = UCL)) %>%
@@ -23,7 +23,7 @@ plot_ctrl_hchart = function(df, title) {
       marker = F,
       tooltip = list(headerFormat = "", pointFormat = "<b>Frozen rate (based on first 12 data points:</b> {point.CL}%")
     ) %>%
-    highcharter::hc_yAxis(labels = list(format = "{value}%")) %>%
+    highcharter::hc_yAxis(labels = list(format = "{value}%"), min = ymin, max = ymax) %>%
     highcharter::hc_plotOptions(
       arearange = list(
         color = "lightgrey",
