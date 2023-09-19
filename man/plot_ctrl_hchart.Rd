@@ -4,7 +4,7 @@
 \alias{plot_ctrl_hchart}
 \title{Plot interactive ctrl chart using highcharter package}
 \usage{
-plot_ctrl_hchart(df, title)
+plot_ctrl_hchart(df, title, ymin = NA, ymax = NA)
 }
 \arguments{
 \item{df}{A data frame - should be in the structure of obstinit::structure_data}
