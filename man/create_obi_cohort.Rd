@@ -7,7 +7,7 @@
 \usage{
 create_90_day_lock_dt()
 
-create_obi_cohort(df)
+create_obi_cohort(df, limit_to_locked = T)
 }
 \arguments{
 \item{df}{Data frame -- usually this is the data frame read into R using data.table::fread}
