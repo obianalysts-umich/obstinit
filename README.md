@@ -2,7 +2,7 @@
 
 ## Background
 
-This is the draft space for our OBI "tools" package.
+This is the draft space for our OBI "tools" package. This package is meant to provide a series of tools we regularly use in data processing and visualization and to save time used on repetitive coding tasks.
 
 ## Installation
 
@@ -14,6 +14,8 @@ devtools::install_github("obianalysts-umich/obstinit")
 ```
 
 ## Functions
+
+The `read_current_data()` function reads the most recent (today's) OBI registry data from the Turbo drive. This function does not take any arguments and is built to work with both Mac and PC operating systems.
 
 The `calculate_dys_comp()` function calculates dystocia compliance, overall and by type (if `include_types == T`).
 
@@ -51,6 +53,7 @@ ctrl_chart = ctrl_cohort %>% plot_ctrl_chart()
 
 ## Status
 
+* 9/19/2023 - added `read_current_data`
 * 8/7/2023 - added `calculate_dys_comp()`
 * 5/23/2023 - `create_90_day_lock_dt()` and `create_obi_cohort()` are live
 * 5/19/2023 - `plot_ctrl_hchart()` is live
