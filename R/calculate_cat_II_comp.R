@@ -4,7 +4,7 @@
 #' @export
 #' @param df Data frame -- usually this is the data frame read into R using data.table::fread
 #' @import tidyverse
-#' @rdname read_current_data
+#' @rdname calculate_cat_II_comp
 
 calculate_cat_II_comp = function(df) {
   df %>% filter(mode_of_delivery_cd == 4,
