@@ -6,12 +6,10 @@
 #' @import tidyverse
 #' @rdname calculate_IA_comp
 
-calculate_cat_II_comp = function(df) {
-  df %>% filter(mode_of_delivery_cd == 4,
-                ces_primary_indication_cd == 6,
-                fht_category_e %in% c(1, 3)) %>% summarize(
-                  cat_II_num = sum(ifelse(fht_mgt_documentation_e == 1, 1, 0)),
-                  cat_II_denom = sum(birth),
-                  cat_II_comp_rate = cat_II_num / cat_II_denom
-                )
+calculate_IA_comp = function(df) {
+  df %>% filter(admit_labor_status_cd %in% c(3, 4),!ia_not_ordered_reason_e %in% c(1:6, 9:11)) %>% summarize(
+    IA_num = sum(sum(admit_fm_IA, na.rm = T)),
+    IA_denom = sum(birth),
+    IA_comp_rate = IA_num / IA_denom
+  )
 }
