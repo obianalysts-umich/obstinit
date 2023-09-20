@@ -2,6 +2,7 @@
 
 export(add_CI_values)
 export(calculate_IA_comp)
+export(calculate_TB_comp)
 export(calculate_cat_II_comp)
 export(calculate_dys_comp)
 export(create_90_day_lock_dt)
