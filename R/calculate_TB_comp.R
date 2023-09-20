@@ -16,7 +16,7 @@ calculate_TB_comp = function(df) {
     tb_full_compliance = ifelse(admit_huddle_mtg_compliance == 1 &
                                   huddle_per_12h >= 1, 1, 0)
   ) %>% summarize(
-    TB_num = sum(tb_full_compliance),
+    TB_num = sum(tb_full_compliance, na.rm = T),
     TB_denom = sum(birth),
     TB_comp_rate = TB_num / TB_denom
   )
