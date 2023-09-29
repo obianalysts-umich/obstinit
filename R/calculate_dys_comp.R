@@ -9,14 +9,14 @@
 #' @rdname calculate_dys_comp
 
 calculate_dys_comp = function(df, include_types = F) {
-  df1 = df %>% summarize(
+  df1 = df %>% filter(transfer_from_home_birth_b != 1) %>% summarize(
     dys_comp_num = sum(overall_dystocia_compliance_num),
     dys_comp_denom = sum(overall_dystocia_den_all),
     dys_comp_rate = dys_comp_num / dys_comp_denom
   )
   
   if (include_types) {
-    df %>% summarize(
+    df %>% filter(transfer_from_home_birth_b != 1) %>% summarize(
       dys_comp_num = sum(overall_dystocia_compliance_num),
       dys_comp_denom = sum(overall_dystocia_den_all),
       dys_comp_rate = dys_comp_num / dys_comp_denom,
