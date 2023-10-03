@@ -14,7 +14,9 @@ theme_obi(
   subtitle_size = 12,
   subtitle_hjust = 0.5,
   caption_size = 12,
-  caption_hjust = 0
+  caption_hjust = 0,
+  legend_title_size = 12,
+  legend_text_size = 11
 )
 }
 \arguments{
@@ -38,7 +40,9 @@ theme_obi(
 
 \item{caption_hjust}{Position for caption. Default is 0 for left-justified, change to 0.5 for centered.}
 
-\item{name}{description}
+\item{legend_title_size}{Size of legend title text. Default is 12.}
+
+\item{legend_text_size}{Size of legend text. Default is 11.}
 }
 \description{
 Add OBI ggplot theme

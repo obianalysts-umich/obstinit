@@ -11,9 +11,8 @@
 #' @param subtitle_hjust Position for subtitle text. Default is 0.5 for centered, change to 0 for left-justified.
 #' @param caption_size Size for caption text. Default is 12.
 #' @param caption_hjust Position for caption. Default is 0 for left-justified, change to 0.5 for centered.
-#' @param name description
-#' @param name description
-#' @param name description
+#' @param legend_title_size Size of legend title text. Default is 12.
+#' @param legend_text_size Size of legend text. Default is 11.
 #' @export
 #' @rdname theme_obi
 
@@ -26,8 +25,10 @@ theme_obi = function(x_axis_title_size = 12,
                      subtitle_size = 12,
                      subtitle_hjust = 0.5,
                      caption_size = 12,
-                     caption_hjust = 0) {
-    theme_minimal() +
+                     caption_hjust = 0,
+                     legend_title_size = 12,
+                     legend_text_size = 11) {
+  theme_minimal() +
     theme(
       axis.title.x = element_text(color = OBI.color::prim_dark_blue(), size = x_axis_title_size),
       axis.text.x = element_text(color = OBI.color::prim_dark_blue(), size = x_axis_text_size),
@@ -48,6 +49,8 @@ theme_obi = function(x_axis_title_size = 12,
         size = caption_size,
         hjust = caption_hjust
       ),
+      legend.title = element_text(color = OBI.color::prim_dark_blue(), size = legend_title_size),
+      legend.text = element_text(color = OBI.color::prim_dark_blue(), size = legend_text_size),
       plot.background = element_rect(fill = "white", color = "white"),
       panel.background = element_rect(fill = "white", color = "white")
     )
