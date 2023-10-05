@@ -2,10 +2,10 @@
 % Please edit documentation in R/read_current_data.R
 \name{read_current_data}
 \alias{read_current_data}
-\title{Read current data}
+\title{Read current OBI data}
 \usage{
 read_current_data()
 }
 \description{
-Read current data
+read OBI analytic data from Turbo
 }

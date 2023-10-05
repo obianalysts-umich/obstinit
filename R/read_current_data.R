@@ -1,5 +1,8 @@
 
-#' Read current data
+#' Read current OBI data
+#' @description
+#' read OBI analytic data from Turbo
+#' 
 #'
 #' @export
 #' @rdname read_current_data
@@ -15,6 +18,18 @@ read_current_data = function() {
       "/Volumes/nur-kanelow/OBI_abstracted_data/Current_Data/data/output/sourcetables_OBI_export_recodes.csv"
   }
   
-  data.table::fread(current_dt_path)
+  
+  # test path
+  if(!file.exists(current_dt_path)){
+    error("Check your VPN connection. Path doesn't exsit at ", current_dt_path)
+  } 
+  
+  dt = data.table::fread(current_dt_path)
+  
+  # message after done reading
+  message("Current OBI data are loaded")
+  
+  return(dt)
+  
   
 }
