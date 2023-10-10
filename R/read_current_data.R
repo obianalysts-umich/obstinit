@@ -2,8 +2,6 @@
 #' Read current OBI data
 #' @description
 #' read OBI analytic data from Turbo
-#' 
-#'
 #' @export
 #' @rdname read_current_data
 
@@ -27,9 +25,9 @@ read_current_data = function() {
   dt = data.table::fread(current_dt_path)
   
   # message after done reading
-  message("Current OBI data are loaded")
+  message("Current OBI data are loaded. The data are updated on ", 
+          lubridate::as_date(file.info(current_dt_path)$mtime), ".")
   
   return(dt)
-  
   
 }
