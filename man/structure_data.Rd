@@ -12,30 +12,47 @@ structure_data(
   date_gran = "month",
   nsigmas = 3,
   long = F,
-  increase_is_bad = T,
-  for_highchart = F
+  increase_is_bad = TRUE,
+  for_highchart = FALSE
 )
 }
 \arguments{
-\item{df}{A data frame}
+\item{df}{A data frame, for example OBI export data}
 
 \item{date_var}{The date variable to be used for grouping; usually infant_dob_dt;
 Make use this variable is in a date format, for example: lubridate::dmy_hms(infant_dob_dt)}
 
-\item{num_var}{The variable to be summarized as the numerator of the rate we're interested in calculating - should be binary 0 1}
+\item{num_var}{The variable to be summarized as the numerator - should be binary 0 1}
 
-\item{den_var}{The variable to be summarized as the denominator of the rate we're interested in calculating - should be binary 0 1}
+\item{den_var}{The variable to be summarized as the denominator - should be binary 0 1}
 
-\item{date_gran}{The granularity of dates we want to use for our control chart; "month" or "quarter"}
+\item{date_gran}{"month" or "quarter"; The granularity of dates we want to use for our control chart; default is "month".}
 
-\item{nsigmas}{a numeric value specifying the number of sigmas to use for computing control limits.}
+\item{nsigmas}{a numeric value specifying the number of sigmas to use for computing control limits. default to 3.}
 
-\item{long}{Whether to pivot the data to long format - default is T as this is the data structure needed for ggplot2}
+\item{long}{Whether to pivot the data to long format - default is TRUE as this is the data structure needed for ggplot2}
 
-\item{increase_is_bad}{If TRUE, this is a trend that would ideally be decreasing over time; if FALSE, ideally increasing}
+\item{increase_is_bad}{If TRUE, this is a trend that would ideally be decreasing over time; if FALSE, ideally increasing. default is TRUE.}
 
-\item{for_highchart}{If TRUE, multiplies all rates by 100 for highchart}
+\item{for_highchart}{If TRUE, multiplies all rates by 100 for highchart; default is FALSE.}
+}
+\value{
+An tibble with the aggridated numerator and denominator by input date variable
 }
 \description{
-Structure OBI data for plotting control charts
+This function takes in a data frame row per observation like OBI data.
+It then summarize the numerator and denominator of a rate of interest.
+This function also use control chart principles to calculate control limits
+}
+\examples{
+It might take a min to load OBI data
+library(tidyverse)
+OBI_data = read_current_data()
+structure_data(
+ df = OBI_data,
+ date_var = infant_dob_dt,
+ num_var = cesarean,
+ den_var = birth
+ )
+ 
 }
