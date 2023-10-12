@@ -17,7 +17,8 @@ Imports:
     qicharts2,
     tidyr,
     data.table,
-    ggforce
+    ggforce,
+    cli
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
