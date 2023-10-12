@@ -42,7 +42,7 @@ An tibble with the aggridated numerator and denominator by input date variable
 \description{
 This function takes in a data frame row per observation like OBI data.
 It then summarize the numerator and denominator of a rate of interest.
-This function also use control chart principles to calculate control limits
+This function also use control chart principles to calculate CIs and flag alerts.
 }
 \examples{
 It might take a min to load OBI data
