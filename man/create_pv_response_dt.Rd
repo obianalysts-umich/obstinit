@@ -17,10 +17,14 @@ this function creates a data frame excluding opt out patients
 \itemize{
 \item opt out from CDA
 \item opt out from patients
+\item limited to infant dob > 2023-5-10 (when PRO survey started)
 }
+}
+\details{
+this function read in pro survey data from \verb{P:/OBI_abstracted_data/Current_Data/data/input/pro_6_week_postpartum.csv}
 }
 \examples{
-obi_dt <- read_current_data() |> 
-  create_obi_cohort()
+obi_dt <- read_current_data() |>
+  create_obi_cohort(limit_to_locked = FALSE)
 create_pv_response_dt(obi_dt)
 }
