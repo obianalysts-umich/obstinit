@@ -6,9 +6,9 @@
 #' 
 #'
 #' @param email_message your email body; use html code for breaks and hyperlinks
-#' @param email_to a email address or a list of email addresses seperated by ";"
+#' @param email_to a email address or a list of email addresses separated by ";"
 #' @param email_subject text
-#' @param cc a email address or a list of email addresses seperated by ";"
+#' @param cc a email address or a list of email addresses separated by ";"
 #' @param save_or_send default to "save", can be "save" or "send"
 #'
 #' @return a message in the console
@@ -26,16 +26,16 @@ send_email <- function(email_message = "<p> This is an automatic message. </p> <
                        save_or_send = "save"
                        ) {
   # message
-  cli_alert_info("This function was only tested using outlook app")
+  cli::cli_alert_info("This function was only tested using outlook app")
   
   # check if PC
   if (!Sys.info()["sysname"] == "Windows"){
-    cli_abort("this function only works on Windows, see package RDCOMClient requirement.")
+    cli::cli_abort("this function only works on Windows, see package RDCOMClient requirement.")
   }
   
   # install pkg if needed
   if (!require("RDCOMClient")) {
-    cli_alert_info("installing RDCOMClient package for email sending")
+    cli::cli_alert_info("installing RDCOMClient package for email sending")
     devtools::install_github("omegahat/RDCOMClient")
   } 
   
@@ -53,12 +53,12 @@ send_email <- function(email_message = "<p> This is an automatic message. </p> <
   
   if (save_or_send == "save") {
     outMail$Save()
-    cli_alert_success("email saved in draft; check your outlook draft")
+    cli::cli_alert_success("email saved in draft; check your outlook draft")
   } else if (save_or_send == "send") {
     outMail$Send()
-    cli_alert_success("email sent to ", email_to, " with cc ", cc)
+    cli::cli_alert_success("email sent to ", email_to, " with cc ", cc)
   } else {
-    cli_alert_info("save_or_send must be either 'save' or 'send'")
+    cli::cli_alert_info("save_or_send must be either 'save' or 'send'")
   }
   
 }
