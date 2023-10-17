@@ -15,11 +15,11 @@ send_email(
 \arguments{
 \item{email_message}{your email body; use html code for breaks and hyperlinks}
 
-\item{email_to}{a email address or a list of email addresses seperated by ";"}
+\item{email_to}{a email address or a list of email addresses separated by ";"}
 
 \item{email_subject}{text}
 
-\item{cc}{a email address or a list of email addresses seperated by ";"}
+\item{cc}{a email address or a list of email addresses separated by ";"}
 
 \item{save_or_send}{default to "save", can be "save" or "send"}
 }
