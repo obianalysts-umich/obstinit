@@ -4,7 +4,7 @@
 \alias{calculate_IA_comp}
 \title{Calculate IA compliance}
 \usage{
-calculate_IA_comp(df, limit_to_IA_sites = F)
+calculate_IA_comp(df)
 }
 \arguments{
 \item{df}{Data frame -- ideally, run through obstinit::create_IA_cohort first}

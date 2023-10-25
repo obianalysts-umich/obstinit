@@ -7,7 +7,7 @@
 #' @import tidyverse
 #' @rdname create_IA_cohort
 
-calculate_IA_comp = function(df, limit_to_IA_sites = F) {
+create_IA_cohort = function(df, limit_to_IA_sites = F) {
   df1 = df %>%
     mutate(to_drop = ifelse(ia_not_ordered_reason_e %in% c(1:6, 9:11), 1, 0)) %>%
     filter(
