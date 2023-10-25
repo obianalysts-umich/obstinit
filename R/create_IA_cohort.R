@@ -20,5 +20,7 @@ create_IA_cohort = function(df, limit_to_IA_sites = F) {
   if (limit_to_IA_sites) {
     df1 %>%
       filter(QII_Choice_2023 == "IA Bundle")
+  } else{
+    return(df1)
   }
 }

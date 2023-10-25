@@ -20,5 +20,7 @@ create_cat_II_cohort = function(df, limit_to_catII_sites = F) {
   if (limit_to_catII_sites) {
     df1 %>%
       filter(QII_Choice_2023 == "Cat 2 Fetal Heart Rate Tracings")
+  } else{
+    return(df1)
   }
 }
