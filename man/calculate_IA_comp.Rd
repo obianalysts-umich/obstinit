@@ -4,10 +4,10 @@
 \alias{calculate_IA_comp}
 \title{Calculate IA compliance}
 \usage{
-calculate_IA_comp(df)
+calculate_IA_comp(df, limit_to_IA_sites = F)
 }
 \arguments{
-\item{df}{Data frame -- usually this is the data frame read into R using data.table::fread}
+\item{df}{Data frame -- ideally, run through obstinit::create_IA_cohort first}
 }
 \description{
 Calculate IA compliance
