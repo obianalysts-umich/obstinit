@@ -7,7 +7,7 @@
 calculate_cat_II_comp(df)
 }
 \arguments{
-\item{df}{Data frame -- usually this is the data frame read into R using data.table::fread}
+\item{df}{Data frame -- ideally, run through obstinit::create_cat_II_cohort first}
 }
 \description{
 Calculate cat II compliance
