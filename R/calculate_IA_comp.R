@@ -10,6 +10,7 @@ calculate_IA_comp = function(df) {
   df %>%
     mutate(to_drop = ifelse(ia_not_ordered_reason_e %in% c(1:6, 9:11), 1, 0)) %>%
     filter(
+      planned_mode_of_delivery_cd == 1,
       admit_labor_status_cd %in% c(3, 4, 5),
       admit_fetal_monitor_type_e != "{99}",
       to_drop != 1
