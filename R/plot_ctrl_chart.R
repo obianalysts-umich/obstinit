@@ -40,7 +40,7 @@ plot_ctrl_chart = function(df, plot_center_line = T) {
     ) +
     scale_fill_identity(guide = guide_legend("Control chart alert"),
                         labels = legend_lab) +
-    theme_bw() +
+    theme_obi() +
     scale_y_continuous(labels = scales::percent)
   
     plot_2 = if (length(line_values) == 1) {
