@@ -12,5 +12,6 @@ read_crosswalk = function() {
     "P:/OBI hospital and provider/OBI Hospital Information/Crosswalk/crosswalk_current.xlsx",
     sheet = 1
   ) %>%
-    janitor::clean_names()
+    janitor::clean_names() %>% 
+    filter(!duplicated(mdhhs_id))
 }
