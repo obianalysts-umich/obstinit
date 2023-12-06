@@ -6,6 +6,7 @@
 #'    2. include case if case is complete using flg_complete
 #'    3. create case_locked varaible using 90 days lock
 #'    4. filter to complete and locked cases(limit_to_locked = TRUE)
+#'    5. create mdhhs_id character variable with leading 0's
 #' 
 #' 
 #' @param df Data frame -- usually this is the data frame read into R using data.table::fread

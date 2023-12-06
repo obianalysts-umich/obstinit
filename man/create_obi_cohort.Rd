@@ -18,5 +18,6 @@ this function does
 \item include case if case is complete using flg_complete
 \item create case_locked varaible using 90 days lock
 \item filter to complete and locked cases(limit_to_locked = TRUE)
+\item create mdhhs_id character variable with leading 0's
 }
 }
