@@ -54,7 +54,11 @@ obi_cohort = obi %>%
   create_obi_cohort()
 
 ctrl_cohort = obi_cohort %>% 
-  create_ctrl_df(infant_dob_dt, year_mon, overall_dystocia_compliance_num, overall_dystocia_den_all, increase_is_bad = F)
+  create_ctrl_df(infant_dob_dt,
+                 overall_dystocia_compliance_num, 
+                 overall_dystocia_den_all, 
+                 date_gran = "quarter",
+                 increase_is_bad = F)
 
 ctrl_chart = ctrl_cohort %>% 
   plot_ctrl_chart()
