@@ -9,7 +9,7 @@ create_pv_response_dt(obi_dt, pro_survey_expired = FALSE)
 \arguments{
 \item{obi_dt}{OBI nightly export data}
 
-\item{pro_survey_expired}{logical, if TRUE, only include patients who are after 12 weeks postpartum}
+\item{pro_survey_expired}{logical, if TRUE, only include patients who are after 16 weeks postpartum}
 }
 \value{
 a data frame with variables: patientid, site_name, infant_dob_dt, pro_response
