@@ -9,7 +9,7 @@
 #' - limited to infant dob > 2023-5-10 (when PRO survey started)
 #'
 #' @param obi_dt OBI nightly export data
-#' @param pro_survey_expired logical, if TRUE, only include patients who are after 12 weeks postpartum
+#' @param pro_survey_expired logical, if TRUE, only include patients who are after 16 weeks postpartum
 #'
 #' @return a data frame with variables: patientid, site_name, infant_dob_dt, pro_response
 #' @export
@@ -27,7 +27,7 @@ create_pv_response_dt <- function(
     pro_survey_expired = FALSE) {
   # PRO survey starting date
   start_date <- lubridate::as_date("2023-5-10")
-  pro_expire_date <- lubridate::as_date(Sys.Date() - 12 * 7) # 12 weeks postpartum
+  pro_expire_date <- lubridate::as_date(Sys.Date() - 16 * 7) # 16 weeks postpartum
 
   # Patient voice data
   if (Sys.info()["sysname"] == "Windows") {
@@ -55,8 +55,6 @@ create_pv_response_dt <- function(
     select(patientid) %>%
     mutate(pro_response = 1)
 
-  message("Patient voice survey started on ", start_date, ". Response rates for 2023 are calculated after the start date. ")
-
   # add variable pro_response flag to obi_dt
   obi_dt_pro_flg <- obi_dt %>%
     filter(!patientid %in% opt_out_list) |>
@@ -64,6 +62,9 @@ create_pv_response_dt <- function(
     mutate(pro_response = ifelse(is.na(pro_response), 0, 1)) %>%
     filter(infant_dob_dt >= start_date) |>
     select(patientid, site_name, infant_dob_dt, pro_response)
+
+  message("Patient voice survey started on ", start_date, ". Response rates for 2023 are calculated after the start date. ")
+  
 
   if (pro_survey_expired == TRUE) {
     obi_dt_pro_flg |>
