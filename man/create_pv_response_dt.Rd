@@ -9,24 +9,32 @@ create_pv_response_dt(obi_dt, pro_survey_expired = FALSE)
 \arguments{
 \item{obi_dt}{OBI nightly export data}
 
-\item{pro_survey_expired}{logical, if TRUE, only include patients who are after 16 weeks postpartum}
+\item{pro_survey_expired}{logical, if TRUE, only include patients who are after 12 weeks postpartum}
 }
 \value{
-a data frame with variables: patientid, site_name, infant_dob_dt, pro_response
+a data frame with variables: patientid, site_name, infant_dob_dt, complete_pro_survey_flg, survey_informed_consent_b_0
 }
 \description{
-this function creates a data frame excluding opt out patients
+combine patient contact log with survey response data
 \itemize{
-\item opt out from CDA
-\item opt out from patients
-\item limited to infant dob > 2023-5-10 (when PRO survey started)
+\item cohort: pts who received pro survey emails
+\item added var:
+\itemize{
+\item pro_response: pts who completed pro survey (opt out pts also consider complete)
+\item pts choose to opt out: survey_informed_consent_b_0 ==0
+}
 }
 }
 \details{
-this function read in pro survey data from \verb{P:/OBI_abstracted_data/Current_Data/data/input/pro_6_week_postpartum.csv}
+this function read in pro survey data from
+\itemize{
+\item survey response: \verb{P:/OBI_abstracted_data/Current_Data/data/input/pro_6_week_postpartum.csv}
+\item contact log pts who received emails: \verb{P:/OBI_abstracted_data/Current_Data/data/input/contactlog.csv}
+}
 }
 \examples{
-obi_dt <- read_current_data() |>
-  create_obi_cohort(limit_to_locked = FALSE)
-create_pv_response_dt(obi_dt)
+obi_dt <- read_current_data() |> 
+  create_obi_cohort(limit_to_locked = FALSE) 
+create_pv_response_dt(obi_dt) 
+ 
 }
