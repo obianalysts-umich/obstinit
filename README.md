@@ -35,6 +35,8 @@ devtools::install_github("obianalysts-umich/obstinit")
 * `create_ctrl_df()` creates a data frame containing the numerator, denominator, rate, CL (center line) UCL (upper control limit) and LCL (lower control limit) for a variable of interest (ex. Cesarean). The dataset is limited to complete cases; additional date or other constraints must be added manually. To use this function with `plot_ctrl_hchart()`, set `for_highchart == T`. This function used to be called `structure_data()`.
 * `plot_ctrl_chart()` takes the data frame constructed by `structure_data()` and plots it using ggplot2. Plot title, axis titles, and caption must be added manually.
 * `plot_ctrl_hchart()` is identical to the `plot_ctrl_chart()` function, except that it formats everything to be used with the `highchart` rather than `ggplot2` package.
+* `create_caterpillar_df()` structures data for caterpillar (ranking) plots; each row of the data frame is a site name by default and the data frame includes a numerator, denominator, rate, and (0-1 bounded) 95% CI.
+* `plot_caterpillar_chart()` plots a caterpillar chart, presumably using the dataframe created by `create_caterpillar_df()`. Plot title, axis titles, and caption must be added manually.
 * `theme_obi()` is a ggplot2 theme that standardizes formatting of plots for semi-annual meetings, presentations, and more. It uses `theme_minimal()` as a base and additionally centers the plot title and subtitle, left-justifies the plot caption, standardizes text sizes across the plot, and makes all text OBI's dark blue. All OBI plots should use this theme.
 
 ### Other data processing
