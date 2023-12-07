@@ -39,7 +39,7 @@ add_benchmark = function(plot,
   if (add_label) {
     h +
       geom_text(
-        aes(x = label_xval, y = y_int + y_int * 0.02),
+        aes(x = label_xval, y = y_int + y_int * 0.05),
         label = label_text,
         size = 5,
         color = plot_linecolor
