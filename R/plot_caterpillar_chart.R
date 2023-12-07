@@ -8,6 +8,7 @@
 #' @param x_var Variable to be placed on the x axis - default is site_name
 #' @param point_shape Shape of the points - default is "diamond"
 #' @param point_size Size of the points - default is 2
+#' @param bar_width Width of the error bars - default is 3
 #' @param dt_color Color for the data points and errorbars - default is OBI.color::prim_dark_blue()
 #' @rdname plot_caterpillar_chart
 #' @import tidyverse
@@ -19,6 +20,7 @@ plot_caterpillar_chart = function(df,
                                   x_var = site_name,
                                   point_shape = "diamond",
                                   point_size = 2,
+                                  bar_width = 3,
                                   dt_color = OBI.color::prim_dark_blue()) {
   df |>
     ggplot(aes(x = reorder({
@@ -40,7 +42,7 @@ plot_caterpillar_chart = function(df,
     geom_errorbar(
       aes(ymin = LC,
           ymax = UC),
-      linewidth = 2,
+      linewidth = bar_width,
       width = 0,
       color = dt_color,
       alpha = 0.3

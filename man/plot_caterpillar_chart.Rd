@@ -10,6 +10,7 @@ plot_caterpillar_chart(
   x_var = site_name,
   point_shape = "diamond",
   point_size = 2,
+  bar_width = 3,
   dt_color = OBI.color::prim_dark_blue()
 )
 }
@@ -23,6 +24,8 @@ plot_caterpillar_chart(
 \item{point_shape}{Shape of the points - default is "diamond"}
 
 \item{point_size}{Size of the points - default is 2}
+
+\item{bar_width}{Width of the error bars - default is 3}
 
 \item{dt_color}{Color for the data points and errorbars - default is OBI.color::prim_dark_blue()}
 }
