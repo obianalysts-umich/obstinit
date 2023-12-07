@@ -7,9 +7,13 @@
 create_caterpillar_df(df, num_var, denom_var, group_var = site_name)
 }
 \arguments{
-\item{df}{Data frame -- usually this is the data frame read into R using data.table::fread}
+\item{df}{Data frame -- usually this is obi_cohort}
 
-\item{limit_to_locked}{Logical -- if TRUE, only return cases that are locked}
+\item{num_var}{Numerator variable}
+
+\item{denom_var}{Denominator variable}
+
+\item{group_var}{Grouping variable; by default, this is site_name}
 }
 \description{
 this function creates a data frame to be used for caterpillar plots where each row is a site name. The df includes a numerator, denominator, and rate for the variable of interest, as well as a 95\% CI (bounded by 0 and 1) for the rate.

@@ -3,8 +3,10 @@
 #' @description
 #' this function creates a data frame to be used for caterpillar plots where each row is a site name. The df includes a numerator, denominator, and rate for the variable of interest, as well as a 95% CI (bounded by 0 and 1) for the rate.
 #' 
-#' @param df Data frame -- usually this is the data frame read into R using data.table::fread
-#' @param limit_to_locked Logical -- if TRUE, only return cases that are locked
+#' @param df Data frame -- usually this is obi_cohort
+#' @param num_var Numerator variable
+#' @param denom_var Denominator variable
+#' @param group_var Grouping variable; by default, this is site_name
 #' @rdname create_caterpillar_df
 #' @import tidyverse
 #' @export
