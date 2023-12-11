@@ -16,7 +16,9 @@
 #' @import cli
 #'
 #' @examples
+#' \dontrun{
 #' send_email(email_message = "<p> This is an automatic message. </p> <p> OBI analytics team </p>")
+#' }
 
 
 send_email <- function(email_message = "<p> This is an automatic message. </p> <p> OBI analytics team </p> ",

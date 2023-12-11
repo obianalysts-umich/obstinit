@@ -7,8 +7,11 @@
 #' 
 #' @param var variable you want to sort
 #' @param n_cases number of cases used to calculate CI
+#' 
+#' @importFrom dplyr %>% across mutate mutate_at select filter rename rename_at
 #'
 #' @examples
+#' library(dplyr)
 #'tb = tibble::tibble(cs_rate = c(0.1, 0.3),
 #'                     n_pt_cases = c(140, 234))
 #'tb %>% 

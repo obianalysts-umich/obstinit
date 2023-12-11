@@ -17,6 +17,7 @@ Two new variables will be added LC and UC
 the formula is based on 95\% CI: rate+/- 1.96 x sqrt((!!var x (1-!!var))/!!n_cases)
 }
 \examples{
+library(dplyr)
 tb = tibble::tibble(cs_rate = c(0.1, 0.3),
                     n_pt_cases = c(140, 234))
 tb \%>\% 

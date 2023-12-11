@@ -15,16 +15,6 @@
 #' @param for_highchart If TRUE, multiplies all rates by 100 for highchart; default is FALSE.
 #' @rdname create_ctrl_df
 #'
-#' @examples
-#' It might take a min to load OBI data
-#' library(tidyverse)
-#' OBI_data = read_current_data()
-#' structure_data(
-#'  df = OBI_data,
-#'  date_var = infant_dob_dt,
-#'  num_var = cesarean,
-#'  den_var = birth
-#'  )
 #'  
 #' @returns
 #' An tibble with the aggridated numerator and denominator by input date variable

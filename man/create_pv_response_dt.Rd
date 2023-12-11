@@ -33,8 +33,10 @@ this function read in pro survey data from
 }
 }
 \examples{
+\dontrun{
 obi_dt <- read_current_data() |> 
   create_obi_cohort(limit_to_locked = FALSE) 
 create_pv_response_dt(obi_dt) 
+}
  
 }

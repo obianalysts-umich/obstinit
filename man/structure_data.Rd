@@ -45,7 +45,8 @@ It then summarize the numerator and denominator of a rate of interest.
 This function also use control chart principles to calculate CIs and flag alerts.
 }
 \examples{
-It might take a min to load OBI data
+# It might take a min to load OBI data
+\dontrun{
 library(tidyverse)
 OBI_data = read_current_data()
 structure_data(
@@ -54,5 +55,6 @@ structure_data(
  num_var = cesarean,
  den_var = birth
  )
+ }
  
 }

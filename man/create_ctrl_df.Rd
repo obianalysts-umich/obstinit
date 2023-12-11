@@ -44,15 +44,3 @@ This function takes in a data frame row per observation like OBI data.
 It then summarize the numerator and denominator of a rate of interest.
 This function also use control chart principles to calculate CIs and flag alerts.
 }
-\examples{
-It might take a min to load OBI data
-library(tidyverse)
-OBI_data = read_current_data()
-structure_data(
- df = OBI_data,
- date_var = infant_dob_dt,
- num_var = cesarean,
- den_var = birth
- )
- 
-}

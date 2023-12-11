@@ -16,7 +16,8 @@
 #' @rdname structure_data
 #'
 #' @examples
-#' It might take a min to load OBI data
+#' # It might take a min to load OBI data
+#' \dontrun{
 #' library(tidyverse)
 #' OBI_data = read_current_data()
 #' structure_data(
@@ -25,6 +26,7 @@
 #'  num_var = cesarean,
 #'  den_var = birth
 #'  )
+#'  }
 #'  
 #' @returns
 #' An tibble with the aggridated numerator and denominator by input date variable

@@ -30,5 +30,7 @@ a message in the console
 send or save draft emails from R
 }
 \examples{
+\dontrun{
 send_email(email_message = "<p> This is an automatic message. </p> <p> OBI analytics team </p>")
+}
 }
