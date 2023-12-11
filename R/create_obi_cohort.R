@@ -12,6 +12,7 @@
 #' @param df Data frame -- usually this is the data frame read into R using data.table::fread
 #' @param limit_to_locked Logical -- if TRUE, only return cases that are locked
 #' @import tidyverse
+#' @import lubridate
 #' @export
 
 create_obi_cohort = function(df,
