@@ -18,7 +18,9 @@ Imports:
     tidyr,
     data.table,
     ggforce,
-    cli
+    cli,
+    lubridate,
+    tidyverse
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
