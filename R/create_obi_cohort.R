@@ -30,12 +30,8 @@ create_obi_cohort = function(df,
       ),
       ~ ifelse(discharge_opioid_e == 1, .x, NA)
     ),
-    mdhhs_id = case_when(
-      external_mdhhs_site_id == 4001 ~ "04001",
-      external_mdhhs_site_id == 8001 ~ "08001",
-      external_mdhhs_site_id == 9005 ~ "09005",
-      TRUE ~ as.character(external_mdhhs_site_id)
-    )
+    mdhhs_id = as.character(external_mdhhs_site_id),
+    mdhhs_id = ifelse(nchar(mdhhs_id) < 5, paste0("0", mdhhs_id), mdhhs_id),
   )
   
   if (limit_to_locked == T) {
