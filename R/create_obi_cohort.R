@@ -32,6 +32,29 @@ create_obi_cohort = function(df,
     ),
     mdhhs_id = as.character(external_mdhhs_site_id),
     mdhhs_id = ifelse(nchar(mdhhs_id) < 5, paste0("0", mdhhs_id), mdhhs_id),
+    race_eth = factor(
+      race_ethnicity3,
+      levels = c(
+        "AMERICAN INDIAN/ALASKAN NATIVE, NON-HISPANIC",
+        "ASIAN/PACIFIC ISLANDER, NON-HISPANIC",
+        "BLACK, NON-HISPANIC",
+        "HISPANIC",
+        "MORE THAN ONE RACE, NOT HISPANIC/LATINO",
+        "RACE AND/OR ETHNICITY MISSING",
+        "RACE AND/OR ETHNICITY UNKNOWN",
+        "WHITE, NON-HISPANIC"
+      ),
+      labels = c(
+        "American Indian or Alaskan Native",
+        "Asian or Pacific Islander",
+        "Black",
+        "Hispanic",
+        "More than one race",
+        "Missing",
+        "Unknown",
+        "White"
+      )
+    )
   )
   
   if (limit_to_locked == T) {
