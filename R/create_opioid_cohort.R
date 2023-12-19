@@ -12,7 +12,13 @@
 create_opioid_cohort = function(df) {
   # read in OME multiplication factors
   
-  OME <- readxl::read_xlsx("P:/opioids/OME_data.xlsx") |>
+  if (Sys.info()["sysname"] == "Windows") {
+    turbo_path = "P:/opioids/"
+  } else if (Sys.info()["sysname"] == "Darwin") {
+    turbo_path <- "/Volumes/nur-kanelow/opioids/"
+  }
+  
+  OME <- readxl::read_xlsx(paste0(turbo_path, "OME_data.xlsx")) |>
     select(-c(mult_factor_source, notes)) |>
     rename(opioid_name = opioid) |>
     select(-c(dose_common_unit))
