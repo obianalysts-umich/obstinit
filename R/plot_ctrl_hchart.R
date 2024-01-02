@@ -39,7 +39,9 @@ plot_ctrl_hchart <- function(df, title, ymin = NA, ymax = NA) {
         tooltip = list(pointFormat = "<b>Alert: {point.p_chart_alert}</b> <br> <b>Rate</b>: {point.rate}% <br> <b>Num:</b> {point.num} <br> <b>Denom:</b> {point.denom}")
       )
     ) %>%
-    highcharter::hc_title(text = {{ title }})
+    highcharter::hc_title(text = {{ title }}) |> 
+    highcharter::hc_exporting(enabled = TRUE, 
+                              filename = "obi_dashboard_plot") 
 
   ## fix x axis formats
 
