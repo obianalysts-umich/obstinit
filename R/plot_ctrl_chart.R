@@ -36,11 +36,11 @@ plot_ctrl_chart = function(df, plot_center_line = T) {
       aes(y = rate, fill = point_color),
       size = 3,
       shape = 21,
-      stroke = 0
+      stroke = NA
     ) +
     scale_fill_identity(guide = guide_legend("Control chart alert"),
                         labels = legend_lab) +
-    theme_obi() +
+    obstinit::theme_obi() +
     scale_y_continuous(labels = scales::percent)
   
     plot_2 = if (length(line_values) == 1) {
