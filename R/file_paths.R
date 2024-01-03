@@ -9,13 +9,11 @@
 #' 
 #'
 #' @param pc_unique_name your unique name. This will be used to find your account on PC. 
-#'    No need to input thisif using Mac
+#'    No need to input this if using Mac
 #'
-#' @return
 #' @export
 #'
-#' @examples
-#' 
+
 dropbox_root_path <- function(pc_unique_name = "ourdea") {
   if (Sys.info()["sysname"] == "Windows") {
     user_dir <- fs::dir_ls("C:/Users")
@@ -34,5 +32,31 @@ dropbox_root_path <- function(pc_unique_name = "ourdea") {
     user
   }
 
+}
+
+
+#' @title OBI Turbo root path
+#' @description Turbo path to nur-kanelow Turbo drive
+#'
+#' @return
+#' @export
+#'
+#' @examples
+turbo_root_path <- function() {
+  if (Sys.info()["sysname"] == "Windows") {
+    turbo_root <- "P:/"
+  } else if (Sys.info()["sysname"] == "Darwin") {
+    turbo_root <- "/Volumes/nur-kanelow/"
+  }
+  
+  # testing -----------------------------------------------------------------
+  if (file.exists(turbo_root) == FALSE) {
+    cli::cli_abort(c("Path doesn't exist at ", turbo_root,
+                     "i" = "Are you connect to VPN?"))
+  } else {
+    # retrun valid path
+    cli::cli_inform(paste0("Your turbo path is set as ", turbo_root))
+    turbo_root
+  }
 }
 
