@@ -41,7 +41,8 @@ plot_ctrl_hchart <- function(df, title, ymin = NA, ymax = NA) {
     ) %>%
     highcharter::hc_title(text = {{ title }}) |> 
     highcharter::hc_exporting(enabled = TRUE, 
-                              filename = "obi_dashboard_plot") 
+                              filename = "obi_dashboard_plot") |> 
+    hc_add_theme(hc_theme(chart = list(backgroundColor = 'white'))) 
 
   ## fix x axis formats
 
