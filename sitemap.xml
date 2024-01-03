@@ -99,4 +99,7 @@
   <url>
     <loc>/reference/theme_obi.html</loc>
   </url>
+  <url>
+    <loc>/reference/turbo_root_path.html</loc>
+  </url>
 </urlset>
