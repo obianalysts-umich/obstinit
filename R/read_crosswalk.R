@@ -8,8 +8,11 @@
 #' @export
 
 read_crosswalk = function() {
+  turbo_path = turbo_root_path()
+  crosswalk_file_path = paste0(turbo_path, "OBI hospital and provider/OBI Hospital Information/Crosswalk/crosswalk_current.xlsx")
+  
   openxlsx::read.xlsx(
-    "P:/OBI hospital and provider/OBI Hospital Information/Crosswalk/crosswalk_current.xlsx",
+    crosswalk_file_path,
     sheet = 1
   ) %>%
     janitor::clean_names() %>% 
