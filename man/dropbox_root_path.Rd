@@ -8,7 +8,7 @@ dropbox_root_path(pc_unique_name = "ourdea")
 }
 \arguments{
 \item{pc_unique_name}{your unique name. This will be used to find your account on PC.
-No need to input thisif using Mac}
+No need to input this if using Mac}
 }
 \description{
 Based in PC or Mac. If on PC, specify the unique name of the PC user.
