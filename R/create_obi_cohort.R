@@ -55,7 +55,7 @@ create_obi_cohort = function(df,
         "White"
       )
     ),
-    select_g1_site_2023 = ifelse(
+    g1_site_2023 = ifelse(
       site_name %in% c(
         "Ascension Genesys Hospital (Grand Blanc)",
         "Ascension St. John Hospital (Detroit)",
@@ -73,6 +73,23 @@ create_obi_cohort = function(df,
         "St. Joseph Mercy (Oakland)",
         "Trinity Health Ann Arbor",
         "Trinity Health Saint Mary s (Grand Rapids)",
+        "University of Michigan Health, West"
+      ),
+      1,
+      0
+    ),
+    select_g1_site_2023 = ifelse(
+      site_name %in% c(
+        "Ascension Genesys Hospital (Grand Blanc)",
+        "Ascension St. John Hospital (Detroit)",
+        "Corewell Health William Beaumont University Hospital",
+        "Covenant Healthcare (Saginaw)",
+        "DMC Hutzel Women s Hospital",
+        "Henry Ford Hospital (Detroit)",
+        "Holland Hospital (Holland)",
+        "Hurley Medical Center (Flint)",
+        "MyMichigan Medical Center (Midland)",
+        "Sparrow Hospital (Lansing)",
         "University of Michigan Health, West"
       ),
       1,
