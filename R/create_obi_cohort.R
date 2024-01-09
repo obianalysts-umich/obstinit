@@ -78,6 +78,32 @@ create_obi_cohort = function(df,
       1,
       0
     ),
+    g1_color_2023 = case_when(
+      site_name %in% c(
+        "Bronson Methodist Hospital (Kalamazoo)",
+        "St. Joseph Mercy (Oakland)",
+        "Trinity Health Saint Mary s (Grand Rapids)"
+      ) ~ "green",
+      site_name %in% c(
+        "Corewell Health Dearborn Hospital",
+        "Henry Ford West Bloomfield Hospital (West Bloomfield Township)",
+        "Trinity Health Ann Arbor"
+      ) ~ "yellow",
+      site_name %in% c(
+        "Ascension Genesys Hospital (Grand Blanc)",
+        "Ascension St. John Hospital (Detroit)",
+        "Corewell Health William Beaumont University Hospital",
+        "Covenant Healthcare (Saginaw)",
+        "DMC Hutzel Women s Hospital",
+        "Henry Ford Hospital (Detroit)",
+        "Holland Hospital (Holland)",
+        "Hurley Medical Center (Flint)",
+        "MyMichigan Medical Center (Midland)",
+        "Sparrow Hospital (Lansing)",
+        "University of Michigan Health, West"
+      ) ~ "red",
+      TRUE ~ as.character(NA)
+    ),
     select_g1_site_2023 = ifelse(
       site_name %in% c(
         "Ascension Genesys Hospital (Grand Blanc)",
