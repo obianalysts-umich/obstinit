@@ -2,7 +2,7 @@
 #' Calculate cat II compliance
 #'
 #' @export
-#' @param df Data frame -- ideally, run through obstinit::create_cat_II_cohort first
+#' @param df Data frame, run through obstinit::create_cat_II_cohort or otherwise having denominator criteria applied first
 #' @import tidyverse
 #' @rdname calculate_cat_II_comp
 

@@ -4,12 +4,12 @@
 \alias{create_cat_II_cohort}
 \title{Create cat II cohort}
 \usage{
-create_cat_II_cohort(df, limit_to_catII_sites = F)
+create_cat_II_cohort(df, limit_to_catII_sites = T)
 }
 \arguments{
 \item{df}{Data frame -- usually this is the data frame read into R using data.table::fread}
 
-\item{limit_to_catII_sites}{Whether or not to limit the cohort to 2023 Cat II sites - set to false by default}
+\item{limit_to_catII_sites}{Whether or not to limit the cohort to 2023 Cat II sites; default is TRUE}
 }
 \description{
 Create cat II cohort

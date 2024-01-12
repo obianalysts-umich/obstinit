@@ -4,12 +4,12 @@
 \alias{create_IA_cohort}
 \title{Create IA cohort}
 \usage{
-create_IA_cohort(df, limit_to_IA_sites = F)
+create_IA_cohort(df, limit_to_IA_sites = T)
 }
 \arguments{
-\item{df}{Data frame -- usually this is the data frame read into R using data.table::fread}
+\item{df}{Data frame -- usually this is obi_cohort created using obstinit::create_obi_cohort}
 
-\item{limit_to_IA_sites}{Whether cohort should be limited to 2023 IA sites; default is false}
+\item{limit_to_IA_sites}{Whether cohort should be limited to 2023 IA sites; default is TRUE}
 }
 \description{
 Create IA cohort

@@ -7,7 +7,7 @@
 calculate_cat_II_comp(df)
 }
 \arguments{
-\item{df}{Data frame -- ideally, run through obstinit::create_cat_II_cohort first}
+\item{df}{Data frame, run through obstinit::create_cat_II_cohort or otherwise having denominator criteria applied first}
 }
 \description{
 Calculate cat II compliance
