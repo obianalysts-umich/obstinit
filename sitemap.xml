@@ -25,13 +25,13 @@
     <loc>/reference/calculate_IA_comp.html</loc>
   </url>
   <url>
-    <loc>/reference/calculate_TB_comp.html</loc>
-  </url>
-  <url>
     <loc>/reference/calculate_cat_II_comp.html</loc>
   </url>
   <url>
     <loc>/reference/calculate_dys_comp.html</loc>
+  </url>
+  <url>
+    <loc>/reference/calculate_teambirth_comp.html</loc>
   </url>
   <url>
     <loc>/reference/create_90_day_lock_dt.html</loc>
