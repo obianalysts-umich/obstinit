@@ -7,7 +7,7 @@
 calculate_TB_comp(df)
 }
 \arguments{
-\item{df}{Data frame -- usually this is the data frame read into R using data.table::fread}
+\item{df}{Data frame -- note that in order to have the correct variables for numerator and denominator calculation, data frame MUST first be run through obstinit::create_teambirth_cohort}
 }
 \description{
 Calculate TeamBirth compliance
