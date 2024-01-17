@@ -123,15 +123,22 @@ create_obi_cohort = function(df,
         0
       ),
     ) |>
-    select(!c(submitdate, Record))
-    
-    if (limit_to_locked == T) {
-      df1 |> filter(
-        flg_complete == 1,
-        case_locked == 1,
-        infant_dob_dt >= lubridate::ymd_hms("2020-01-01 00:00:00")
-      )
-    }
+    select(!c(submitdate, Record)) |>
+    mutate(across(starts_with("submit"), ~ lubridate::dmy_hms(.x))) |>
+    rowwise() |> 
+    mutate(submitdate_max = max(
+      c_across(submitdate.abs_delivery:submitdate_abs_visit_4),
+      na.rm = T
+    )) |>
+    ungroup()
+
+  if (limit_to_locked == T) {
+    df1 |> filter(
+      flg_complete == 1,
+      case_locked == 1,
+      infant_dob_dt >= lubridate::ymd_hms("2020-01-01 00:00:00")
+    )
+  }
   
   else if (limit_to_locked == F) {
     df1 |> filter(flg_complete == 1,
