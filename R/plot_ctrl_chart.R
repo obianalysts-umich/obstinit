@@ -3,14 +3,16 @@
 #'
 #' @param df A data frame in wide format, created by the structure_data function
 #' @param plot_center_line If TRUE, the center line will be added to the plot
+#' @param quarterly If TRUE, the x axis will be formatted as quarterly; if FALSE, x axis is formatted monthly. Default value is FALSE (formatted monthly).
 #' @import data.table
 #' @importFrom ggforce geom_link2
 #' @export
 #' @rdname plot_ctrl_chart
 
 
-plot_ctrl_chart = function(df, plot_center_line = T) {
-  
+plot_ctrl_chart = function(df,
+                           plot_center_line = T,
+                           fmt_x_quarterly = F) {
   line_values = unique(df$col_ID)
   
   # sort value for line color assignment
@@ -28,7 +30,7 @@ plot_ctrl_chart = function(df, plot_center_line = T) {
   # plot --------------------------------------------------------------------
   
   plot_1 = ggplot(aes(x = date_var),
-         data = df) +
+                  data = df) +
     geom_ribbon(aes(ymin = LCL, ymax = UCL),
                 fill = "#CAC4CE",
                 alpha = 0.4) +
@@ -43,29 +45,40 @@ plot_ctrl_chart = function(df, plot_center_line = T) {
     obstinit::theme_obi() +
     scale_y_continuous(labels = scales::percent)
   
-    plot_2 = if (length(line_values) == 1) {
-      plot_1 +
+  plot_2 = if (length(line_values) == 1) {
+    plot_1 +
       geom_line(aes(y = rate, color = point_color), linewidth = 0.8) +
-        scale_color_identity(guide = "none")
-    }
+      scale_color_identity(guide = "none")
+  }
   else{
     plot_1 +
-    geom_link2(aes(y = rate, color = col_ID), linewidth = 0.8) +
+      geom_link2(aes(y = rate, color = col_ID), linewidth = 0.8) +
       scale_color_gradientn(
         colors = line_color_pal,
         values = scales::rescale(line_values_sort),
         guide = "none"
       )
   }
-    
-    if (plot_center_line){plot_2 + geom_line(
+  
+  if (plot_center_line) {
+    plot_2 + geom_line(
       aes(y = CL),
       color = OBI.color::prim_dark_blue(),
       linetype = "dashed",
       linewidth = 0.75,
       alpha = 0.5
-    )}
-    else{plot_2}
+    )
+  }
+  else{
+    plot_2
+  }
   
-  
+  if (fmt_x_quarterly) {
+    plot_2 +
+      zoo::scale_x_yearqtr(format = "%Y Q%q")
+  }
+  else{
+    plot_2 +
+      zoo::scale_x_yearmon(format = "%b %Y")
+  }
 }
