@@ -8,7 +8,7 @@
 #' @export
 #' @rdname calculate_max_submitdate
 
-calculate_max_submitdate <- function() {
+calculate_max_submitdate <- function(df) {
   df |>
     select(!c(submitdate, Record)) |>
     mutate(across(starts_with("submit"), ~ lubridate::dmy_hms(.x))) |>

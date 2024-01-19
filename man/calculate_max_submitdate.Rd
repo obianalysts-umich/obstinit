@@ -4,7 +4,7 @@
 \alias{calculate_max_submitdate}
 \title{Calculate maximum submitdate}
 \usage{
-calculate_max_submitdate()
+calculate_max_submitdate(df)
 }
 \arguments{
 \item{df}{Data frame -- usually this is obi_cohort created with obstinit::read_current_data() |> obstinit::create_obi_cohort()}
