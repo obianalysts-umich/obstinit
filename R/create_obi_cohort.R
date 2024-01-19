@@ -122,15 +122,7 @@ create_obi_cohort = function(df,
         1,
         0
       ),
-    ) |>
-    select(!c(submitdate, Record)) |>
-    mutate(across(starts_with("submit"), ~ lubridate::dmy_hms(.x))) |>
-    rowwise() |> 
-    mutate(submitdate_max = max(
-      c_across(submitdate.abs_delivery:submitdate_abs_visit_4),
-      na.rm = T
-    )) |>
-    ungroup()
+    )
 
   if (limit_to_locked == T) {
     df1 |> filter(
