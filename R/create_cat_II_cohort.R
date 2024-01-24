@@ -12,8 +12,9 @@ create_cat_II_cohort = function(df, limit_to_catII_sites = T) {
     filter(
       planned_mode_of_delivery_cd == 1,
       transfer_from_home_birth_b != 1,
-      mode_of_delivery_cd == 4,
-      ces_primary_indication_cd == 6,
+      # mode_of_delivery_cd == 4,
+      !is.na(fht_mgt_documentation_e),
+      # ces_primary_indication_cd == 6,
       fht_category_e %in% c(1, 3)
     )
   
