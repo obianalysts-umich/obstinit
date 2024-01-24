@@ -18,7 +18,8 @@ create_obi_cohort = function(df,
                              limit_to_locked = T) {
   df1 = df |>
     mutate(
-      infant_dob_dt = lubridate::dmy_hms(infant_dob_dt),
+      infant_dob_dt_hms = lubridate::dmy_hms(infant_dob_dt),
+      infant_dob_dt = lubridate::as_date(infant_dob_dt_hms),
       #case locks at MIDNIGHT AFTER THIS DATE
       case_lock_dt = lubridate::date(infant_dob_dt) + days(90),
       case_locked = ifelse(case_lock_dt < lubridate::today(), 1, 0),
