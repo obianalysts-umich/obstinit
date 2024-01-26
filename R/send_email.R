@@ -27,15 +27,10 @@ send_email <- function(email_message = "<p> This is an automatic message. </p> <
   # message
   cli::cli_alert_info("This function is only possible with Outlook app")
   
-  # check if PC
-  #if (!Sys.info()["sysname"] == "Windows"){
-  #  cli::cli_abort("this function only works on Windows, see package RDCOMClient requirement.")
-  #}
-  
   # install pkg if needed
   if (!require("Microsoft365R")) {
     cli::cli_alert_info("installing Microsoft365R package for email sending")
-    devtools::install_github("Microsoft365R")
+    devtools::install_github("Azure/Microsoft365R")
   } 
   
   # email set up ---------------------------------------------------------------
