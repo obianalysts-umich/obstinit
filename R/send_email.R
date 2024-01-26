@@ -8,6 +8,7 @@
 #' @param email_to an email address or a list of addresses in format: c("","")
 #' @param email_subject your email subject
 #' @param cc an email address or a list of addresses in format: c("","")
+#' @param attachment a pathname for a file to be attached to the email
 #' @param save_or_send default to "save", can be "save" or "send"
 #'
 #' @return a message in the console
@@ -22,15 +23,16 @@ send_email <- function(email_message = "<p> This is an automatic message. </p> <
                        email_to = "obianalysts@umich.edu",
                        email_subject = "test",
                        cc = NULL,
+                       attachment = NULL, 
                        save_or_send = "save"
 ) {
   # message
   cli::cli_alert_info("This function is only possible with Outlook app")
-  
+
   # install pkg if needed
   if (!require("Microsoft365R")) {
     cli::cli_alert_info("installing Microsoft365R package for email sending")
-    devtools::install_github("Azure/Microsoft365R")
+    devtools::install_github("Microsoft365R")
   } 
   
   # email set up ---------------------------------------------------------------
@@ -46,6 +48,10 @@ send_email <- function(email_message = "<p> This is an automatic message. </p> <
     send_now = F
   )
   
+  if (!is.null(attachment)) {
+    outMail$add_attachment(attachment)
+  }
+  
   # send or save ---------------------------------------------------------------
   
   if (save_or_send == "save") {
@@ -58,3 +64,5 @@ send_email <- function(email_message = "<p> This is an automatic message. </p> <
   }
   
 }
+
+

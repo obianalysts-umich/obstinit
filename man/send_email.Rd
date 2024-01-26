@@ -9,17 +9,20 @@ send_email(
   email_to = "obianalysts@umich.edu",
   email_subject = "test",
   cc = NULL,
+  attachment = NULL,
   save_or_send = "save"
 )
 }
 \arguments{
 \item{email_message}{your email body; use html code for breaks and hyperlinks}
 
-\item{email_to}{a email address or a list of email addresses separated by ";"}
+\item{email_to}{an email address or a list of addresses in format: c("","")}
 
-\item{email_subject}{text}
+\item{email_subject}{your email subject}
 
-\item{cc}{a email address or a list of email addresses separated by ";"}
+\item{cc}{an email address or a list of addresses in format: c("","")}
+
+\item{attachment}{a pathname for a file to be attached to the email}
 
 \item{save_or_send}{default to "save", can be "save" or "send"}
 }
@@ -27,10 +30,10 @@ send_email(
 a message in the console
 }
 \description{
-send or save draft emails from R
+Send or save draft emails from R
 }
 \examples{
 \dontrun{
-send_email(email_message = "<p> This is an automatic message. </p> <p> OBI analytics team </p>")
+send_email(email_message = "<p> This is a test.")
 }
 }
