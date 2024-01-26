@@ -32,7 +32,7 @@ send_email <- function(email_message = "<p> This is an automatic message. </p> <
   # install pkg if needed
   if (!require("Microsoft365R")) {
     cli::cli_alert_info("installing Microsoft365R package for email sending")
-    devtools::install_github("Microsoft365R")
+    devtools::install_github("Azure/Microsoft365R") 
   } 
   
   # email set up ---------------------------------------------------------------
