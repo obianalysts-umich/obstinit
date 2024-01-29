@@ -45,21 +45,7 @@ send_email <- function(email_message = "<p> This is an automatic message. </p> <
   
   # email set up ---------------------------------------------------------------
   
-  use_account <- get_business_outlook()
-  
-  outMail <- use_account$create_email(
-    content_type = "html",
-    body = email_message, 
-    subject = email_subject,
-    to = email_to,
-    cc = cc,
-    send_now = F
-  )
-  
-  if (!is.null(attachment)) {
-    outMail$add_attachment(attachment)
-  }
-  
+  u
   # send or save ---------------------------------------------------------------
   
   if (save_or_send == "save") {
