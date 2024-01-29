@@ -35,6 +35,14 @@ send_email <- function(email_message = "<p> This is an automatic message. </p> <
     devtools::install_github("Azure/Microsoft365R") 
   } 
   
+  #check list format ------------------------------------------------------
+  
+  if (grepl(";", email_to)) {
+    strsplit(email_to, ";")
+  } else if (grepl("; ", email_to)) {
+    strsplit(email_to, "; ")
+  }
+  
   # email set up ---------------------------------------------------------------
   
   use_account <- get_business_outlook()
