@@ -123,6 +123,30 @@ create_obi_cohort = function(df,
         1,
         0
       ),
+      g1_sites_2024 = ifelse(
+        site_name %in% c(
+        "Ascension Genesys Hospital (Grand Blanc)",
+        "Ascension Providence Hospital Medical Center",
+        "Ascension Providence, Novi",
+        "Ascension St. John Hospital (Detroit)",
+        "Bronson Battle Creek (Battle Creek)",
+        "Corewell Health Beaumont Troy Hospital",
+        "Corewell Health Dearborn Hospital",
+        "Corewell Health Farmington Hills Hospital",
+        "Corewell Health Trenton Hospital",
+        "Corewell Health Wayne Hospital",
+        "Corewell Health William Beaumont University Hospital",
+        "DMC Hutzel Women s Hospital",
+        "DMC Sinai Grace Hospital (Detroit)",
+        "Henry Ford Allegiance Health (Jackson)",
+        "Henry Ford Macomb Hospital (Clinton Township)",
+        "Holland Hospital (Holland)",
+        "McLaren Greater Lansing (Lansing)",
+        "McLaren Port Huron (Port Huron)",
+        "Michigan Medicine (Ann Arbor)",
+        "Munson Medical Center (Traverse City)",
+        "Sparrow Hospital (Lansing)"
+      ), 1, 0)
     )
 
   if (limit_to_locked == T) {
