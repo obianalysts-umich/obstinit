@@ -38,9 +38,8 @@ send_email <- function(email_message = "<p> This is an automatic message. </p> <
   #check list format ------------------------------------------------------
   
   if (grepl(";", email_to)) {
-    strsplit(email_to, ";")
-  } else if (grepl("; ", email_to)) {
-    strsplit(email_to, "; ")
+    email_to <- strsplit(email_to, ";")
+    email_to <- email_to[[1]]
   }
   
   # email set up ---------------------------------------------------------------
