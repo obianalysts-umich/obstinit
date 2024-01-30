@@ -6,10 +6,10 @@
 #'
 #' @param email_message your email body; use html code for breaks and hyperlinks 
 #' @param email_to an email address or a list of addresses in format: c("","")
-#' @param email_from an email address 
 #' @param email_subject your email subject
 #' @param cc an email address or a list of addresses in format: c("","")
 #' @param attachment a pathname for a file to be attached to the email
+#' @param reply_to an email address to which all replies will be sent 
 #' @param save_or_send default to "save", can be "save" or "send"
 #'
 #' @return a message in the console
@@ -22,10 +22,10 @@
 
 send_email <- function(email_message = "<p> This is an automatic message. </p> <p> OBI analytics team </p> ",
                        email_to = "obianalysts@umich.edu",
-                       email_from = NULL, 
                        email_subject = "test",
                        cc = NULL,
                        attachment = NULL, 
+                       reply_to = NULL, 
                        save_or_send = "save"
 ) {
   # message
@@ -46,7 +46,7 @@ send_email <- function(email_message = "<p> This is an automatic message. </p> <
   
   # email set up ---------------------------------------------------------------
   
-  use_account <- get_business_outlook(shared_mbox_email = email_from)
+  use_account <- get_business_outlook()
   
   outMail <- use_account$create_email(
     content_type = "html",
@@ -54,6 +54,7 @@ send_email <- function(email_message = "<p> This is an automatic message. </p> <
     subject = email_subject,
     to = email_to,
     cc = cc,
+    reply_to = reply_to,
     send_now = F
   )
   
