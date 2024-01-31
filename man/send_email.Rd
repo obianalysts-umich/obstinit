@@ -10,6 +10,7 @@ send_email(
   email_subject = "test",
   cc = NULL,
   attachment = NULL,
+  reply_to = NULL,
   save_or_send = "save"
 )
 }
@@ -23,6 +24,8 @@ send_email(
 \item{cc}{an email address or a list of addresses in format: c("","")}
 
 \item{attachment}{a pathname for a file to be attached to the email}
+
+\item{reply_to}{an email address to which all replies will be sent}
 
 \item{save_or_send}{default to "save", can be "save" or "send"}
 }

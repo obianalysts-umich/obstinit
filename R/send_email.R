@@ -73,6 +73,10 @@ send_email <- function(email_message = "<p> This is an automatic message. </p> <
     cli::cli_alert_info("save_or_send must be either 'save' or 'send'")
   }
   
+  
+  # clean token credentials ------------------------------------------------- 
+  # if your password or account is updated
+  # AzureAuth::clean_token_directory() 
 }
 
 
