@@ -7,7 +7,7 @@
 create_pv_response_dt(obi_dt, pro_survey_expired = FALSE)
 }
 \arguments{
-\item{obi_dt}{OBI nightly export data}
+\item{obi_dt}{OBI nightly export data; use current data, becasue expiration date is based on current date}
 
 \item{pro_survey_expired}{logical, if TRUE, only include patients who are after 12 weeks postpartum}
 }
@@ -15,14 +15,11 @@ create_pv_response_dt(obi_dt, pro_survey_expired = FALSE)
 a data frame with variables: patientid, site_name, infant_dob_dt, complete_pro_survey_flg, survey_informed_consent_b_0
 }
 \description{
-combine patient contact log with survey response data
+This function create OBI subset cohort of pts who received pro survey emails.
+There are two additional vars added to OBI dataset
 \itemize{
-\item cohort: pts who received pro survey emails
-\item added var:
-\itemize{
-\item pro_response: pts who completed pro survey (opt out pts also consider complete)
-\item pts choose to opt out: survey_informed_consent_b_0 ==0
-}
+\item pro_response: pts who completed pro survey pro_response == 1
+\item survey_informed_consent_b_0: pts choose to opt out ==0; Self opt out pts also consider complete the survey.
 }
 }
 \details{
