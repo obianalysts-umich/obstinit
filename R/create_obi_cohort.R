@@ -58,94 +58,94 @@ create_obi_cohort = function(df,
         )
       ),
       g1_site_2023 = ifelse(
-        site_name %in% c(
-          "Ascension Genesys Hospital (Grand Blanc)",
-          "Ascension St. John Hospital (Detroit)",
-          "Bronson Methodist Hospital (Kalamazoo)",
-          "Corewell Health Dearborn Hospital",
-          "Corewell Health William Beaumont University Hospital",
-          "Covenant Healthcare (Saginaw)",
-          "DMC Hutzel Women s Hospital",
-          "Henry Ford Hospital (Detroit)",
-          "Henry Ford West Bloomfield Hospital (West Bloomfield Township)",
-          "Holland Hospital (Holland)",
-          "Hurley Medical Center (Flint)",
-          "MyMichigan Medical Center (Midland)",
-          "Sparrow Hospital (Lansing)",
-          "St. Joseph Mercy (Oakland)",
-          "Trinity Health Ann Arbor",
-          "Trinity Health Saint Mary s (Grand Rapids)",
-          "University of Michigan Health, West"
+        mdhhs_id %in% c(
+          "25006",
+          "82053",
+          "39002",
+          "82514",
+          "63015",
+          "73008",
+          "82058",
+          "82028",
+          "63031",
+          "70001",
+          "25005",
+          "56002",
+          "33001",
+          "63009",
+          "81005",
+          "41010",
+          "41005"
         ),
         1,
         0
       ),
       g1_color_2023 = case_when(
-        site_name %in% c(
-          "Bronson Methodist Hospital (Kalamazoo)",
-          "St. Joseph Mercy (Oakland)",
-          "Trinity Health Saint Mary s (Grand Rapids)"
+        mdhhs_id %in% c(
+          "39002",
+          "63009",
+          "41010"
         ) ~ "green",
-        site_name %in% c(
-          "Corewell Health Dearborn Hospital",
-          "Henry Ford West Bloomfield Hospital (West Bloomfield Township)",
-          "Trinity Health Ann Arbor"
+        mdhhs_id %in% c(
+          "82514",
+          "63031",
+          "81005"
         ) ~ "yellow",
-        site_name %in% c(
-          "Ascension Genesys Hospital (Grand Blanc)",
-          "Ascension St. John Hospital (Detroit)",
-          "Corewell Health William Beaumont University Hospital",
-          "Covenant Healthcare (Saginaw)",
-          "DMC Hutzel Women s Hospital",
-          "Henry Ford Hospital (Detroit)",
-          "Holland Hospital (Holland)",
-          "Hurley Medical Center (Flint)",
-          "MyMichigan Medical Center (Midland)",
-          "Sparrow Hospital (Lansing)",
-          "University of Michigan Health, West"
+        mdhhs_id %in% c(
+          "25006",
+          "82053",
+          "63015",
+          "73008",
+          "82058",
+          "82028",
+          "70001",
+          "25005",
+          "56002",
+          "33001",
+          "41005"
         ) ~ "red",
         TRUE ~ as.character(NA)
       ),
       select_g1_site_2023 = ifelse(
-        site_name %in% c(
-          "Ascension Genesys Hospital (Grand Blanc)",
-          "Ascension St. John Hospital (Detroit)",
-          "Corewell Health William Beaumont University Hospital",
-          "Covenant Healthcare (Saginaw)",
-          "DMC Hutzel Women s Hospital",
-          "Henry Ford Hospital (Detroit)",
-          "Holland Hospital (Holland)",
-          "Hurley Medical Center (Flint)",
-          "MyMichigan Medical Center (Midland)",
-          "Sparrow Hospital (Lansing)",
-          "University of Michigan Health, West"
+        mdhhs_id %in% c(
+          "25006",
+          "82053",
+          "63015",
+          "73008",
+          "82058",
+          "82028",
+          "70001",
+          "25005",
+          "56002",
+          "33001",
+          "41005"
         ),
         1,
         0
       ),
       g1_sites_2024 = ifelse(
-        site_name %in% c(
-        "Ascension Genesys Hospital (Grand Blanc)",
-        "Ascension Providence Hospital Medical Center",
-        "Ascension Providence, Novi",
-        "Ascension St. John Hospital (Detroit)",
-        "Bronson Battle Creek (Battle Creek)",
-        "Corewell Health Beaumont Troy Hospital",
-        "Corewell Health Dearborn Hospital",
-        "Corewell Health Farmington Hills Hospital",
-        "Corewell Health Trenton Hospital",
-        "Corewell Health Wayne Hospital",
-        "Corewell Health William Beaumont University Hospital",
-        "DMC Hutzel Women s Hospital",
-        "DMC Sinai Grace Hospital (Detroit)",
-        "Henry Ford Allegiance Health (Jackson)",
-        "Henry Ford Macomb Hospital (Clinton Township)",
-        "Holland Hospital (Holland)",
-        "McLaren Greater Lansing (Lansing)",
-        "McLaren Port Huron (Port Huron)",
-        "Michigan Medicine (Ann Arbor)",
-        "Munson Medical Center (Traverse City)",
-        "Sparrow Hospital (Lansing)"
+        mdhhs_id %in% c(
+        "25006",
+        "63019",
+        "63029",
+        "82053",
+        "13013",
+        "63023",
+        "82514",
+        "63018",
+        "82537",
+        "82535",
+        "63015",
+        "82058",
+        "82024",
+        "38009",
+        "50014",
+        "70001",
+        "33002",
+        "74004",
+        "81006",
+        "28002",
+        "33001"
       ), 1, 0)
     )
 
