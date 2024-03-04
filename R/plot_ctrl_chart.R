@@ -21,7 +21,12 @@ plot_ctrl_chart = function(df,
   
   # assign labels for legend
   
-  legend_lab = df %>% select(point_color, p_chart_alert) %>% group_by(point_color, p_chart_alert) %>% slice_head() %>% select(p_chart_alert) %>% pull()
+  legend_lab = df |>
+    select(point_color, p_chart_alert) |>
+    group_by(point_color, p_chart_alert) |>
+    slice_head() |>
+    select(p_chart_alert) |>
+    pull()
   
   # line color palette
   
