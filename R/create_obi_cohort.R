@@ -123,7 +123,7 @@ create_obi_cohort = function(df,
         1,
         0
       ),
-      g1_sites_2024 = ifelse(
+      g1_site_2024 = ifelse(
         mdhhs_id %in% c(
         "25006",
         "63019",
