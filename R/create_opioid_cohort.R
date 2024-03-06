@@ -76,7 +76,21 @@ create_opioid_cohort = function(df) {
       opioid_dose_no3,
       opioid_quantity_no1,
       opioid_quantity_no2,
-      opioid_quantity_no3
+      opioid_quantity_no3,
+      opioid_24hr_prior_dc_b,
+      opioid_type_24hr_prior_dc_e,
+      codeine_administered_unit_e,
+      codeine_administered_dose_no,
+      hydrocodone_administered_unit_e,
+      hydrocodone_administered_dose_no,
+      hydromorphone_administered_unit_e,
+      hydromorphone_administered_dose_no,
+      morphine_administered_unit_e,
+      morphine_administered_dose_no,
+      oxycodone_administered_unit_e,
+      oxycodone_administered_dose_no,
+      tramadol_administered_unit_e,
+      tramadol_administered_dose_no
     )
   
   # Merge OME conversion factors into OBI dataset
@@ -105,7 +119,21 @@ create_opioid_cohort = function(df) {
       opioid_name3,
       mult_factor_OME1,
       mult_factor_OME2,
-      mult_factor_OME3
+      mult_factor_OME3,
+      opioid_24hr_prior_dc_b,
+      opioid_type_24hr_prior_dc_e,
+      codeine_administered_unit_e,
+      codeine_administered_dose_no,
+      hydrocodone_administered_unit_e,
+      hydrocodone_administered_dose_no,
+      hydromorphone_administered_unit_e,
+      hydromorphone_administered_dose_no,
+      morphine_administered_unit_e,
+      morphine_administered_dose_no,
+      oxycodone_administered_unit_e,
+      oxycodone_administered_dose_no,
+      tramadol_administered_unit_e,
+      tramadol_administered_dose_no
     ) |>
     mutate(
       opioid_OME1 = opioid_dose_no1 * opioid_quantity_no1 * mult_factor_OME1,
