@@ -7,6 +7,7 @@
 send_email(
   email_message = "<p> This is an automatic message. </p> <p> OBI analytics team </p> ",
   email_to = "obianalysts@umich.edu",
+  email_from = NULL,
   email_subject = "test",
   cc = NULL,
   attachment = NULL,
@@ -17,13 +18,15 @@ send_email(
 \arguments{
 \item{email_message}{your email body; use html code for breaks and hyperlinks}
 
-\item{email_to}{an email address or a list of addresses in format: c("","")}
+\item{email_to}{an email address or a list of addresses in format: c(";")}
+
+\item{email_from}{email send from address, for example \code{OBICustomerSupport@med.umich.edu}}
 
 \item{email_subject}{your email subject}
 
-\item{cc}{an email address or a list of addresses in format: c("","")}
+\item{cc}{an email address or a list of addresses in format: c(";")}
 
-\item{attachment}{a pathname for a file to be attached to the email}
+\item{attachment}{a path name for a file to be attached to the email}
 
 \item{reply_to}{an email address to which all replies will be sent}
 

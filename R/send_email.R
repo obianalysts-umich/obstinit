@@ -68,8 +68,6 @@ send_email <- function(email_message = "<p> This is an automatic message. </p> <
     } else {
       cli::cli_alert_info("save_or_send must be either 'save' or 'send'")
     }
-
- 
 }
 
   
