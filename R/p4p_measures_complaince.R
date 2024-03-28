@@ -72,8 +72,7 @@ pv_email_submission_rate <- function(
 #'
 #' @inheritParams pv_email_submission_rate 
 #'
-#' @details The function filters the input data table to include only records with infant date of birth
-#'          on or after January 1, 2024. It then calculates the number of patients, the number of missing
+#' @details It then calculates the number of patients, the number of missing
 #'          race and ethnicity values, and the percentage of missing values. If \code{by_site} is TRUE,
 #'          the measures are calculated separately for each site.
 #'
@@ -95,14 +94,9 @@ pv_email_submission_rate <- function(
 #' 
 race_ethnicity_measure <- function(obi_dt,
                                    by_site = TRUE){
-  obi_dt_gt_2024 = obi_dt |>
-    # race_ethnicity_cd only available after 2024-01-01
-    filter(infant_dob_ymd >= "2024-01-01")
-  
-  cli::cli_alert_info("combined race_ethnicity_cd only available after 2024-01-01.")
 
   if (by_site) {
-    obi_dt_gt_2024 |>
+    obi_dt |>
       summarise(
         n_pt = n(),
         n_NA_race_ethnicity = sum(is.na(race_ethnicity_cd)),
@@ -110,7 +104,7 @@ race_ethnicity_measure <- function(obi_dt,
         .by = c(site_name)
       )
   } else {
-    obi_dt_gt_2024 |>
+    obi_dt |>
       summarise(
         n_pt = n(),
         n_NA_race_ethnicity = sum(is.na(race_ethnicity_cd)),

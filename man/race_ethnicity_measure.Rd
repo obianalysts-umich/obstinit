@@ -19,8 +19,7 @@ A summarized data table with the calculated measures.
 Calculate race and ethnicity missing measure
 }
 \details{
-The function filters the input data table to include only records with infant date of birth
-on or after January 1, 2024. It then calculates the number of patients, the number of missing
+It then calculates the number of patients, the number of missing
 race and ethnicity values, and the percentage of missing values. If \code{by_site} is TRUE,
 the measures are calculated separately for each site.
 }
