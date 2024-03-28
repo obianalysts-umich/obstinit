@@ -164,109 +164,18 @@ create_obi_cohort = function(df,
       df1 |> filter(flg_complete == 1,
                     infant_dob_dt >= lubridate::ymd_hms("2020-01-01 00:00:00"))
     }
-    
+    # data processing for R dataset
   } else{
     df1 = df |>
-      mutate(
-        across(
-          c(
-            starts_with("opioid_e"),
-            starts_with("opioid_dose"),
-            starts_with("opioid_quantity_no"),
-            starts_with("opioid_unit")
-          ),
-          ~ ifelse(discharge_opioid_e == 1, .x, NA)
+      mutate(across(
+        c(
+          starts_with("opioid_e"),
+          starts_with("opioid_dose"),
+          starts_with("opioid_quantity_no"),
+          starts_with("opioid_unit")
         ),
-        g1_site_2023 = ifelse(
-          external_mdhhs_site_id %in% c(
-            "25006",
-            "82053",
-            "39002",
-            "82514",
-            "63015",
-            "73008",
-            "82058",
-            "82028",
-            "63031",
-            "70001",
-            "25005",
-            "56002",
-            "33001",
-            "63009",
-            "81005",
-            "41010",
-            "41005"
-          ),
-          1,
-          0
-        ),
-        g1_color_2023 = case_when(
-          external_mdhhs_site_id %in% c("39002",
-                          "63009",
-                          "41010") ~ "green",
-          external_mdhhs_site_id %in% c("82514",
-                          "63031",
-                          "81005") ~ "yellow",
-          external_mdhhs_site_id %in% c(
-            "25006",
-            "82053",
-            "63015",
-            "73008",
-            "82058",
-            "82028",
-            "70001",
-            "25005",
-            "56002",
-            "33001",
-            "41005"
-          ) ~ "red",
-          TRUE ~ as.character(NA)
-        ),
-        select_g1_site_2023 = ifelse(
-          external_mdhhs_site_id %in% c(
-            "25006",
-            "82053",
-            "63015",
-            "73008",
-            "82058",
-            "82028",
-            "70001",
-            "25005",
-            "56002",
-            "33001",
-            "41005"
-          ),
-          1,
-          0
-        ),
-        g1_site_2024 = ifelse(
-          external_mdhhs_site_id %in% c(
-            "25006",
-            "63019",
-            "63029",
-            "82053",
-            "13013",
-            "63023",
-            "82514",
-            "63018",
-            "82537",
-            "82535",
-            "63015",
-            "82058",
-            "82024",
-            "38009",
-            "50014",
-            "70001",
-            "33002",
-            "74004",
-            "81006",
-            "28002",
-            "33001"
-          ),
-          1,
-          0
-        )
-      )
+        ~ ifelse(discharge_opioid_e == 1, .x, NA)
+      ))
     
     if (limit_to_locked == T) {
       df1 |> filter(
