@@ -33,6 +33,7 @@ This function calculates the email submission rate  by
 comparing the patient IDs in the OBI dataset with the patient IDs in the contact log.
 It returns the number of patients, the number of patients who submitted their email,
 and the percentage of patients who submitted their email.
+compliance definition is at https://docs.google.com/spreadsheets/d/123r8ShMQuxl7GQQsX2Buuh9ynOyMRHOaSeKoFHiwx58/edit#gid=793851872
 }
 \details{
 the reason why we use contact log instead of the variable \emph{email_txt} in the OBI dataset
@@ -47,3 +48,8 @@ obi_dt_subset <- obi_dt |>
 pv_email_submission_rate(obi_dt_subset, contact_log_path = "/path/to/contactlog.csv")
 }
 }
+\seealso{
+Other {P4P measures}: 
+\code{\link{race_ethnicity_measure}()}
+}
+\concept{{P4P measures}}
