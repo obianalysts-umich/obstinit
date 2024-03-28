@@ -118,3 +118,36 @@ race_ethnicity_measure <- function(obi_dt,
       )
   }
 }
+
+
+#' Function to calculate the average days to submit for each site
+#'
+#' This function takes OBI data as input and calculates the average days to submit for each site.
+#' It selects the patient ID, site name, and maximum days from delivery to submission from the input data frame.
+#' Then, it calculates the average days to submit for each site and returns the result as a data frame.
+#'
+#' @param obi_dt A data frame containing the necessary columns (patientid, site_name, deliv_to_submit_max_days_int)
+#'
+#' @return A data frame with the average days to submit for each site
+#'
+#' @examples
+#' data <- data.frame(patientid = c(1, 2, 3),
+#'                    site_name = c("Site A", "Site B", "Site A"),
+#'                    deliv_to_submit_max_days_int = c(5, 7, 3))
+#' average_days_to_submit(data)
+#'
+#' @export
+
+average_days_to_submit <- function(obi_dt) {
+  obi_dt |>
+    select(
+      site_name,  
+      deliv_to_submit_max_days_int  
+    ) |>
+    # average days of submission
+    summarise(
+      avg_days_to_submit = mean(deliv_to_submit_max_days_int, na.rm = TRUE),  # Calculating the average days to submit
+      .by = c(site_name)  
+    )
+}
+

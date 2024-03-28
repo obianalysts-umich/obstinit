@@ -2,6 +2,7 @@
 
 export(add_CI_values)
 export(add_benchmark)
+export(average_days_to_submit)
 export(calculate_IA_comp)
 export(calculate_cat_II_comp)
 export(calculate_dys_comp)
