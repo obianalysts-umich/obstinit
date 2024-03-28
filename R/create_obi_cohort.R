@@ -165,11 +165,10 @@ create_obi_cohort = function(df,
                     infant_dob_dt >= lubridate::ymd_hms("2020-01-01 00:00:00"))
     }
     
-  }
-  else{
+  } else{
     df1 = df |>
       mutate(
-        infant_dob_dt_hms = lubridate::dmy_hms(infant_dob_dt),
+        infant_dob_dt_hms = lubridate::ymd_hms(infant_dob_dt),
         infant_dob_dt = lubridate::as_date(infant_dob_dt_hms),
         #case locks at MIDNIGHT AFTER THIS DATE
         case_lock_dt = infant_dob_dt_hms + days(91),
