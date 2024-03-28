@@ -8,6 +8,7 @@
 #' comparing the patient IDs in the OBI dataset with the patient IDs in the contact log.
 #' It returns the number of patients, the number of patients who submitted their email,
 #' and the percentage of patients who submitted their email.
+#' compliance definition is at https://docs.google.com/spreadsheets/d/123r8ShMQuxl7GQQsX2Buuh9ynOyMRHOaSeKoFHiwx58/edit#gid=793851872
 #'
 #' @param obi_dt The input dataset containing patient information. If you only need a certain infant dob
 #' range, you can filter the dataset before passing it to this function.
@@ -41,12 +42,13 @@ pv_email_submission_rate <- function(
   contact_log <- read_csv(contact_log_path)
 
   # create flg for pts with emails
-  obi_dt <- obi_dt |>
+  obi_dt_consent <- obi_dt |>
+    filter(is.na(pro_opt_out_e)) |>
     mutate(pt_with_emails_flg = ifelse(patientid %in% contact_log$patientid, 1, 0))
 
   # response rate -----------------------------
   if (by_site) {
-    obi_dt |>
+    obi_dt_consent |>
       summarise(
         n_pt = n(),
         n_submitted_email = sum(pt_with_emails_flg),
@@ -54,11 +56,19 @@ pv_email_submission_rate <- function(
         .by = c(site_name)
       )
   } else {
-    obi_dt |>
+    obi_dt_consent |>
       summarise(
         n_pt = n(),
         n_submitted_email = sum(pt_with_emails_flg),
         n_submitted_pct = round(n_submitted_email / n_pt, 2)
       )
   }
+}
+
+
+
+race_ethnicity_measure <- function(obi_dt){
+
+
+
 }
