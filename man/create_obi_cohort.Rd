@@ -4,12 +4,14 @@
 \alias{create_obi_cohort}
 \title{Create OBI cohort of locked, complete cases for most analyses}
 \usage{
-create_obi_cohort(df, limit_to_locked = T)
+create_obi_cohort(df, limit_to_locked = T, use_sas_data = T)
 }
 \arguments{
 \item{df}{Data frame -- usually this is the data frame read into R using data.table::fread}
 
 \item{limit_to_locked}{Logical -- if TRUE, only return cases that are locked}
+
+\item{use_dad_data}{Logical -- set to TRUE (default) if using data processed from SAS; set to FALSE to use data processed from R}
 }
 \description{
 this function does
