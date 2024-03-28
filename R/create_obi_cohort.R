@@ -168,11 +168,6 @@ create_obi_cohort = function(df,
   } else{
     df1 = df |>
       mutate(
-        infant_dob_dt_hms = lubridate::ymd_hms(infant_dob_dt),
-        infant_dob_dt = lubridate::as_date(infant_dob_dt_hms),
-        #case locks at MIDNIGHT AFTER THIS DATE
-        case_lock_dt = infant_dob_dt_hms + days(91),
-        case_locked = ifelse(as_date(case_lock_dt) < lubridate::today(), 1, 0),
         across(
           c(
             starts_with("opioid_e"),
@@ -182,10 +177,8 @@ create_obi_cohort = function(df,
           ),
           ~ ifelse(discharge_opioid_e == 1, .x, NA)
         ),
-        mdhhs_id = as.character(external_mdhhs_site_id),
-        mdhhs_id = ifelse(nchar(mdhhs_id) < 5, paste0("0", mdhhs_id), mdhhs_id),
         g1_site_2023 = ifelse(
-          mdhhs_id %in% c(
+          external_mdhhs_site_id %in% c(
             "25006",
             "82053",
             "39002",
@@ -208,13 +201,13 @@ create_obi_cohort = function(df,
           0
         ),
         g1_color_2023 = case_when(
-          mdhhs_id %in% c("39002",
+          external_mdhhs_site_id %in% c("39002",
                           "63009",
                           "41010") ~ "green",
-          mdhhs_id %in% c("82514",
+          external_mdhhs_site_id %in% c("82514",
                           "63031",
                           "81005") ~ "yellow",
-          mdhhs_id %in% c(
+          external_mdhhs_site_id %in% c(
             "25006",
             "82053",
             "63015",
@@ -230,7 +223,7 @@ create_obi_cohort = function(df,
           TRUE ~ as.character(NA)
         ),
         select_g1_site_2023 = ifelse(
-          mdhhs_id %in% c(
+          external_mdhhs_site_id %in% c(
             "25006",
             "82053",
             "63015",
@@ -247,7 +240,7 @@ create_obi_cohort = function(df,
           0
         ),
         g1_site_2024 = ifelse(
-          mdhhs_id %in% c(
+          external_mdhhs_site_id %in% c(
             "25006",
             "63019",
             "63029",
@@ -278,7 +271,7 @@ create_obi_cohort = function(df,
     if (limit_to_locked == T) {
       df1 |> filter(
         flg_complete == 1,
-        case_locked == 1,
+        locked_90days_flg == 1,
         infant_dob_dt >= lubridate::ymd_hms("2020-01-01 00:00:00")
       )
     }
