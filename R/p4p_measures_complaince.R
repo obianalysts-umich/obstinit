@@ -171,7 +171,7 @@ average_days_to_submit <- function(obi_dt) {
 #'
 #' @export
 
-prop_scheduled_non_opioid <- function(obi_dt,
+prop_scheduled_non_opioid_meds <- function(obi_dt,
                                       by_site = T) {
   # filter to ≥ year 2024 cases
   obi_dt_2024 = obi_dt |>
@@ -190,8 +190,8 @@ prop_scheduled_non_opioid <- function(obi_dt,
             ibuprofen_ordered_e == 1,
           na.rm = TRUE
         ),
-        n_missing_pct = round(n_scheduled_non_opioid / n_pt, 3),
-        .by = c(site_name, external_mdhhs_id)
+        scheduled_non_opioid_pct = round(n_scheduled_non_opioid / n_pt, 3),
+        .by = c(site_name, external_mdhhs_site_id)
       )
   } else {
     obi_dt |>
@@ -204,7 +204,7 @@ prop_scheduled_non_opioid <- function(obi_dt,
             ibuprofen_ordered_e == 1,
           na.rm = TRUE
         ),
-        n_missing_pct = round(n_scheduled_non_opioid / n_pt, 3)
+        scheduled_non_opioid_pct = round(n_scheduled_non_opioid / n_pt, 3)
       )
   }
   
