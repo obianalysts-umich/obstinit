@@ -34,7 +34,8 @@ race_ethnicity_measure(obi_dt, by_site = TRUE)
 
 }
 \seealso{
-Other {P4P measures}: 
+Other {2024 P4P measures}: 
+\code{\link{average_days_to_submit}()},
 \code{\link{pv_email_submission_rate}()}
 }
-\concept{{P4P measures}}
+\concept{{2024 P4P measures}}

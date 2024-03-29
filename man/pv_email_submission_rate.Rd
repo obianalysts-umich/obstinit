@@ -49,7 +49,8 @@ pv_email_submission_rate(obi_dt_subset, contact_log_path = "/path/to/contactlog.
 }
 }
 \seealso{
-Other {P4P measures}: 
+Other {2024 P4P measures}: 
+\code{\link{average_days_to_submit}()},
 \code{\link{race_ethnicity_measure}()}
 }
-\concept{{P4P measures}}
+\concept{{2024 P4P measures}}
