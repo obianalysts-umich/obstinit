@@ -26,7 +26,7 @@
 #' is that the variable *email_txt* in the OBI dataset was overwritten by data integration early in 2024.
 #' It has been since fixed. But to be save, it's better to use contact log.
 #' 
-#' @family {P4P measures}
+#' @family {2024 P4P measures}
 #'
 #' @examples
 #' /dontrun{
@@ -85,7 +85,7 @@ pv_email_submission_rate <- function(
 #' race_ethnicity_measure(obi_dt, by_site = TRUE)
 #' }
 #'
-#' @family {P4P measures}
+#' @family {2024 P4P measures}
 #'
 #' @importFrom dplyr filter summarise
 #' @importFrom cli cli_alert_info
@@ -95,20 +95,26 @@ pv_email_submission_rate <- function(
 race_ethnicity_measure <- function(obi_dt,
                                    by_site = TRUE){
 
+  # filter to ≥ year 2024 cases
+  obi_dt_2024 = obi_dt |>
+    filter(infant_year >= 2024)
+  
+  cli::cli_alert_warning("cases are filtered to infant dob year ≥ 2024")
+
   if (by_site) {
     obi_dt |>
       summarise(
         n_pt = n(),
-        n_NA_race_ethnicity = sum(is.na(race_ethnicity_cd)),
-        n_missing_pct = round(n_NA_race_ethnicity / n_pt, 2),
+        n_no_doc_race_ethnicity = sum(race_ethnicity_cd == "{99}", na.rm = TRUE),
+        n_missing_pct = round(n_no_doc_race_ethnicity / n_pt, 2),
         .by = c(site_name)
       )
   } else {
     obi_dt |>
       summarise(
         n_pt = n(),
-        n_NA_race_ethnicity = sum(is.na(race_ethnicity_cd)),
-        n_missing_pct = round(n_NA_race_ethnicity / n_pt, 2)
+        n_no_doc_race_ethnicity = sum(race_ethnicity_cd == "{99}", na.rm = TRUE),
+        n_missing_pct = round(n_no_doc_race_ethnicity / n_pt, 2)
       )
   }
 }
@@ -129,6 +135,8 @@ race_ethnicity_measure <- function(obi_dt,
 #'                    site_name = c("Site A", "Site B", "Site A"),
 #'                    deliv_to_submit_max_days_int = c(5, 7, 3))
 #' average_days_to_submit(data)
+#' 
+#' @family {2024 P4P measures}
 #'
 #' @export
 
