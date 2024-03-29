@@ -34,7 +34,7 @@ create_opioid_cohort = function(df) {
       # No opioid use during pregnancy
       opioid_use_b == 0,
       # Limit to 2023 cohort
-      birth_year == 2023,
+      birth_year >= 2023,
       # LOS birth to discharge is <= 4 days
       dob_to_dischg_days <= 4,
       # births where a discharge opioid was prescribed are not missing data on opioid type, quantity, unit or dose
