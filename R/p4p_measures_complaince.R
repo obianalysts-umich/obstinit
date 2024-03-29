@@ -153,3 +153,59 @@ average_days_to_submit <- function(obi_dt) {
     )
 }
 
+#' Function to calculate compliance with scheduled acetaminophen and oral NSAID
+#'
+#' This function takes OBI data as input and calculates what proportion of eligible births got scheduled acetaminophen and oral NSAID
+#'
+#' @param obi_dt A data frame containing the necessary columns (patientid, site_name, deliv_to_submit_max_days_int)
+#'
+#' @return A data frame with the proportion of eligible births with scheduled acetaminophen and oral NSAID per site
+#'
+#' @examples
+#' data <- data.frame(patientid = c(1, 2, 3),
+#'                    site_name = c("Site A", "Site B", "Site A"),
+#'                    deliv_to_submit_max_days_int = c(5, 7, 3))
+#' prop_scheduled_acetaminophen_and_NSAID(data)
+#' 
+#' @family {2024 P4P measures}
+#'
+#' @export
+
+prop_scheduled_non_opioid <- function(obi_dt,
+                                      by_site = T) {
+  # filter to ≥ year 2024 cases
+  obi_dt_2024 = obi_dt |>
+    filter(infant_year >= 2024)
+  
+  cli::cli_alert_warning("cases are filtered to infant dob year ≥ 2024")
+  
+  if (by_site) {
+    obi_dt |>
+      filter(acetaminophen_ordered_e != 4 &
+               ibuprofen_ordered_e != 4) |>
+      summarise(
+        n_pt = n(),
+        n_scheduled_non_opioid = sum(
+          acetaminophen_ordered_e == 1 |
+            ibuprofen_ordered_e == 1,
+          na.rm = TRUE
+        ),
+        n_missing_pct = round(n_scheduled_non_opioid / n_pt, 3),
+        .by = c(site_name, external_mdhhs_id)
+      )
+  } else {
+    obi_dt |>
+      filter(acetaminophen_ordered_e != 4 &
+               ibuprofen_ordered_e != 4) |>
+      summarise(
+        n_pt = n(),
+        n_scheduled_non_opioid = sum(
+          acetaminophen_ordered_e == 1 |
+            ibuprofen_ordered_e == 1,
+          na.rm = TRUE
+        ),
+        n_missing_pct = round(n_scheduled_non_opioid / n_pt, 3)
+      )
+  }
+  
+}
