@@ -24,3 +24,9 @@ data <- data.frame(patientid = c(1, 2, 3),
 average_days_to_submit(data)
 
 }
+\seealso{
+Other {2024 P4P measures}: 
+\code{\link{pv_email_submission_rate}()},
+\code{\link{race_ethnicity_measure}()}
+}
+\concept{{2024 P4P measures}}
