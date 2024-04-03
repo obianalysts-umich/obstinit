@@ -56,15 +56,15 @@ pv_email_submission_rate <- function(
       summarise(
         n_pt = n(),
         n_submitted_email = sum(pt_with_emails_flg),
-        n_submitted_pct = round(n_submitted_email / n_pt, 2),
-        .by = c(site_name)
+        n_submitted_pct = round(n_submitted_email / n_pt, 3),
+        .by = c(site_name, external_mdhhs_id)
       )
   } else {
     obi_dt_consent |>
       summarise(
         n_pt = n(),
         n_submitted_email = sum(pt_with_emails_flg),
-        n_submitted_pct = round(n_submitted_email / n_pt, 2)
+        n_submitted_pct = round(n_submitted_email / n_pt, 3)
       )
   }
 }
@@ -110,15 +110,15 @@ race_ethnicity_measure <- function(obi_dt,
       summarise(
         n_pt = n(),
         n_no_doc_race_ethnicity = sum(race_ethnicity_cd == "{99}", na.rm = TRUE),
-        n_missing_pct = round(n_no_doc_race_ethnicity / n_pt, 2),
-        .by = c(site_name)
+        n_missing_pct = round(n_no_doc_race_ethnicity / n_pt, 3),
+        .by = c(site_name, external_mdhhs_site_id)
       )
   } else {
     obi_dt |>
       summarise(
         n_pt = n(),
         n_no_doc_race_ethnicity = sum(race_ethnicity_cd == "{99}", na.rm = TRUE),
-        n_missing_pct = round(n_no_doc_race_ethnicity / n_pt, 2)
+        n_missing_pct = round(n_no_doc_race_ethnicity / n_pt, 3)
       )
   }
 }
@@ -157,6 +157,7 @@ average_days_to_submit <- function(obi_dt) {
     )
 }
 
+
 #' Function to calculate compliance with scheduled acetaminophen and oral NSAID
 #'
 #' This function takes OBI data as input and calculates what proportion of eligible births got scheduled acetaminophen and oral NSAID
@@ -176,15 +177,16 @@ average_days_to_submit <- function(obi_dt) {
 #' @export
 
 prop_scheduled_non_opioid_meds <- function(obi_dt,
-                                      by_site = T) {
-  # filter to ≥ year 2024 cases
-  obi_dt_2024 = obi_dt |>
-    filter(infant_year >= 2024)
+                                           by_site = T) {
+  # filter to ≥ year 2024 cases and opioid cohort
+  obi_dt_2024 <- obi_dt |>
+    filter(infant_year >= 2024,
+           opioid_denom_flg == 1)
   
   cli::cli_alert_warning("cases are filtered to infant dob year ≥ 2024")
   
   if (by_site) {
-    obi_dt |>
+    obi_dt_2024 |>
       filter(acetaminophen_ordered_e != 4 &
                ibuprofen_ordered_e != 4) |>
       summarise(
@@ -199,6 +201,7 @@ prop_scheduled_non_opioid_meds <- function(obi_dt,
       )
   } else {
     obi_dt |>
+      # drop patients who have contraindication to BOTH acetaminophen and NSAIDs
       filter(acetaminophen_ordered_e != 4 &
                ibuprofen_ordered_e != 4) |>
       summarise(
@@ -209,6 +212,76 @@ prop_scheduled_non_opioid_meds <- function(obi_dt,
           na.rm = TRUE
         ),
         scheduled_non_opioid_pct = round(n_scheduled_non_opioid / n_pt, 3)
+      )
+  }
+  
+}
+
+
+#' Function to calculate compliance with COMFORT guideline by mode of delivery
+#'
+#' This function takes OBI data as input and calculates what proportion of eligible births were compliant with the COMFORT guideline for their particular mode of delivery
+#' Modes of delivery include vaginal with no laceration, vaginal with 3rd/4th degree laceration, and cesarean section
+#' Max acceptable OME is 0 for vaginal births with no laceration, 75 for vaginal births with 3rd/4th degree laceration, and 113 for cesarean births
+#'
+#' @param obi_dt A data frame containing the necessary columns. DATA MUST FIRST BE RUN THROUGH OBSTINIT::CREATE_OBI_COHORT() to have the necessary opioid variables
+#'
+#' @return A data frame with the proportion of eligible births with opioid prescribing consistent with the COMFORT guideline by mode of delivery
+#'
+#' @examples
+#' 
+#' @family {2024 P4P measures}
+#'
+#' @export
+
+prop_births_mtg_COMFORT_compliance <- function(obi_dt,
+                                               by_site = T) {
+  # max acceptable OME by mode of delivery
+  max_OME_vag <- 0
+  max_OME_vag_lac <- 75
+  max_OME_ces <- 113
+  
+  # filter to ≥ year 2024 cases and push through create_opioid_cohort
+  obi_dt_2024 <- obi_dt |>
+    filter(infant_year >= 2024,
+           opioid_denom_flg == 1)
+  
+  cli::cli_alert_warning("cases are filtered to infant dob year ≥ 2024")
+  
+  if (by_site) {
+    obi_dt_2024 |>
+      # mode of delivery groups
+      mutate(
+        # max acceptable OME per COMFORT
+        max_acceptable_OME = case_when(
+          opioid_group == "Vaginal" ~ max_OME_vag,
+          opioid_group == "Vaginal with laceration" ~ max_OME_vag_lac,
+          opioid_group == "Cesarean" ~ max_OME_ces,
+          TRUE ~ NA
+        )
+      ) |>
+      summarise(
+        n_pt = n(),
+        n_mtg_COMFORT = sum(opioid_OME_total <= max_acceptable_OME, na.rm = TRUE),
+        n_mtg_COMFORT_pct = round(n_scheduled_non_opioid / n_pt, 3),
+        .by = c(site_name, external_mdhhs_site_id)
+      )
+  } else {
+    obi_dt_2024 |>
+      # mode of delivery groups
+      mutate(
+        # max acceptable OME per COMFORT
+        max_acceptable_OME = case_when(
+          opioid_group == "Vaginal" ~ max_OME_vag,
+          opioid_group == "Vaginal with laceration" ~ max_OME_vag_lac,
+          opioid_group == "Cesarean" ~ max_OME_ces,
+          TRUE ~ NA
+        )
+      ) |>
+      summarise(
+        n_pt = n(),
+        n_mtg_COMFORT = sum(opioid_OME_total <= max_acceptable_OME, na.rm = TRUE),
+        n_mtg_COMFORT_pct = round(n_scheduled_non_opioid / n_pt, 3),
       )
   }
   
