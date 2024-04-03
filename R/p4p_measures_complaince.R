@@ -54,15 +54,15 @@ pv_email_submission_rate <- function(
       summarise(
         n_pt = n(),
         n_submitted_email = sum(pt_with_emails_flg),
-        n_submitted_pct = round(n_submitted_email / n_pt, 2),
-        .by = c(site_name)
+        n_submitted_pct = round(n_submitted_email / n_pt, 3),
+        .by = c(site_name, external_mdhhs_id)
       )
   } else {
     obi_dt_consent |>
       summarise(
         n_pt = n(),
         n_submitted_email = sum(pt_with_emails_flg),
-        n_submitted_pct = round(n_submitted_email / n_pt, 2)
+        n_submitted_pct = round(n_submitted_email / n_pt, 3)
       )
   }
 }
@@ -106,15 +106,15 @@ race_ethnicity_measure <- function(obi_dt,
       summarise(
         n_pt = n(),
         n_no_doc_race_ethnicity = sum(race_ethnicity_cd == "{99}", na.rm = TRUE),
-        n_missing_pct = round(n_no_doc_race_ethnicity / n_pt, 2),
-        .by = c(site_name)
+        n_missing_pct = round(n_no_doc_race_ethnicity / n_pt, 3),
+        .by = c(site_name, external_mdhhs_site_id)
       )
   } else {
     obi_dt |>
       summarise(
         n_pt = n(),
         n_no_doc_race_ethnicity = sum(race_ethnicity_cd == "{99}", na.rm = TRUE),
-        n_missing_pct = round(n_no_doc_race_ethnicity / n_pt, 2)
+        n_missing_pct = round(n_no_doc_race_ethnicity / n_pt, 3)
       )
   }
 }
