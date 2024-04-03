@@ -25,6 +25,7 @@ prop_scheduled_acetaminophen_and_NSAID(data)
 \seealso{
 Other {2024 P4P measures}: 
 \code{\link{average_days_to_submit}()},
+\code{\link{prop_births_mtg_COMFORT_compliance}()},
 \code{\link{pv_email_submission_rate}()},
 \code{\link{race_ethnicity_measure}()}
 }

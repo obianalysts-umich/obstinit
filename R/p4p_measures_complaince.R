@@ -227,8 +227,6 @@ prop_scheduled_non_opioid_meds <- function(obi_dt,
 #' @param obi_dt A data frame containing the necessary columns. DATA MUST FIRST BE RUN THROUGH OBSTINIT::CREATE_OBI_COHORT() to have the necessary opioid variables
 #'
 #' @return A data frame with the proportion of eligible births with opioid prescribing consistent with the COMFORT guideline by mode of delivery
-#'
-#' @examples
 #' 
 #' @family {2024 P4P measures}
 #'

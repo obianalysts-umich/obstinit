@@ -38,10 +38,8 @@ dropbox_root_path <- function(pc_unique_name = "ourdea") {
 #' @title OBI Turbo root path
 #' @description Turbo path to nur-kanelow Turbo drive
 #'
-#' @return
 #' @export
 #'
-#' @examples
 turbo_root_path <- function() {
   if (Sys.info()["sysname"] == "Windows") {
     turbo_root <- "P:/"
