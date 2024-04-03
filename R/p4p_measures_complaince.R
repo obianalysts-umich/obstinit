@@ -35,6 +35,8 @@
 #'    filter(infant_dob_ymd >= "2023-01-01")
 #' pv_email_submission_rate(obi_dt_subset, contact_log_path = "/path/to/contactlog.csv")
 #' }
+#' 
+#' @export
 
 pv_email_submission_rate <- function(
     obi_dt,
@@ -92,6 +94,8 @@ pv_email_submission_rate <- function(
 #' 
 #' @return A summarized data table with the calculated measures.
 #' 
+#' @export
+
 race_ethnicity_measure <- function(obi_dt,
                                    by_site = TRUE){
 

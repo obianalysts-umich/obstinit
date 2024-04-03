@@ -26,6 +26,7 @@ average_days_to_submit(data)
 }
 \seealso{
 Other {2024 P4P measures}: 
+\code{\link{prop_scheduled_non_opioid_meds}()},
 \code{\link{pv_email_submission_rate}()},
 \code{\link{race_ethnicity_measure}()}
 }

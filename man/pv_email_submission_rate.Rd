@@ -47,10 +47,12 @@ obi_dt_subset <- obi_dt |>
    filter(infant_dob_ymd >= "2023-01-01")
 pv_email_submission_rate(obi_dt_subset, contact_log_path = "/path/to/contactlog.csv")
 }
+
 }
 \seealso{
 Other {2024 P4P measures}: 
 \code{\link{average_days_to_submit}()},
+\code{\link{prop_scheduled_non_opioid_meds}()},
 \code{\link{race_ethnicity_measure}()}
 }
 \concept{{2024 P4P measures}}
