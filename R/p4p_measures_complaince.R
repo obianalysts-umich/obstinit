@@ -173,10 +173,11 @@ average_days_to_submit <- function(obi_dt) {
 #' @export
 
 prop_scheduled_non_opioid_meds <- function(obi_dt,
-                                      by_site = T) {
-  # filter to ≥ year 2024 cases
+                                           by_site = T) {
+  # filter to ≥ year 2024 cases and opioid cohort
   obi_dt_2024 <- obi_dt |>
-    filter(infant_year >= 2024)
+    filter(infant_year >= 2024,
+           opioid_denom_flg == 1)
   
   cli::cli_alert_warning("cases are filtered to infant dob year ≥ 2024")
   
@@ -238,8 +239,8 @@ prop_births_mtg_COMFORT_compliance <- function(obi_dt,
   
   # filter to ≥ year 2024 cases and push through create_opioid_cohort
   obi_dt_2024 <- obi_dt |>
-    filter(infant_year >= 2024) |>
-    obstinit::create_opioid_cohort()
+    filter(infant_year >= 2024,
+           opioid_denom_flg == 1)
   
   cli::cli_alert_warning("cases are filtered to infant dob year ≥ 2024")
   
@@ -247,16 +248,6 @@ prop_births_mtg_COMFORT_compliance <- function(obi_dt,
     obi_dt_2024 |>
       # mode of delivery groups
       mutate(
-        opioid_group = case_when(
-          mode_of_delivery_cd %in% c(1:3) &
-            laceration_third_deg_b == 0 &
-            laceration_fourth_deg_b == 0 ~ "Vaginal",
-          mode_of_delivery_cd %in% c(1:3) &
-            laceration_third_deg_b == 1 |
-            laceration_fourth_deg_b == 1 ~ "Vaginal with laceration",
-          mode_of_delivery_cd %in% c(4:6) ~ "Cesarean",
-          TRUE ~ NA_character_
-        ),
         # max acceptable OME per COMFORT
         max_acceptable_OME = case_when(
           opioid_group == "Vaginal" ~ max_OME_vag,
@@ -275,16 +266,6 @@ prop_births_mtg_COMFORT_compliance <- function(obi_dt,
     obi_dt_2024 |>
       # mode of delivery groups
       mutate(
-        opioid_group = case_when(
-          mode_of_delivery_cd %in% c(1:3) &
-            laceration_third_deg_b == 0 &
-            laceration_fourth_deg_b == 0 ~ "Vaginal",
-          mode_of_delivery_cd %in% c(1:3) &
-            laceration_third_deg_b == 1 |
-            laceration_fourth_deg_b == 1 ~ "Vaginal with laceration",
-          mode_of_delivery_cd %in% c(4:6) ~ "Cesarean",
-          TRUE ~ NA_character_
-        ),
         # max acceptable OME per COMFORT
         max_acceptable_OME = case_when(
           opioid_group == "Vaginal" ~ max_OME_vag,
