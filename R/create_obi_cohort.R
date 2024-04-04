@@ -11,13 +11,13 @@
 #' 
 #' @param df Data frame -- usually this is the data frame read into R using data.table::fread
 #' @param limit_to_locked Logical -- if TRUE, only return cases that are locked
-#' @param use_dad_data Logical -- set to TRUE (default) if using data processed from SAS; set to FALSE to use data processed from R
+#' @param sas_processed_dt Logical -- set to TRUE (default) if using data processed from SAS; set to FALSE to use data processed from R
 #' @import tidyverse
 #' @export
 
 create_obi_cohort = function(df,
                              limit_to_locked = T,
-                             use_sas_data = T) {
+                             sas_processed_dt = T) {
   # data processing using sas data
   if (use_sas_data) {
     df1 = df |>
