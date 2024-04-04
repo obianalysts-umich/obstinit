@@ -180,14 +180,14 @@ prop_scheduled_non_opioid_meds <- function(obi_dt,
                                            by_site = T) {
   # filter to ≥ year 2024 cases and opioid cohort
   obi_dt_2024 <- obi_dt |>
-    filter(infant_year >= 2024,
-           opioid_denom_flg == 1)
+    filter(infant_year >= 2024)
   
   cli::cli_alert_warning("cases are filtered to infant dob year ≥ 2024")
   
   if (by_site) {
     obi_dt_2024 |>
-      filter(acetaminophen_ordered_e != 4 &
+      filter(opioid_denom_flg == 1,
+             acetaminophen_ordered_e != 4 &
                ibuprofen_ordered_e != 4) |>
       summarise(
         n_pt = n(),
@@ -200,9 +200,10 @@ prop_scheduled_non_opioid_meds <- function(obi_dt,
         .by = c(site_name, external_mdhhs_site_id)
       )
   } else {
-    obi_dt |>
+    obi_dt_2024 |>
       # drop patients who have contraindication to BOTH acetaminophen and NSAIDs
-      filter(acetaminophen_ordered_e != 4 &
+      filter(opioid_denom_flg == 1,
+             acetaminophen_ordered_e != 4 &
                ibuprofen_ordered_e != 4) |>
       summarise(
         n_pt = n(),
