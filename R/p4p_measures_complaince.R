@@ -262,8 +262,8 @@ prop_births_mtg_COMFORT_compliance <- function(obi_dt,
       summarise(
         n_pt = n(),
         n_mtg_COMFORT = sum(opioid_OME_total <= max_acceptable_OME, na.rm = TRUE),
-        n_mtg_COMFORT_pct = round(n_scheduled_non_opioid / n_pt, 3),
-        .by = c(site_name, external_mdhhs_site_id)
+        n_mtg_COMFORT_pct = round(n_mtg_COMFORT / n_pt, 3),
+        .by = c(site_name, external_mdhhs_site_id, opioid_group)
       )
   } else {
     obi_dt_2024 |>
@@ -281,6 +281,7 @@ prop_births_mtg_COMFORT_compliance <- function(obi_dt,
         n_pt = n(),
         n_mtg_COMFORT = sum(opioid_OME_total <= max_acceptable_OME, na.rm = TRUE),
         n_mtg_COMFORT_pct = round(n_scheduled_non_opioid / n_pt, 3),
+        .by = c(opioid_group)
       )
   }
   
