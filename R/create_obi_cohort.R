@@ -19,7 +19,7 @@ create_obi_cohort = function(df,
                              limit_to_locked = T,
                              sas_processed_dt = T) {
   # data processing using sas data
-  if (use_sas_data) {
+  if (sas_processed_dt) {
     df1 = df |>
       mutate(
         infant_dob_dt_hms = lubridate::dmy_hms(infant_dob_dt),
