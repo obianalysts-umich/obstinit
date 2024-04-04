@@ -27,15 +27,6 @@ create_obi_cohort = function(df,
         #case locks at MIDNIGHT AFTER THIS DATE
         case_lock_dt = infant_dob_dt_hms + days(91),
         case_locked = ifelse(as_date(case_lock_dt) < lubridate::today(), 1, 0),
-        across(
-          c(
-            starts_with("opioid_e"),
-            starts_with("opioid_dose"),
-            starts_with("opioid_quantity_no"),
-            starts_with("opioid_unit")
-          ),
-          ~ ifelse(discharge_opioid_e == 1, .x, NA)
-        ),
         mdhhs_id = as.character(external_mdhhs_site_id),
         mdhhs_id = ifelse(nchar(mdhhs_id) < 5, paste0("0", mdhhs_id), mdhhs_id),
         race_eth = factor(
