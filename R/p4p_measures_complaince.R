@@ -57,7 +57,7 @@ pv_email_submission_rate <- function(
         n_pt = n(),
         n_submitted_email = sum(pt_with_emails_flg),
         n_submitted_pct = round(n_submitted_email / n_pt, 3),
-        .by = c(site_name, external_mdhhs_id)
+        .by = c(site_name, external_mdhhs_site_id)
       )
   } else {
     obi_dt_consent |>
