@@ -16,8 +16,8 @@
 #' @export
 
 create_obi_cohort = function(df,
-                             limit_to_locked = T,
-                             sas_processed_dt = T) {
+                             sas_processed_dt = T,
+                             limit_to_locked = T) {
   # data processing using sas data
   if (sas_processed_dt) {
     df1 = df |>
@@ -143,7 +143,7 @@ create_obi_cohort = function(df,
         )
       )
     
-    if (limit_to_locked == T) {
+    if (limit_to_locked) {
       df1 |> filter(
         flg_complete == 1,
         case_locked == 1,
@@ -157,28 +157,19 @@ create_obi_cohort = function(df,
     }
     # data processing for R dataset
   } else{
-    df1 = df |>
-      mutate(across(
-        c(
-          starts_with("opioid_e"),
-          starts_with("opioid_dose"),
-          starts_with("opioid_quantity_no"),
-          starts_with("opioid_unit")
-        ),
-        ~ ifelse(discharge_opioid_e == 1, .x, NA)
-      ))
-    
-    if (limit_to_locked == T) {
-      df1 |> filter(
-        flg_complete == 1,
-        locked_90days_flg == 1,
-        infant_dob_dt >= lubridate::ymd_hms("2020-01-01 00:00:00")
-      )
-    }
-    
-    else if (limit_to_locked == F) {
-      df1 |> filter(flg_complete == 1,
-                    infant_dob_dt >= lubridate::ymd_hms("2020-01-01 00:00:00"))
+    if (limit_to_locked) {
+      df |>
+        # additionally limit to locked
+        filter(
+          infant_dob_dt >= lubridate::ymd_hms("2020-01-01 00:00:00"),
+          flg_complete == 1,
+          locked_90days_flg == 1
+        )
+    } else{
+      df |>
+        # limit to cases >= 2024 and complete
+        filter(infant_dob_dt >= lubridate::ymd_hms("2020-01-01 00:00:00"),
+               flg_complete == 1)
     }
   }
 }
