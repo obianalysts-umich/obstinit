@@ -6,8 +6,8 @@
 \usage{
 pv_email_submission_rate(
   obi_dt,
-  contact_log_path =
-    "/Volumes/nur-kanelow/OBI_abstracted_data/Current_Data/data/input/contactlog.csv",
+  contact_log_path = paste0(obstinit::turbo_root_path(),
+    "OBI_abstracted_data/Current_Data/data/input/contactlog.csv"),
   by_site = TRUE
 )
 }
