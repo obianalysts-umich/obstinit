@@ -7,7 +7,7 @@
 prop_births_mtg_COMFORT_compliance(obi_dt, by_site = T)
 }
 \arguments{
-\item{obi_dt}{A data frame containing the necessary columns. DATA MUST FIRST BE RUN THROUGH OBSTINIT::CREATE_OBI_COHORT() to have the necessary opioid variables}
+\item{obi_dt}{A data frame containing the necessary columns; current RDS dataframe is sufficient.}
 }
 \value{
 A data frame with the proportion of eligible births with opioid prescribing consistent with the COMFORT guideline by mode of delivery

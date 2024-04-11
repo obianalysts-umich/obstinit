@@ -225,7 +225,7 @@ prop_scheduled_non_opioid_meds <- function(obi_dt,
 #' Modes of delivery include vaginal with no laceration, vaginal with 3rd/4th degree laceration, and cesarean section
 #' Max acceptable OME is 0 for vaginal births with no laceration, 75 for vaginal births with 3rd/4th degree laceration, and 113 for cesarean births
 #'
-#' @param obi_dt A data frame containing the necessary columns. DATA MUST FIRST BE RUN THROUGH OBSTINIT::CREATE_OBI_COHORT() to have the necessary opioid variables
+#' @param obi_dt A data frame containing the necessary columns; current RDS dataframe is sufficient.
 #'
 #' @return A data frame with the proportion of eligible births with opioid prescribing consistent with the COMFORT guideline by mode of delivery
 #' 
