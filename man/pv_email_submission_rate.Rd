@@ -4,19 +4,11 @@
 \alias{pv_email_submission_rate}
 \title{Calculate the email submission rate for PRO}
 \usage{
-pv_email_submission_rate(
-  obi_dt,
-  contact_log_path = paste0(obstinit::turbo_root_path(),
-    "OBI_abstracted_data/Current_Data/data/input/contactlog.csv"),
-  by_site = TRUE
-)
+pv_email_submission_rate(obi_dt, by_site = TRUE)
 }
 \arguments{
 \item{obi_dt}{The input dataset containing patient information. If you only need a certain infant dob
 range, you can filter the dataset before passing it to this function.}
-
-\item{contact_log_path}{The file path to the contact log CSV file. Please
-make sure that the contact log file should be from the same date as the OBI dataset.}
 
 \item{by_site}{A logical value indicating whether to calculate the email submission rate by site.}
 }
@@ -30,22 +22,17 @@ A data frame with the following columns:
 }
 \description{
 This function calculates the email submission rate  by
-comparing the patient IDs in the OBI dataset with the patient IDs in the contact log.
+checking if variable \code{email_txt} has value.
 It returns the number of patients, the number of patients who submitted their email,
 and the percentage of patients who submitted their email.
 compliance definition is at https://docs.google.com/spreadsheets/d/123r8ShMQuxl7GQQsX2Buuh9ynOyMRHOaSeKoFHiwx58/edit#gid=793851872
-}
-\details{
-the reason why we use contact log instead of the variable \emph{email_txt} in the OBI dataset
-is that the variable \emph{email_txt} in the OBI dataset was overwritten by data integration early in 2024.
-It has been since fixed. But to be save, it's better to use contact log.
 }
 \examples{
 /dontrun{
 obi_dt <- read_current_data(sas_processed_dt = FALSE)
 obi_dt_subset <- obi_dt |>
    filter(infant_dob_ymd >= "2023-01-01")
-pv_email_submission_rate(obi_dt_subset, contact_log_path = "/path/to/contactlog.csv")
+pv_email_submission_rate(obi_dt_subset)
 }
 
 }
