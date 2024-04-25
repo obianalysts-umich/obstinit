@@ -46,8 +46,8 @@ add_CI_values <- function(data,
   else if (mean_or_proportion == "mean") {
     data %>%
       mutate(
-        LC = !!var - (1.96 * (sd(!!var) / !!n_cases)),
-        UC = !!var + (1.96 * (sd(!!var) / !!n_cases)),
+        LC = !!var - (1.96 * (sd(!!var) / sqrt(!!n_cases))),
+        UC = !!var + (1.96 * (sd(!!var) / sqrt(!!n_cases))),
         LC = round(LC, 4),
         UC = round(UC, 4)
       )
