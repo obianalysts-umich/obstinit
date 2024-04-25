@@ -4,12 +4,14 @@
 \alias{add_CI_values}
 \title{confidence interval for a rate}
 \usage{
-add_CI_values(data, var, n_cases)
+add_CI_values(data, var, n_cases, mean_or_proportion = "proportion")
 }
 \arguments{
 \item{var}{variable you want to sort}
 
 \item{n_cases}{number of cases used to calculate CI}
+
+\item{mean_or_proportion}{Confidence interval for a mean or proportion? Set to proportion by default}
 }
 \description{
 This function create upper and lower CI for observed rate.

@@ -7,6 +7,7 @@
 #' 
 #' @param var variable you want to sort
 #' @param n_cases number of cases used to calculate CI
+#' @param mean_or_proportion Confidence interval for a mean or proportion? Set to proportion by default
 #' 
 #' @importFrom dplyr %>% across mutate mutate_at select filter rename rename_at
 #'
@@ -23,16 +24,32 @@
 
 add_CI_values <- function(data,
                           var,
-                          n_cases) {
-  
+                          n_cases,
+                          mean_or_proportion = "proportion") {
   var <- enexpr(var)
   n_cases <- enexpr(n_cases)
   
-  data %>% 
-    mutate(
-      LC = !!var - (1.96 * sqrt((!!var * (1-!!var))/!!n_cases)),
-      UC = !!var + (1.96 * sqrt((!!var * (1-!!var))/!!n_cases)),
-      LC = round(LC,4),
-      UC= round(UC,4))
-  
+  if (mean_or_proportion == "proportion") {
+    data %>%
+      mutate(
+        LC = !!var - (1.96 * sqrt((
+          !!var * (1-!!var)
+        ) / !!n_cases)),
+        UC = !!var + (1.96 * sqrt((
+          !!var * (1-!!var)
+        ) / !!n_cases)),
+        LC = round(LC, 4),
+        UC = round(UC, 4)
+      )
+    
+  }
+  else if (mean_or_proportion == "mean") {
+    data %>%
+      mutate(
+        LC = !!var - (1.96 * (sd(!!var) / !!n_cases)),
+        UC = !!var + (1.96 * (sd(!!var) / !!n_cases)),
+        LC = round(LC, 4),
+        UC = round(UC, 4)
+      )
+  }
 }
