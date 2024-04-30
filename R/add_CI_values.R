@@ -1,8 +1,8 @@
 #' confidence interval for a rate
 #' @description
-#' This function create upper and lower CI for observed rate.
-#' Two new variables will be added LC and UC
-#' the formula is based on 95% CI: rate+/- 1.96 x sqrt((!!var x (1-!!var))/!!n_cases)
+#' This function create upper and lower CI for observed mean or proportion.
+#' Two new variables will be added: LC and UC
+#' the formula is based on 95% CI for a PROPORTION: rate+/- 1.96 x sqrt((!!var x (1-!!var))/!!n_cases) OR 95% CI for a MEAN: mean +/- (1.96 * (sd(!!var, na.rm = T) / sqrt(!!n_cases)))
 #' 
 #' 
 #' @param var variable you want to sort
@@ -18,6 +18,11 @@
 #'tb %>% 
 #'  add_CI_values(var = cs_rate,
 #'                n_cases = n_pt_cases)
+#'                
+#'OME_dt |> 
+#'   add_CI_values(var = opioid_OME_total,
+#'                 n_cases = n_pt,
+#'                 mean_or_proportion = "mean")
 #'                
 #' @export
 
@@ -46,8 +51,8 @@ add_CI_values <- function(data,
   else if (mean_or_proportion == "mean") {
     data %>%
       mutate(
-        LC = !!var - (1.96 * (sd(!!var) / sqrt(!!n_cases))),
-        UC = !!var + (1.96 * (sd(!!var) / sqrt(!!n_cases))),
+        LC = !!var - (1.96 * (sd(!!var, na.rm = T) / sqrt(!!n_cases))),
+        UC = !!var + (1.96 * (sd(!!var, na.rm = T) / sqrt(!!n_cases))),
         LC = round(LC, 4),
         UC = round(UC, 4)
       )
