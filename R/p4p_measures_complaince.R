@@ -178,7 +178,8 @@ prop_scheduled_non_opioid_meds <- function(obi_dt,
     obi_dt_2024 |>
       filter(opioid_denom_flg == 1,
              acetaminophen_ordered_e != 4 &
-               ibuprofen_ordered_e != 4) |>
+               ibuprofen_ordered_e != 4,
+             cesarean_flg == 1) |>
       summarise(
         n_pt = n(),
         n_scheduled_non_opioid = sum(
@@ -194,7 +195,8 @@ prop_scheduled_non_opioid_meds <- function(obi_dt,
       # drop patients who have contraindication to BOTH acetaminophen and NSAIDs
       filter(opioid_denom_flg == 1,
              acetaminophen_ordered_e != 4 &
-               ibuprofen_ordered_e != 4) |>
+               ibuprofen_ordered_e != 4,
+             cesarean_flg == 1) |>
       summarise(
         n_pt = n(),
         n_scheduled_non_opioid = sum(
