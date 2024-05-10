@@ -6,16 +6,22 @@
 #' @param members_only A logical value that indicates whether the report is for members only. Default is 1.
 #' @param site_year An integer that indicates the year used to determine the sites that have reports. Default is 2023.
 #' @param exclude_site A character vector that contains any sites to exclude. Default is an empty vector.
+#' @param output_path Path to output the CSV file to.
 #' @import tidyverse
 #' @export
 #' @rdname create_website_upload_csv
 
-create_website_upload_csv <- function(report_name, members_only = 1, site_year = 2023, exclude_site = c("")) {
-  
+create_website_upload_csv <- function(report_name,
+                                      members_only = 1,
+                                      site_year = 2023,
+                                      exclude_site = c(""),
+                                      output_path) {
   # load data ----------------------------
-  site_names <- read_csv("data_raw/OBI _ performance reports example - Categories.csv", show_col_types = FALSE) |>
+  site_names <- read_csv("data_raw/OBI _ performance reports example - Categories.csv",
+                         show_col_types = FALSE) |>
     janitor::clean_names()
-  site_names_mdhhs <- read_csv("data_raw/Engaged Hospital List-site_name_mdhhs.csv", show_col_types = FALSE) |>
+  site_names_mdhhs <- read_csv("data_raw/Engaged Hospital List-site_name_mdhhs.csv",
+                               show_col_types = FALSE) |>
     janitor::clean_names()
   
   if (.Platform$OS.type == "windows") {
@@ -30,7 +36,8 @@ create_website_upload_csv <- function(report_name, members_only = 1, site_year =
   
   # test path
   if (!file.exists(current_dt_path)) {
-    stop("Check your VPN connection. Path doesn't exsit at ", current_dt_path)
+    stop("Check your VPN connection. Path doesn't exsit at ",
+         current_dt_path)
   }
   
   obi_dt <- readRDS(current_dt_path)
@@ -85,21 +92,21 @@ create_website_upload_csv <- function(report_name, members_only = 1, site_year =
     anti_join(workstation_site_names, by = c("site_id_a_mx" = "site_id"))
   
   if (dim(workstation_website_site_name_missed)[1] != 0) {
-    message("Missed sites: ", workstation_website_site_name_missed$site_name)
+    message("Missed sites: ",
+            workstation_website_site_name_missed$site_name)
   }
   
   # constants -----------------------------
   yr_month_lbl <- format(Sys.Date(), "%Y %B")
   file_url_yr_month_lbl <- tolower(format(Sys.Date(), "%B-%Y"))
   title_lbl <- report_name
-  file_url_path <- paste0("/wp-content/uploads/private/dlm_uploads/", file_url_yr_month_lbl, "/")
+  file_url_path <- paste0("/wp-content/uploads/private/dlm_uploads/",
+                          file_url_yr_month_lbl,
+                          "/")
   
   # only keep sites that have push reports
   site_with_push_reports <- obi_dt |>
-    filter(
-      infant_year == site_year,
-      !site_name %in% exclude_site
-      ) |>
+    filter(infant_year == site_year, !site_name %in% exclude_site) |>
     distinct(site_id) |>
     pull()
   
@@ -108,17 +115,13 @@ create_website_upload_csv <- function(report_name, members_only = 1, site_year =
     filter(site_id_a_mx %in% site_with_push_reports) |>
     select(categories = site_name, workstation_site_name) |>
     transmute(
-      title = paste0( yr_month_lbl, " - ", title_lbl, " - ", workstation_site_name),
+      title = paste0(yr_month_lbl, " - ", title_lbl, " - ", workstation_site_name),
       categories,
       members_only = members_only,
       redirect = 0,
       version = "",
       file_date = "",
-      file_urls = paste0(
-        file_url_path,
-        title_lbl, " - ",
-        workstation_site_name, ".pdf"
-      )
+      file_urls = paste0(file_url_path, title_lbl, " - ", workstation_site_name, ".pdf")
     )
   
   # expand rows with type column; type column has two values: "NTSV" and "NTSV - 2"
@@ -139,6 +142,11 @@ create_website_upload_csv <- function(report_name, members_only = 1, site_year =
   # save data -----------------------------
   write_csv(
     csv_upload_matched_format,
-    paste0("csv_upload_matched_format ", Sys.Date(), ".csv")
+    paste0(
+      output_path,
+      "csv_upload_matched_format ",
+      Sys.Date(),
+      ".csv"
+    )
   )
 }
