@@ -14,6 +14,6 @@ multiple selected varibales shouldn't have different values based on order
 for example, {1|2} euqal to {2|1}. This function short the numbers
 }
 \examples{
-val = "8,1,0,3"
+val <- "8,1,0,3"
 sort_muti_selection(val)
 }
