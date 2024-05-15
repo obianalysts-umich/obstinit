@@ -24,5 +24,6 @@ create_website_upload_csv(
 \item{output_path}{Path to output the CSV file to.}
 }
 \description{
-To create the CSV needed to upload reports to the OBI website.
+To create the CSV needed to upload reports to the OBI website. The CSV files should be in the following \href{https://docs.google.com/spreadsheets/d/19Ua83FMIsT9RjrugrvPD4NJEZcfI8e_cBFfrudDSDeM/edit#gid=141729511}{format}
+(see the \href{https://docs.google.com/document/d/1g0BcXkA-rcm0AAtkTjK9uE7Bh2o5NzB_fBr_UDr_niw/edit}{SOP} for more details)
 }

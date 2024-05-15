@@ -1,15 +1,16 @@
 #' Create website upload CSV
 #' 
-#' To create the CSV needed to upload reports to the OBI website. 
+#' To create the CSV needed to upload reports to the OBI website. The CSV files should be in the following [format](https://docs.google.com/spreadsheets/d/19Ua83FMIsT9RjrugrvPD4NJEZcfI8e_cBFfrudDSDeM/edit#gid=141729511) 
+#' (see the [SOP](https://docs.google.com/document/d/1g0BcXkA-rcm0AAtkTjK9uE7Bh2o5NzB_fBr_UDr_niw/edit) for more details)
 #' 
 #' @param report_name A character string that is the tile of the report excluding the site names. The report filename must be formatted as "[filename] - [sitename]". 
 #' @param members_only A logical value that indicates whether the report is for members only. Default is 1.
 #' @param site_year An integer that indicates the year used to determine the sites that have reports. Default is 2023.
 #' @param exclude_site A character vector that contains any sites to exclude. Default is an empty vector.
 #' @param output_path Path to output the CSV file to.
-#' @import tidyverse
+#' 
+#' 
 #' @export
-#' @rdname create_website_upload_csv
 
 create_website_upload_csv <- function(report_name,
                                       members_only = 1,
