@@ -6,60 +6,40 @@
 #' @param report_name A character string that is the tile of the report excluding the site names. The report filename must be formatted as "[filename] - [sitename]". 
 #' @param members_only A logical value that indicates whether the report is for members only. Default is 1.
 #' @param site_year An integer that indicates the year used to determine the sites that have reports. Default is 2023.
+#' @param site_list A data frame that contains the site names. Default is the `site_names` data frame.
+#' @param site_mdhhs A data frame that contains the site names, AMx IDs, and MDHHS IDs. Default is the `site_names_mdhhs` data frame.
 #' @param exclude_site A character vector that contains any sites to exclude. Default is an empty vector.
 #' @param output_path Path to output the CSV file to.
 #' 
-#' 
+#' @import tidyverse
 #' @export
 
 create_website_upload_csv <- function(report_name,
                                       members_only = 1,
                                       site_year = 2023,
+                                      site_list = site_names,
+                                      site_mdhhs = site_names_mdhhs,
                                       exclude_site = c(""),
                                       output_path) {
+  
+  # constants -----------------------------
+  yr_month_lbl <- format(Sys.Date(), "%Y %B")
+  file_url_yr_month_lbl <- tolower(format(Sys.Date(), "%B-%Y"))
+  title_lbl <- report_name
+  file_url_path <- paste0("/wp-content/uploads/private/dlm_uploads/",
+                          file_url_yr_month_lbl,
+                          "/")
+  
   # load data ----------------------------
-  site_names <- read_csv("data_raw/OBI _ performance reports example - Categories.csv",
-                         show_col_types = FALSE) |>
-    janitor::clean_names()
-  site_names_mdhhs <- read_csv("data_raw/Engaged Hospital List-site_name_mdhhs.csv",
-                               show_col_types = FALSE) |>
-    janitor::clean_names()
+  site_names <- site_list
+  site_names_mdhhs <- site_mdhhs
   
-  if (.Platform$OS.type == "windows") {
-    # windows file path
-    current_dt_path <-
-      "P:/OBI_abstracted_data/Current_Data/data/output/obi_data_R.Rds"
-  } else if (.Platform$OS.type == "unix") {
-    # MAC file path
-    current_dt_path <-
-      "/Volumes/nur-kanelow/OBI_abstracted_data/Current_Data/data/output/obi_data_R.Rds"
-  }
-  
-  # test path
-  if (!file.exists(current_dt_path)) {
-    stop("Check your VPN connection. Path doesn't exsit at ",
-         current_dt_path)
-  }
-  
-  obi_dt <- readRDS(current_dt_path)
-  
-  # data processing -----------------------------
-  site_names_mdhhs <- site_names_mdhhs |>
-    # 5 digits id
-    mutate(mdhhs_id = str_pad(mdhhs_id, 5, pad = "0"))
+  obi_dt <- obstinit::read_current_data(sas_processed_dt = FALSE)
   
   # workstation site names
   workstation_site_names <- obi_dt |>
     distinct(site_name, site_id, external_mdhhs_site_id) |>
-    rename(workstation_site_name = site_name) |>
-    mutate(
-      workstation_site_name = case_when(
-        workstation_site_name == "Corewell Health Lakeland/Niles Hospital" ~ "Corewell Health Lakeland Niles Hospital",
-        workstation_site_name == "Trinity Health Saint Mary s (Grand Rapids)" ~ "Trinity Health Saint Mary's (Grand Rapids)",
-        workstation_site_name == "DMC Hutzel Women s Hospital" ~ "DMC Hutzel Women's Hospital",
-        TRUE ~ workstation_site_name
-      )
-    )
+    rename(workstation_site_name = site_name) 
   
   # add IDs to website category data
   site_names_id <- site_names |>
@@ -96,14 +76,6 @@ create_website_upload_csv <- function(report_name,
     message("Missed sites: ",
             workstation_website_site_name_missed$site_name)
   }
-  
-  # constants -----------------------------
-  yr_month_lbl <- format(Sys.Date(), "%Y %B")
-  file_url_yr_month_lbl <- tolower(format(Sys.Date(), "%B-%Y"))
-  title_lbl <- report_name
-  file_url_path <- paste0("/wp-content/uploads/private/dlm_uploads/",
-                          file_url_yr_month_lbl,
-                          "/")
   
   # only keep sites that have push reports
   site_with_push_reports <- obi_dt |>
@@ -150,4 +122,6 @@ create_website_upload_csv <- function(report_name,
       ".csv"
     )
   )
+  
+  message("CSV file saved to: ", output_path)
 }
