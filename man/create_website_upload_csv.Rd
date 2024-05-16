@@ -8,6 +8,8 @@ create_website_upload_csv(
   report_name,
   members_only = 1,
   site_year = 2023,
+  site_list = site_names,
+  site_mdhhs = site_names_mdhhs,
   exclude_site = c(""),
   output_path
 )
@@ -18,6 +20,10 @@ create_website_upload_csv(
 \item{members_only}{A logical value that indicates whether the report is for members only. Default is 1.}
 
 \item{site_year}{An integer that indicates the year used to determine the sites that have reports. Default is 2023.}
+
+\item{site_list}{A data frame that contains the site names. Default is the \code{site_names} data frame.}
+
+\item{site_mdhhs}{A data frame that contains the site names, AMx IDs, and MDHHS IDs. Default is the \code{site_names_mdhhs} data frame.}
 
 \item{exclude_site}{A character vector that contains any sites to exclude. Default is an empty vector.}
 
