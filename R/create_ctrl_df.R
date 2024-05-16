@@ -60,8 +60,8 @@ create_ctrl_df <- function(df,
   ctrl_cohort <- ctrl_cohort %>%
     group_by(date_var) %>%
     summarize(
-      num = sum({{ num_var }}),
-      denom = sum({{ den_var }}),
+      num = sum({{ num_var }}, na.rm = T),
+      denom = sum({{ den_var }}, na.rm = T),
       rate = num / denom,
       .groups = "drop"
     )
