@@ -8,6 +8,8 @@ create_website_upload_csv(
   report_name,
   members_only = 1,
   site_year = 2023,
+  site_list = site_names,
+  site_mdhhs = site_names_mdhhs,
   exclude_site = c(""),
   output_path
 )
@@ -19,9 +21,13 @@ create_website_upload_csv(
 
 \item{site_year}{An integer that indicates the year used to determine the sites that have reports. Default is 2023.}
 
+\item{site_list}{A data frame that contains the site names. Default is the \code{site_names} data frame.}
+
+\item{site_mdhhs}{A data frame that contains the site names, AMx IDs, and MDHHS IDs. Default is the \code{site_names_mdhhs} data frame.}
+
 \item{exclude_site}{A character vector that contains any sites to exclude. Default is an empty vector.}
 
-\item{output_path}{Path to output the CSV file to.}
+\item{output_path}{Path to output the CSV file to (must end in /).}
 }
 \description{
 To create the CSV needed to upload reports to the OBI website. The CSV files should be in the following \href{https://docs.google.com/spreadsheets/d/19Ua83FMIsT9RjrugrvPD4NJEZcfI8e_cBFfrudDSDeM/edit#gid=141729511}{format}
