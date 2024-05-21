@@ -9,7 +9,7 @@
 #' @param site_list A data frame that contains the site names. Default is the `site_names` data frame.
 #' @param site_mdhhs A data frame that contains the site names, AMx IDs, and MDHHS IDs. Default is the `site_names_mdhhs` data frame.
 #' @param exclude_site A character vector that contains any sites to exclude. Default is an empty vector.
-#' @param output_path Path to output the CSV file to.
+#' @param output_path Path to output the CSV file to (must end in /).
 #' 
 #' @import tidyverse
 #' @export

@@ -27,7 +27,7 @@ create_website_upload_csv(
 
 \item{exclude_site}{A character vector that contains any sites to exclude. Default is an empty vector.}
 
-\item{output_path}{Path to output the CSV file to.}
+\item{output_path}{Path to output the CSV file to (must end in /).}
 }
 \description{
 To create the CSV needed to upload reports to the OBI website. The CSV files should be in the following \href{https://docs.google.com/spreadsheets/d/19Ua83FMIsT9RjrugrvPD4NJEZcfI8e_cBFfrudDSDeM/edit#gid=141729511}{format}
