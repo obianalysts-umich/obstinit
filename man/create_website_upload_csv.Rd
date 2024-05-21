@@ -29,7 +29,18 @@ create_website_upload_csv(
 
 \item{output_path}{Path to output the CSV file to (must end in /).}
 }
+\value{
+A saved CSV file that can be uploaded to the OBI website.
+}
 \description{
 To create the CSV needed to upload reports to the OBI website. The CSV files should be in the following \href{https://docs.google.com/spreadsheets/d/19Ua83FMIsT9RjrugrvPD4NJEZcfI8e_cBFfrudDSDeM/edit#gid=141729511}{format}
 (see the \href{https://docs.google.com/document/d/1g0BcXkA-rcm0AAtkTjK9uE7Bh2o5NzB_fBr_UDr_niw/edit}{SOP} for more details)
+}
+\examples{
+/dontrun{
+library(tidyverse)
+create_website_upload_csv(report_name = "test report - Michigan Medicine",
+                          output_path = "test_report.csv")
+}
+
 }

@@ -11,6 +11,14 @@
 #' @param exclude_site A character vector that contains any sites to exclude. Default is an empty vector.
 #' @param output_path Path to output the CSV file to (must end in /).
 #' 
+#' @return A saved CSV file that can be uploaded to the OBI website.
+#' @examples 
+#' /dontrun{
+#' library(tidyverse)
+#' create_website_upload_csv(report_name = "test report - Michigan Medicine",
+#'                           output_path = "test_report.csv")
+#' }
+#' 
 #' @import tidyverse
 #' @export
 
