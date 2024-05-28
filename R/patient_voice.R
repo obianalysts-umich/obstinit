@@ -33,38 +33,59 @@ create_pv_response_dt <- function(obi_dt,
   # Patient voice data 
   if (Sys.info()["sysname"] == "Windows") { 
     pro_survey_dt <- data.table::fread("P:/OBI_abstracted_data/Current_Data/data/input/pro_6_week_postpartum.csv") 
-    contact_log <- read_csv("P:/OBI_abstracted_data/Current_Data/data/input/contactlog.csv") 
+    contact_log <- readr::read_csv("P:/OBI_abstracted_data/Current_Data/data/input/contactlog.csv") 
     
   } else if (Sys.info()["sysname"] == "Darwin") { 
     pro_survey_dt <- data.table::fread("/Volumes/nur-kanelow/OBI_abstracted_data/Current_Data/data/input/pro_6_week_postpartum.csv") 
-    contact_log <- read_csv("/Volumes/nur-kanelow/OBI_abstracted_data/Current_Data/data/input/contactlog.csv") 
+    contact_log <- readr::read_csv("/Volumes/nur-kanelow/OBI_abstracted_data/Current_Data/data/input/contactlog.csv") 
   } 
+  
+  # pts that have an opt-out email address
+  obi_dt <- obstinit::read_current_data(sas_processed_dt = FALSE)
+  
+  opt_out_list <- obi_dt |> 
+    dplyr::mutate(
+      email_txt = tolower(email_txt),
+      pro_opt_out_e_new = dplyr::case_when(
+        email_txt == "ptnoemail@optout.com" ~ 1,
+        email_txt == "optout@noemail.com" ~ 1,
+        email_txt == "obicustomersupport@med.umich.edu" ~ 1,
+        email_txt == "obi-cda-support@med.umich.edu" ~ 1,
+        grepl("optout", tolower(email_txt)) ~ 1,
+        grepl("noemail", tolower(email_txt)) ~ 1,
+        TRUE ~ NA
+      )
+    ) |> 
+    dplyr::filter(pro_opt_out_e_new == 1) |> 
+    dplyr::pull(patientid)
+  
   
   # pts that have received pro survey 
   contact_log_pt = contact_log |>  
-    distinct(patientid)  
+    dplyr::distinct(patientid) |> 
+    dplyr::filter(!(patientid %in% opt_out_list))
   
   # select complete survey vars 
   pro_survey_dt_select = pro_survey_dt |>  
-    select(patientid, survey_informed_consent_b_0)  
+    dplyr::select(patientid, survey_informed_consent_b_0)  
   
   # merge contact log with pro survey data 
   pro_survey_sent_complete_dt = contact_log_pt |>  
-    mutate(complete_pro_survey_flg = ifelse(patientid %in% pro_survey_dt_select$patientid, 1, 0)) |> 
-    left_join(pro_survey_dt_select) 
+    dplyr::mutate(complete_pro_survey_flg = ifelse(patientid %in% pro_survey_dt_select$patientid, 1, 0)) |> 
+    dplyr::left_join(pro_survey_dt_select) 
   
   # add variable pro_response flag to obi_dt 
-  obi_dt_pro_flg <- obi_dt %>% 
-    filter(patientid %in% pro_survey_sent_complete_dt$patientid) |> 
-    left_join(pro_survey_sent_complete_dt, by = c("patientid")) %>% 
-    select(patientid, site_name, infant_dob_dt, complete_pro_survey_flg, survey_informed_consent_b_0) 
+  obi_dt_pro_flg <- obi_dt |> 
+    dplyr::filter(patientid %in% pro_survey_sent_complete_dt$patientid) |> 
+    dplyr::left_join(pro_survey_sent_complete_dt, by = c("patientid")) |>  
+    dplyr::select(patientid, site_name, infant_dob_dt, complete_pro_survey_flg, survey_informed_consent_b_0) 
   
   if (pro_survey_expired == TRUE) { 
     # PRO survey expiration date 
     pro_expire_date <- lubridate::as_date(Sys.Date() - 12 * 7) # 12 weeks postpartum 
     
     obi_dt_pro_flg |> 
-      filter(infant_dob_dt <= pro_expire_date) 
+      dplyr::filter(infant_dob_dt <= pro_expire_date) 
   } else { 
     obi_dt_pro_flg 
   } 
