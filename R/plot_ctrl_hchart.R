@@ -5,6 +5,7 @@
 #' @export
 #' @rdname plot_ctrl_hchart
 #' @import tidyverse
+#' @import highcharter
 
 plot_ctrl_hchart <- function(df, title, ymin = NA, ymax = NA) {
   plot_1 <- highcharter::hchart(
