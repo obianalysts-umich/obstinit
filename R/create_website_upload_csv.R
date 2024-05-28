@@ -19,7 +19,7 @@
 #'                           output_path = "test_report.csv")
 #' }
 #' 
-#' @import tidyverse
+#' @import tidyr
 #' @export
 
 create_website_upload_csv <- function(report_name,
@@ -46,17 +46,17 @@ create_website_upload_csv <- function(report_name,
   
   # workstation site names
   workstation_site_names <- obi_dt |>
-    distinct(site_name, site_id, external_mdhhs_site_id) |>
-    rename(workstation_site_name = site_name) 
+    dplyr::distinct(site_name, site_id, external_mdhhs_site_id) |>
+    dplyr::rename(workstation_site_name = site_name) 
   
   # add IDs to website category data
   site_names_id <- site_names |>
-    left_join(site_names_mdhhs, by = c("site_name" = "site_name"))
+    dplyr::left_join(site_names_mdhhs, by = c("site_name" = "site_name"))
   
   # manual ID assignment
   site_names_id_manual <- site_names_id |>
-    mutate(
-      site_id_a_mx = case_match(
+    dplyr::mutate(
+      site_id_a_mx = dplyr::case_match(
         site_name,
         "Munson Healthcare Charlevoix Hospital" ~ 26,
         "Sparrow Hospital Lansing" ~ 117,
@@ -70,15 +70,15 @@ create_website_upload_csv <- function(report_name,
     )
   
   site_names_id_manual_valid_sites <- site_names_id_manual |>
-    filter(!is.na(site_id_a_mx))
+    dplyr::filter(!is.na(site_id_a_mx))
   
   # merge with workstation data
   workstation_website_site_name_joined <- site_names_id_manual_valid_sites |>
-    left_join(workstation_site_names, by = c("site_id_a_mx" = "site_id"))
+    dplyr::left_join(workstation_site_names, by = c("site_id_a_mx" = "site_id"))
   
   # identify missed sites
   workstation_website_site_name_missed <- site_names_id_manual_valid_sites |>
-    anti_join(workstation_site_names, by = c("site_id_a_mx" = "site_id"))
+    dplyr::anti_join(workstation_site_names, by = c("site_id_a_mx" = "site_id"))
   
   if (dim(workstation_website_site_name_missed)[1] != 0) {
     message("Missed sites: ",
@@ -87,15 +87,15 @@ create_website_upload_csv <- function(report_name,
   
   # only keep sites that have push reports
   site_with_push_reports <- obi_dt |>
-    filter(infant_year == site_year, !site_name %in% exclude_site) |>
-    distinct(site_id) |>
-    pull()
+    dplyr::filter(infant_year == site_year, !site_name %in% exclude_site) |>
+    dplyr::distinct(site_id) |>
+    dplyr::pull()
   
   # create required columns -----------------------------
   csv_upload_one_row_per_site <- workstation_website_site_name_joined |>
-    filter(site_id_a_mx %in% site_with_push_reports) |>
-    select(categories = site_name, workstation_site_name) |>
-    transmute(
+    dplyr::filter(site_id_a_mx %in% site_with_push_reports) |>
+    dplyr::select(categories = site_name, workstation_site_name) |>
+    dplyr::transmute(
       title = paste0(yr_month_lbl, " - ", title_lbl, " - ", workstation_site_name),
       categories,
       members_only = members_only,
@@ -107,8 +107,8 @@ create_website_upload_csv <- function(report_name,
   
   # expand rows with type column; type column has two values: "NTSV" and "NTSV - 2"
   csv_upload_matched_format <- expand_grid(type = c("download", "version"), csv_upload_one_row_per_site) |>
-    arrange(categories) |>
-    mutate(
+    dplyr::arrange(categories) |>
+    dplyr::mutate(
       # version row
       title = ifelse(type == "version", "", title),
       categories = ifelse(type == "version", "", categories),
@@ -121,7 +121,7 @@ create_website_upload_csv <- function(report_name,
     )
   
   # save data -----------------------------
-  write_csv(
+  readr::write_csv(
     csv_upload_matched_format,
     paste0(
       output_path,
