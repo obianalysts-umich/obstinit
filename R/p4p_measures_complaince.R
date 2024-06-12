@@ -34,10 +34,26 @@
 pv_email_submission_rate <- function(
     obi_dt,
     by_site = TRUE) {
+  
+  # find opt out emails 
+  obi_dt_opt_out <- obi_dt |>
+    mutate(
+      email_txt = tolower(email_txt),
+      pro_opt_out_e_new = case_when(
+        pro_opt_out_e == 1 ~ 1, 
+        email_txt == "ptnoemail@optout.com" ~ 1,
+        email_txt == "optout@noemail.com" ~ 1,
+        email_txt == "obicustomersupport@med.umich.edu" ~ 1,
+        email_txt == "obi-cda-support@med.umich.edu" ~ 1,
+        grepl("optout", tolower(email_txt)) ~ 1,
+        grepl("noemail", tolower(email_txt)) ~ 1,
+        TRUE ~ NA
+      )
+    )
 
   # create flg for pts with emails
-  obi_dt_consent <- obi_dt |>
-    filter(is.na(pro_opt_out_e)) |>
+  obi_dt_consent <- obi_dt_opt_out |>
+    filter(is.na(pro_opt_out_e_new)) |>
     mutate(pt_with_emails_flg = ifelse(!is.na(email_txt), 1, 0))
 
   # response rate -----------------------------
