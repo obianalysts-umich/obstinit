@@ -4,7 +4,7 @@
 \alias{prop_scheduled_non_opioid_meds}
 \title{Function to calculate compliance with scheduled acetaminophen and oral NSAID}
 \usage{
-prop_scheduled_non_opioid_meds(obi_dt, by_site = T)
+prop_scheduled_non_opioid_meds(obi_dt, by_site = T, drop_vaginal = T)
 }
 \arguments{
 \item{obi_dt}{A data frame containing the necessary columns (patientid, site_name, deliv_to_submit_max_days_int)}
