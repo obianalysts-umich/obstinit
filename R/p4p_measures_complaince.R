@@ -183,7 +183,8 @@ average_days_to_submit <- function(obi_dt) {
 #' @export
 
 prop_scheduled_non_opioid_meds <- function(obi_dt,
-                                           by_site = T) {
+                                           by_site = T,
+                                           drop_vaginal = T) {
   # filter to ≥ year 2024 cases and opioid cohort
   obi_dt_2024 <- obi_dt |>
     filter(infant_year >= 2024)
@@ -191,11 +192,10 @@ prop_scheduled_non_opioid_meds <- function(obi_dt,
   cli::cli_alert_warning("cases are filtered to infant dob year ≥ 2024")
   
   if (by_site) {
-    obi_dt_2024 |>
+    dt <- obi_dt_2024 |>
       filter(opioid_denom_flg == 1,
              acetaminophen_ordered_e != 4 &
-               ibuprofen_ordered_e != 4,
-             cesarean_flg == 1) |>
+               ibuprofen_ordered_e != 4) |>
       summarise(
         n_pt = n(),
         n_scheduled_non_opioid = sum(
@@ -204,15 +204,21 @@ prop_scheduled_non_opioid_meds <- function(obi_dt,
           na.rm = TRUE
         ),
         scheduled_non_opioid_pct = round(n_scheduled_non_opioid / n_pt, 3),
-        .by = c(site_name, external_mdhhs_site_id)
+        .by = c(site_name, external_mdhhs_site_id, cesarean_flg)
       )
+    if (drop_vaginal) {
+      dt |>
+        filter(cesarean_flg == 1) |>
+        select(-c(cesarean_flg))
+    } else {
+      dt
+    }
   } else {
-    obi_dt_2024 |>
+    dt <- obi_dt_2024 |>
       # drop patients who have contraindication to BOTH acetaminophen and NSAIDs
       filter(opioid_denom_flg == 1,
              acetaminophen_ordered_e != 4 &
-               ibuprofen_ordered_e != 4,
-             cesarean_flg == 1) |>
+               ibuprofen_ordered_e != 4) |>
       summarise(
         n_pt = n(),
         n_scheduled_non_opioid = sum(
@@ -220,8 +226,16 @@ prop_scheduled_non_opioid_meds <- function(obi_dt,
             ibuprofen_ordered_e == 1,
           na.rm = TRUE
         ),
+        .by = cesarean_flg,
         scheduled_non_opioid_pct = round(n_scheduled_non_opioid / n_pt, 3)
       )
+    if (drop_vaginal) {
+      dt |>
+        filter(cesarean_flg == 1) |>
+        select(-c(cesarean_flg))
+    } else {
+      dt
+    }
   }
   
 }
