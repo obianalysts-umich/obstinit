@@ -132,4 +132,5 @@ create_website_upload_csv <- function(report_name,
   )
   
   message("CSV file saved to: ", output_path)
+  message("Site list based on active sites in 2024.")
 }
