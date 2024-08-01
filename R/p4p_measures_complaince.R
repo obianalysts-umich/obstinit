@@ -187,43 +187,15 @@ prop_scheduled_non_opioid_meds <- function(obi_dt,
                                            drop_vaginal = T) {
   # filter to ≥ year 2024 cases and opioid cohort
   obi_dt_2024 <- obi_dt |>
-    filter(infant_year >= 2024)
+    filter(infant_year >= 2024, scheduled_nonopioid_denom_flg == 1)
   
   cli::cli_alert_warning("cases are filtered to infant dob year ≥ 2024")
   
   if (by_site) {
     dt <- obi_dt_2024 |>
-      mutate(
-        scheduled_nonopioid_contra_both = ifelse(acetaminophen_ordered_e == 4 &
-                                                   ibuprofen_ordered_e == 4, 1, 0)
-      ) |>
-      filter(opioid_denom_flg == 1, scheduled_nonopioid_contra_both != 1) |>
-      mutate(
-        scheduled_med_needed = case_when(
-          acetaminophen_ordered_e == 4 ~ "Ibuprofen",
-          ibuprofen_ordered_e == 4 ~ "Acetaminophen",
-          TRUE ~ "Both"
-        ),
-        mtg_scheduled_comp = case_when(
-          scheduled_med_needed == "Both" &
-            acetaminophen_ordered_e == 1 &
-            ibuprofen_ordered_e == 1 ~ 1,
-          scheduled_med_needed == "Both" &
-            (acetaminophen_ordered_e != 1 |
-               ibuprofen_ordered_e != 1) ~ 0,
-          scheduled_med_needed == "Ibuprofen" &
-            ibuprofen_ordered_e == 1 ~ 1,
-          scheduled_med_needed == "Ibuprofen" &
-            ibuprofen_ordered_e != 1 ~ 0,
-          scheduled_med_needed == "Acetaminophen" &
-            acetaminophen_ordered_e == 1 ~ 1,
-          scheduled_med_needed == "Acetaminophen" &
-            acetaminophen_ordered_e != 1 ~ 0
-        )
-      ) |>
       summarise(
         n_pt = n(),
-        n_scheduled_non_opioid = sum(mtg_scheduled_comp, na.rm = TRUE),
+        n_scheduled_non_opioid = sum(mtg_scheduled_nonopioid_comp, na.rm = TRUE),
         scheduled_non_opioid_pct = round(n_scheduled_non_opioid / n_pt, 3),
         .by = c(site_name, external_mdhhs_site_id, cesarean_flg)
       )
@@ -236,38 +208,9 @@ prop_scheduled_non_opioid_meds <- function(obi_dt,
     }
   } else {
     dt <- obi_dt_2024 |>
-      # drop patients who have contraindication to BOTH acetaminophen and NSAIDs
-      mutate(
-        scheduled_nonopioid_contra_both = ifelse(acetaminophen_ordered_e == 4 &
-                                                   ibuprofen_ordered_e == 4, 1, 0)
-      ) |>
-      filter(opioid_denom_flg == 1, scheduled_nonopioid_contra_both != 1) |>
-      mutate(
-        scheduled_med_needed = case_when(
-          acetaminophen_ordered_e == 4 ~ "Ibuprofen",
-          ibuprofen_ordered_e == 4 ~ "Acetaminophen",
-          TRUE ~ "Both"
-        ),
-        mtg_scheduled_comp = case_when(
-          scheduled_med_needed == "Both" &
-            acetaminophen_ordered_e == 1 &
-            ibuprofen_ordered_e == 1 ~ 1,
-          scheduled_med_needed == "Both" &
-            (acetaminophen_ordered_e != 1 |
-               ibuprofen_ordered_e != 1) ~ 0,
-          scheduled_med_needed == "Ibuprofen" &
-            ibuprofen_ordered_e == 1 ~ 1,
-          scheduled_med_needed == "Ibuprofen" &
-            ibuprofen_ordered_e != 1 ~ 0,
-          scheduled_med_needed == "Acetaminophen" &
-            acetaminophen_ordered_e == 1 ~ 1,
-          scheduled_med_needed == "Acetaminophen" &
-            acetaminophen_ordered_e != 1 ~ 0
-        )
-      ) |>
       summarise(
         n_pt = n(),
-        n_scheduled_non_opioid = sum(mtg_scheduled_comp, na.rm = TRUE),
+        n_scheduled_non_opioid = sum(mtg_scheduled_nonopioid_comp, na.rm = TRUE),
         scheduled_non_opioid_pct = round(n_scheduled_non_opioid / n_pt, 3),
         .by = cesarean_flg
       )
