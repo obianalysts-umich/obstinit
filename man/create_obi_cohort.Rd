@@ -4,12 +4,12 @@
 \alias{create_obi_cohort}
 \title{Create OBI cohort of locked, complete cases for most analyses}
 \usage{
-create_obi_cohort(df, sas_processed_dt = T, limit_to_locked = T)
+create_obi_cohort(df, sas_processed_dt = FALSE, limit_to_locked = TRUE)
 }
 \arguments{
 \item{df}{Data frame -- usually this is the data frame read into R using data.table::fread}
 
-\item{sas_processed_dt}{Logical -- set to TRUE (default) if using data processed from SAS; set to FALSE to use data processed from R}
+\item{sas_processed_dt}{Logical -- set to TRUE  if using data processed from SAS; set to FALSE (default) to use data processed from R}
 
 \item{limit_to_locked}{Logical -- if TRUE, only return cases that are locked}
 }
@@ -18,8 +18,6 @@ this function does
 \enumerate{
 \item include case ≥2020-01-01 based on infant date of birth
 \item include case if case is complete using flg_complete
-\item create case_locked varaible using 90 days lock
 \item filter to complete and locked cases(limit_to_locked = TRUE)
-\item create mdhhs_id character variable with leading 0's
 }
 }

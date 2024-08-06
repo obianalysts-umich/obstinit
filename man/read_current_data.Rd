@@ -4,10 +4,10 @@
 \alias{read_current_data}
 \title{Read current OBI data}
 \usage{
-read_current_data(sas_processed_dt = TRUE)
+read_current_data(sas_processed_dt = FALSE)
 }
 \arguments{
-\item{sas_processed_dt}{if read SAS processed data, default to TRUE}
+\item{sas_processed_dt}{if read SAS processed data or not; default to FALSE}
 }
 \description{
 read OBI analytic data from Turbo

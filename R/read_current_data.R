@@ -1,21 +1,18 @@
 #' Read current OBI data
-#' @param sas_processed_dt if read SAS processed data, default to TRUE
+#' @param sas_processed_dt if read SAS processed data or not; default to FALSE
 #' @description
 #' read OBI analytic data from Turbo
 #' @export
 
-read_current_data <- function(sas_processed_dt = TRUE) {
+read_current_data <- function(sas_processed_dt = FALSE) {
   # if reading SAS processed data
   if (sas_processed_dt) {
-    if (.Platform$OS.type == "windows") {
-      # windows file path
-      current_dt_path <-
-        "P:/OBI_abstracted_data/Current_Data/data/output/sourcetables_obi_export_recodes.csv"
-    } else if (.Platform$OS.type == "unix") {
-      # MAC file path
-      current_dt_path <-
-        "/Volumes/nur-kanelow/OBI_abstracted_data/Current_Data/data/output/sourcetables_OBI_export_recodes.csv"
-    }
+    cli::cli_abort(
+      c(
+        "SAS processed data is not supported. SAS processing stopped in Aug 2024.",
+        "x" = "change `sas_processed_dt = FALSE`"
+      )
+    )
   } else {
     # read R processed R data file
     # to keep formatting
