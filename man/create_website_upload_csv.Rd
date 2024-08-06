@@ -7,7 +7,7 @@
 create_website_upload_csv(
   report_name,
   members_only = 1,
-  site_year = 2023,
+  site_year = 2024,
   site_list = site_names,
   site_mdhhs = site_names_mdhhs,
   exclude_site = c(""),
