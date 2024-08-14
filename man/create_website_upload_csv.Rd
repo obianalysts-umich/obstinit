@@ -6,6 +6,7 @@
 \usage{
 create_website_upload_csv(
   report_name,
+  tags,
   members_only = 1,
   site_year = 2024,
   site_list = site_names,
@@ -16,6 +17,8 @@ create_website_upload_csv(
 }
 \arguments{
 \item{report_name}{A character string that is the tile of the report excluding the site names. The report filename must be formatted as "\link{filename} - \link{sitename}".}
+
+\item{tags}{A character vector that contains the tags for the report. The available tags on the website are "Data Request", "NTSV Performance Report", "NTSV Summary Report", "P4P Progress Report", "Weekly Dystocia Report", or "Other". Default is an empty vector.}
 
 \item{members_only}{A logical value that indicates whether the report is for members only. Default is 1.}
 

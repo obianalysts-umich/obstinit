@@ -4,6 +4,7 @@
 #' (see the [SOP](https://docs.google.com/document/d/1g0BcXkA-rcm0AAtkTjK9uE7Bh2o5NzB_fBr_UDr_niw/edit) for more details)
 #' 
 #' @param report_name A character string that is the tile of the report excluding the site names. The report filename must be formatted as "[filename] - [sitename]". 
+#' @param tags A character vector that contains the tags for the report. The available tags on the website are "Data Request", "NTSV Performance Report", "NTSV Summary Report", "P4P Progress Report", "Weekly Dystocia Report", or "Other". Default is an empty vector.
 #' @param members_only A logical value that indicates whether the report is for members only. Default is 1.
 #' @param site_year An integer that indicates the year used to determine the sites that have reports. Default is 2023.
 #' @param site_list A data frame that contains the site names. Default is the `site_names` data frame.
@@ -23,6 +24,7 @@
 #' @export
 
 create_website_upload_csv <- function(report_name,
+                                      tags,
                                       members_only = 1,
                                       site_year = 2024,
                                       site_list = site_names,
@@ -98,6 +100,7 @@ create_website_upload_csv <- function(report_name,
     dplyr::transmute(
       title = paste0(yr_month_lbl, " - ", title_lbl, " - ", workstation_site_name),
       categories,
+      tags = tags,
       members_only = members_only,
       redirect = 0,
       version = "",
@@ -109,12 +112,13 @@ create_website_upload_csv <- function(report_name,
   csv_upload_matched_format <- expand_grid(type = c("download", "version"), csv_upload_one_row_per_site) |>
     dplyr::arrange(categories) |>
     dplyr::mutate(
-      # version row
+      # download row
       title = ifelse(type == "version", "", title),
       categories = ifelse(type == "version", "", categories),
+      tags = ifelse(type == "version", "", tags),
       members_only = ifelse(type == "version", "", members_only),
       redirect = ifelse(type == "version", "", redirect),
-      # download row
+      # version row
       version = ifelse(type == "download", "", version),
       file_date = ifelse(type == "download", "", file_date),
       file_urls = ifelse(type == "download", "", file_urls)
@@ -131,6 +135,10 @@ create_website_upload_csv <- function(report_name,
     )
   )
   
-  message("CSV file saved to: ", output_path)
+  if (!(tags %in% c("Data Request", "NTSV Performance Report", "NTSV Summary Report", "P4P Progress Report", "Weekly Dystocia Report", "Other"))) {
+    stop("Tags must be one of the following: Data Request, NTSV Performance Report, NTSV Summary Report, P4P Progress Report, Weekly Dystocia Report, or Other.")
+  }
+  
   message("Site list based on active sites in 2024.")
+  message("CSV file saved to: ", output_path)
 }
