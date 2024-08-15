@@ -67,6 +67,8 @@ create_website_upload_csv <- function(report_name,
         "Trinity Health St Joseph Mercy Oakland Hospital Pontiac" ~ 126,
         "DMC Hutzel Women's Hospital Detroit" ~ 44,
         "DMC Sinai Grace Hospital Detroit" ~ 112,
+        "Dickinson County Hospital Iron Mountain" ~ 36,
+        "Hillsdale Hospital Hillsdale" ~ 52,
         .default = site_id_a_mx
       )
     )
