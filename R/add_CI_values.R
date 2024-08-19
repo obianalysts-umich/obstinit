@@ -27,10 +27,7 @@
 #' @export
 
 
-add_CI_values <- function(data,
-                          var,
-                          n_cases,
-                          mean_or_proportion = "proportion") {
+add_CI_values <- function(data, var, n_cases, mean_or_proportion = "proportion") {
   var <- enexpr(var)
   n_cases <- enexpr(n_cases)
   
@@ -43,8 +40,8 @@ add_CI_values <- function(data,
         UC = !!var + (1.96 * sqrt((
           !!var * (1-!!var)
         ) / !!n_cases)),
-        LC = round(LC, 4),
-        UC = round(UC, 4)
+        LC = ifelse(LC < 0, 0.0000, round(LC, 4)),
+        UC = ifelse(UC > 1, 1.0000, round(UC, 4))
       )
     
   }
