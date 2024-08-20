@@ -1,3 +1,27 @@
+#' Create website upload CSV
+#' 
+#' To create the CSV needed to upload reports to the OBI website. The CSV files should be in the following [format](https://docs.google.com/spreadsheets/d/19Ua83FMIsT9RjrugrvPD4NJEZcfI8e_cBFfrudDSDeM/edit#gid=141729511) 
+#' (see the [SOP](https://docs.google.com/document/d/1g0BcXkA-rcm0AAtkTjK9uE7Bh2o5NzB_fBr_UDr_niw/edit) for more details)
+#' 
+#' @param input_path A character string that is the file path of the html report.  
+#' @param output_pdf_path A character string that is the file path of the final PDF report. 
+#' @param top_margin A numeric that indicates the top margin of the PDF. Default is 0.4.
+#' @param bottom_margin A numeric that indicates the bottom margin of the PDF. Default is 0.4.
+#' @param page_number A logical that indicates if the page number should be included in the PDF. Default is FALSE.
+#' @param page_range A character string that indicates the page range of the PDF. Default is "", which prings all pages. 
+#'
+#' @return Creates a PDF containing the BCBSM logo and language in a footnote. The file is a PDF copy of the HTML verson of the report.. 
+#' @examples 
+#' /dontrun{
+#' print_obi_report("report.html", 
+#' "PRO Patient Voices Report.pdf", 
+#' top_margin = 0.4, 
+#' bottom_margin = 0.4,
+#' page_number = TRUE)
+#' }
+#' 
+#' @export
+
 
 print_obi_report <- function(input_path, 
                      output_pdf_path, 
