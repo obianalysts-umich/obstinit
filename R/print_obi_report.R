@@ -1,7 +1,7 @@
 
 
 
-print_obi_report <- (input_path, 
+print_obi_report <- function(input_path, 
                      output_pdf_path, 
                      top_margin = 0.4, 
                      bottom_margin = 0.4,
