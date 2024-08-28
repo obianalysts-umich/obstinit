@@ -1,4 +1,3 @@
-
 #' Create dystocia cohort
 #' 
 #' To create dystocia compliance cohort
@@ -7,8 +6,7 @@
 #' @export
 #' @rdname create_dystocia_cohort
 
-create_dystocia_cohort = function(df) {
-  df %>%
-    filter(planned_mode_of_delivery_cd == 1,
-           transfer_from_home_birth_b != 1)
+create_dystocia_cohort <- function(df) {
+  df |>
+    filter(!is.na(dystocia_noncompliant_flg))
 }

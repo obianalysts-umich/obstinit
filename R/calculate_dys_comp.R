@@ -1,4 +1,3 @@
-
 #' Calculate dystocia compliance
 #' 
 #' To calculate dystocia compliance, overall and by type
@@ -8,34 +7,30 @@
 #' @export
 #' @rdname calculate_dys_comp
 
-calculate_dys_comp = function(df, include_types = F) {
-  df1 = df %>%
+calculate_dys_comp <- function(df, include_types = F) {
+  df1 = df |>
     summarize(
-      dys_comp_num = sum(overall_dystocia_compliance_num),
-      dys_comp_denom = sum(overall_dystocia_den_all),
+      dys_comp_num = sum(dystocia_noncompliant_flg == 0, na.rm = T),
+      dys_comp_denom = sum(!is.na(dystocia_noncompliant_flg)),
       dys_comp_rate = dys_comp_num / dys_comp_denom
     )
   
   if (include_types) {
-    df %>%
-      filter(transfer_from_home_birth_b != 1) %>%
-      summarize(
-        dys_comp_num = sum(overall_dystocia_compliance_num),
-        dys_comp_denom = sum(overall_dystocia_den_all),
-        dys_comp_rate = dys_comp_num / dys_comp_denom,
-        failed_iol_num = sum(failed_induction_num_compliance, na.rm = T),
-        failed_iol_denom = sum(failed_induction_den_all, na.rm = T),
-        failed_iol_comp_rate = failed_iol_num / failed_iol_denom,
-        latent_arrest_num = sum(latent_num_compliance, na.rm = T),
-        latent_arrest_denom = sum(latent_den_all, na.rm = T),
-        latent_arrest_comp_rate = latent_arrest_num / latent_arrest_denom,
-        active_arrest_num = sum(active_num_compliance, na.rm = T),
-        active_arrest_denom = sum(active_den_all, na.rm = T),
-        active_arrest_comp_rate = active_arrest_num / active_arrest_denom,
-        arrest_descent_num = sum(arrest_num_compliance, na.rm = T),
-        arrest_descent_denom = sum(arrest_den_all, na.rm = T),
-        arrest_descent_comp_rate = arrest_descent_num / arrest_descent_denom
-      )
+    df |>
+      summarize(across(
+        c(
+          dystocia_noncompliant_flg,
+          dystocia_failed_induction_noncompliant_flg,
+          dystocia_latent_phase_arrest_noncompliant_flg,
+          dystocia_active_phase_arrest_noncompliant_flg,
+          dystocia_arrest_descent_noncompliant_flg
+        ),
+        list(
+          denom = ~ sum(!is.na(.x)),
+          num = ~ sum(.x == 0, na.rm = T),
+          rate = ~ mean(.x == 0, na.rm = T)
+        )
+      ))
   } else
     (return(df1))
 }
