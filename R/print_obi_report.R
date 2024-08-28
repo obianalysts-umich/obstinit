@@ -1,7 +1,6 @@
-#' Create website upload CSV
+#' Print HTML report to PDF
 #' 
-#' To create the CSV needed to upload reports to the OBI website. The CSV files should be in the following [format](https://docs.google.com/spreadsheets/d/19Ua83FMIsT9RjrugrvPD4NJEZcfI8e_cBFfrudDSDeM/edit#gid=141729511) 
-#' (see the [SOP](https://docs.google.com/document/d/1g0BcXkA-rcm0AAtkTjK9uE7Bh2o5NzB_fBr_UDr_niw/edit) for more details)
+#' To print HTML report to a PDF, this function uses the `pagedown::chrome_print` function. The function adds a footer to the PDF that includes the BCBSM logo and language. The function also allows for the inclusion of page numbers in the PDF.
 #' 
 #' @param input_path A character string that is the file path of the html report.  
 #' @param output_pdf_path A character string that is the file path of the final PDF report. 

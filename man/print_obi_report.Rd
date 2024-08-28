@@ -2,7 +2,7 @@
 % Please edit documentation in R/print_obi_report.R
 \name{print_obi_report}
 \alias{print_obi_report}
-\title{Create website upload CSV}
+\title{Print HTML report to PDF}
 \usage{
 print_obi_report(
   input_path,
@@ -30,8 +30,7 @@ print_obi_report(
 Creates a PDF containing the BCBSM logo and language in a footnote. The file is a PDF copy of the HTML verson of the report..
 }
 \description{
-To create the CSV needed to upload reports to the OBI website. The CSV files should be in the following \href{https://docs.google.com/spreadsheets/d/19Ua83FMIsT9RjrugrvPD4NJEZcfI8e_cBFfrudDSDeM/edit#gid=141729511}{format}
-(see the \href{https://docs.google.com/document/d/1g0BcXkA-rcm0AAtkTjK9uE7Bh2o5NzB_fBr_UDr_niw/edit}{SOP} for more details)
+To print HTML report to a PDF, this function uses the \code{pagedown::chrome_print} function. The function adds a footer to the PDF that includes the BCBSM logo and language. The function also allows for the inclusion of page numbers in the PDF.
 }
 \examples{
 /dontrun{
