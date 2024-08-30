@@ -17,7 +17,7 @@
 #'
 #'  
 #' @returns
-#' An tibble with the aggridated numerator and denominator by input date variable
+#' An tibble with the aggregated numerator and denominator by input date variable
 #'
 #' @export
 
