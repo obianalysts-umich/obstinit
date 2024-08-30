@@ -37,7 +37,7 @@ Make use this variable is in a date format, for example: lubridate::dmy_hms(infa
 \item{for_highchart}{If TRUE, multiplies all rates by 100 for highchart; default is FALSE.}
 }
 \value{
-An tibble with the aggridated numerator and denominator by input date variable
+An tibble with the aggregated numerator and denominator by input date variable
 }
 \description{
 This function takes in a data frame row per observation like OBI data.

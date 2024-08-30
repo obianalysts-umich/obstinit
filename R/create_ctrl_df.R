@@ -19,6 +19,7 @@
 #' @returns
 #' An tibble with the aggregated numerator and denominator by input date variable
 #'
+#'
 #' @export
 
 
@@ -33,7 +34,7 @@ create_ctrl_df <- function(df,
                            for_highchart = FALSE) {
   # outcome rates by time table--------------------------------------------
 
-  ctrl_cohort <- df %>%
+  ctrl_cohort <- df |>
     mutate(
       year_mon = zoo::as.yearmon({{ date_var }}),
       year_qtr = zoo::as.yearqtr({{ date_var }})
@@ -42,23 +43,23 @@ create_ctrl_df <- function(df,
   ## date granularity + for_highchart date formatting
 
   if (date_gran == "month") {
-    ctrl_cohort <- ctrl_cohort %>% mutate(date_var = year_mon)
+    ctrl_cohort <- ctrl_cohort |> mutate(date_var = year_mon)
 
     if (for_highchart) {
-      ctrl_cohort <- ctrl_cohort %>% mutate(date_var = lubridate::my(date_var))
+      ctrl_cohort <- ctrl_cohort |> mutate(date_var = lubridate::my(date_var))
     }
   } else if (date_gran == "quarter") {
-    ctrl_cohort <- ctrl_cohort %>% mutate(date_var = year_qtr)
+    ctrl_cohort <- ctrl_cohort |> mutate(date_var = year_qtr)
 
     if (for_highchart) {
-      ctrl_cohort <- ctrl_cohort %>% mutate(date_var = as.character(date_var))
+      ctrl_cohort <- ctrl_cohort |> mutate(date_var = as.character(date_var))
     }
   }
 
   ## group by date_var and calculate numerator and denominator rates
 
-  ctrl_cohort <- ctrl_cohort %>%
-    group_by(date_var) %>%
+  ctrl_cohort <- ctrl_cohort |>
+    group_by(date_var) |>
     summarize(
       num = sum({{ num_var }}, na.rm = T),
       denom = sum({{ den_var }}, na.rm = T),
@@ -83,7 +84,7 @@ create_ctrl_df <- function(df,
 
   ## bind to original
 
-  ctrl_w_CL <- ctrl_cohort %>% mutate(CL = as.numeric(CL))
+  ctrl_w_CL <- ctrl_cohort |> mutate(CL = as.numeric(CL))
 
   # use qcc package to get limits (for the gray area) ---------------------
 
@@ -107,7 +108,7 @@ create_ctrl_df <- function(df,
 
   # apply shift violations to prior rows ----------------------------------
 
-  ctrl_cohort_fin <- ctrl_cohort_fin %>%
+  ctrl_cohort_fin <- ctrl_cohort_fin |>
     mutate(
       x3_sig_viol = ifelse(rate > UCL | rate < LCL, 1, 0),
       n_pts_above_CL = ifelse(rate > CL, 1, 0),
@@ -117,14 +118,14 @@ create_ctrl_df <- function(df,
   ## make data.table and assign values for shift violations
 
   ctrl_cohort_fin <- data.table::setDT(ctrl_cohort_fin)
-  ctrl_cohort_fin[, rleid_pts_above := sum(n_pts_above_CL), by = data.table::rleid(n_pts_above_CL)]
-  ctrl_cohort_fin[, rleid_pts_below := sum(n_pts_below_CL), by = data.table::rleid(n_pts_below_CL)]
+  ctrl_cohort_fin[, rleid_pts_above := sum(n_pts_above_CL), by = rleid(n_pts_above_CL)]
+  ctrl_cohort_fin[, rleid_pts_below := sum(n_pts_below_CL), by = rleid(n_pts_below_CL)]
 
   # final data manipulation -----------------------------------------------
   ## apply violations to N prior data points, note if point is above UCL or
   ## below LCL, apply colors for ggplot
 
-  ctrl_cohort_alerts <- ctrl_cohort_fin %>%
+  ctrl_cohort_alerts <- ctrl_cohort_fin |>
     mutate(
       violations = ifelse(x3_sig_viol == 1, 1, ifelse(rleid_pts_above >= 8 | rleid_pts_below >= 8, 4, 0)),
       above_or_below = ifelse(
@@ -152,15 +153,15 @@ create_ctrl_df <- function(df,
           p_chart_alert == "Shift" ~ "#f8b434",
           TRUE ~ OBI.color::prim_dark_blue()
         )
-    ) %>%
-    select(-c(x3_sig_viol:above_or_below)) %>%
-    group_by(p_chart_alert) %>%
+    ) |>
+    select(-c(x3_sig_viol:above_or_below)) |>
+    group_by(p_chart_alert) |>
     mutate(col_ID = cur_group_id())
 
   ## multiply all rates by 100 for highchart
 
   if (for_highchart) {
-    ctrl_cohort_alerts <- ctrl_cohort_alerts %>% mutate(
+    ctrl_cohort_alerts <- ctrl_cohort_alerts |> mutate(
       rate = round(rate * 100, digits = 1),
       CL = round(CL *
         100, digits = 1),
@@ -174,13 +175,13 @@ create_ctrl_df <- function(df,
   # pivot longer if long = true -------------------------------------------
 
   if (long) {
-    ctrl_dt_long <- ctrl_cohort_alerts %>%
-      # select(-c(num, denom)) %>%
+    ctrl_dt_long <- ctrl_cohort_alerts |>
+      # select(-c(num, denom)) |>
       pivot_longer(
         cols = c(rate, CL, LCL, UCL),
         names_to = "ctrl_chart_part",
         values_to = "ctrl_chart_value"
-      ) %>%
+      ) |>
       mutate(ctrl_chart_part = factor(
         ctrl_chart_part,
         levels = c("UCL", "CL", "LCL", "rate"),
