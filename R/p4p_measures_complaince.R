@@ -169,6 +169,7 @@ average_days_to_submit <- function(obi_dt) {
 #' This function takes OBI data as input and calculates what proportion of eligible births got scheduled acetaminophen and oral NSAID
 #'
 #' @param obi_dt A data frame containing the necessary columns (patientid, site_name, deliv_to_submit_max_days_int)
+#' @param by_site Should the dataframe be parse by site? Default to YES since for ease of P4P scoring
 #'
 #' @return A data frame with the proportion of eligible births with scheduled acetaminophen and oral NSAID per site
 #'
@@ -176,15 +177,13 @@ average_days_to_submit <- function(obi_dt) {
 #' data <- data.frame(patientid = c(1, 2, 3),
 #'                    site_name = c("Site A", "Site B", "Site A"),
 #'                    deliv_to_submit_max_days_int = c(5, 7, 3))
-#' prop_scheduled_acetaminophen_and_NSAID(data)
+#' prop_scheduled_non_opioid_meds(data)
 #' 
 #' @family {2024 P4P measures}
 #'
 #' @export
 
-prop_scheduled_non_opioid_meds <- function(obi_dt,
-                                           by_site = T,
-                                           drop_vaginal = T) {
+prop_scheduled_non_opioid_meds <- function(obi_dt, by_site = T) {
   # filter to ≥ year 2024 cases and opioid cohort
   obi_dt_2024 <- obi_dt |>
     filter(infant_year >= 2024, scheduled_nonopioid_denom_flg == 1)
@@ -192,37 +191,21 @@ prop_scheduled_non_opioid_meds <- function(obi_dt,
   cli::cli_alert_warning("cases are filtered to infant dob year ≥ 2024")
   
   if (by_site) {
-    dt <- obi_dt_2024 |>
-      summarise(
-        n_pt = n(),
-        n_scheduled_non_opioid = sum(mtg_scheduled_nonopioid_comp, na.rm = TRUE),
-        scheduled_non_opioid_pct = round(n_scheduled_non_opioid / n_pt, 3),
-        .by = c(site_name, external_mdhhs_site_id, cesarean_flg)
-      )
-    if (drop_vaginal) {
-      dt |>
-        filter(cesarean_flg == 1) |>
-        select(-c(cesarean_flg))
-    } else {
-      dt
-    }
+    obi_dt_2024 |> summarise(
+      n_pt = n(),
+      n_scheduled_non_opioid = sum(mtg_scheduled_nonopioid_comp, na.rm = TRUE),
+      scheduled_non_opioid_pct = round(n_scheduled_non_opioid / n_pt, 3),
+      .by = c(site_name, external_mdhhs_site_id, opioid_group)
+    )
   } else {
-    dt <- obi_dt_2024 |>
+    obi_dt_2024 |>
       summarise(
         n_pt = n(),
         n_scheduled_non_opioid = sum(mtg_scheduled_nonopioid_comp, na.rm = TRUE),
         scheduled_non_opioid_pct = round(n_scheduled_non_opioid / n_pt, 3),
-        .by = cesarean_flg
+        .by = opioid_group
       )
-    if (drop_vaginal) {
-      dt |>
-        filter(cesarean_flg == 1) |>
-        select(-c(cesarean_flg))
-    } else {
-      dt
-    }
   }
-  
 }
 
 
