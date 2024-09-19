@@ -4,13 +4,14 @@
 \alias{race_ethnicity_measure}
 \title{Calculate race and ethnicity missing measure}
 \usage{
-race_ethnicity_measure(obi_dt, by_site = TRUE)
+race_ethnicity_measure(obi_dt, limit_to_2024 = T, by_site = TRUE)
 }
 \arguments{
-\item{obi_dt}{The input dataset containing patient information. If you only need a certain infant dob
-range, you can filter the dataset before passing it to this function.}
+\item{obi_dt}{Dataframe to be piped into the function}
 
-\item{by_site}{A logical value indicating whether to calculate the email submission rate by site.}
+\item{limit_to_2024}{Logical value indicating whether to filter the data to cases with infant dob year ≥ 2024; default is set to T}
+
+\item{by_site}{Should the output dataframe be parsed by site? Default is T}
 }
 \value{
 A summarized data table with the calculated measures.
@@ -31,7 +32,6 @@ race_ethnicity_measure(obi_dt)
 # Calculate race and ethnicity measures by site
 race_ethnicity_measure(obi_dt, by_site = TRUE)
 }
-
 }
 \seealso{
 Other {2024 P4P measures}: 

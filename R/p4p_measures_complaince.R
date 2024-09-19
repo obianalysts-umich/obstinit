@@ -78,8 +78,6 @@ pv_email_submission_rate <- function(
 
 #' Calculate race and ethnicity missing measure
 #'
-#' @inheritParams pv_email_submission_rate 
-#'
 #' @details It then calculates the number of patients, the number of missing
 #'          race and ethnicity values, and the percentage of missing values. If \code{by_site} is TRUE,
 #'          the measures are calculated separately for each site.
@@ -92,7 +90,9 @@ pv_email_submission_rate <- function(
 #' # Calculate race and ethnicity measures by site
 #' race_ethnicity_measure(obi_dt, by_site = TRUE)
 #' }
-#'
+#' @param obi_dt Dataframe to be piped into the function
+#' @param limit_to_2024 Logical value indicating whether to filter the data to cases with infant dob year ≥ 2024; default is set to T
+#' @param by_site Should the output dataframe be parsed by site? Default is T
 #' @family {2024 P4P measures}
 #'
 #' @importFrom dplyr filter summarise
@@ -103,16 +103,20 @@ pv_email_submission_rate <- function(
 #' @export
 
 race_ethnicity_measure <- function(obi_dt,
+                                   limit_to_2024 = T,
                                    by_site = TRUE){
 
+  if(limit_to_2024){
   # filter to ≥ year 2024 cases
-  obi_dt_2024 = obi_dt |>
+  obi_df <- obi_dt |>
     filter(infant_year >= 2024)
   
-  cli::cli_alert_warning("cases are filtered to infant dob year ≥ 2024")
+  cli::cli_alert_warning("cases are filtered to infant dob year ≥ 2024")}
+  
+  else{obi_df <- obi_dt}
 
   if (by_site) {
-    obi_dt |>
+    obi_df |>
       summarise(
         n_pt = n(),
         n_no_doc_race_ethnicity = sum(race_ethnicity_cd == "{99}", na.rm = TRUE),
@@ -120,7 +124,7 @@ race_ethnicity_measure <- function(obi_dt,
         .by = c(site_name, external_mdhhs_site_id)
       )
   } else {
-    obi_dt |>
+    obi_df |>
       summarise(
         n_pt = n(),
         n_no_doc_race_ethnicity = sum(race_ethnicity_cd == "{99}", na.rm = TRUE),
@@ -169,6 +173,7 @@ average_days_to_submit <- function(obi_dt) {
 #' This function takes OBI data as input and calculates what proportion of eligible births got scheduled acetaminophen and oral NSAID
 #'
 #' @param obi_dt A data frame containing the necessary columns (patientid, site_name, deliv_to_submit_max_days_int)
+#' @param limit_to_2024 Logical value indicating whether to filter the data to cases with infant dob year ≥ 2024; default is set to T
 #' @param by_site Should the dataframe be parse by site? Default to YES since for ease of P4P scoring
 #'
 #' @return A data frame with the proportion of eligible births with scheduled acetaminophen and oral NSAID per site
@@ -183,22 +188,31 @@ average_days_to_submit <- function(obi_dt) {
 #'
 #' @export
 
-prop_scheduled_non_opioid_meds <- function(obi_dt, by_site = T) {
-  # filter to ≥ year 2024 cases and opioid cohort
-  obi_dt_2024 <- obi_dt |>
-    filter(infant_year >= 2024, scheduled_nonopioid_denom_flg == 1)
+prop_scheduled_non_opioid_meds <- function(obi_dt,
+                                           limit_to_2024 = T,
+                                           by_site = T) {
+  if (limit_to_2024) {
+    # filter to ≥ year 2024 cases and opioid cohort
+    obi_df <- obi_dt |>
+      filter(infant_year >= 2024, scheduled_nonopioid_denom_flg == 1)
+    
+    cli::cli_alert_warning("cases are filtered to infant dob year ≥ 2024")
+  }
   
-  cli::cli_alert_warning("cases are filtered to infant dob year ≥ 2024")
+  else{
+    obi_df <- obi_dt |>
+      filter(scheduled_nonopioid_denom_flg == 1)
+  }
   
   if (by_site) {
-    obi_dt_2024 |> summarise(
+    obi_df |> summarise(
       n_pt = n(),
       n_scheduled_non_opioid = sum(mtg_scheduled_nonopioid_comp, na.rm = TRUE),
       scheduled_non_opioid_pct = round(n_scheduled_non_opioid / n_pt, 3),
       .by = c(site_name, external_mdhhs_site_id, opioid_group)
     )
   } else {
-    obi_dt_2024 |>
+    obi_df |>
       summarise(
         n_pt = n(),
         n_scheduled_non_opioid = sum(mtg_scheduled_nonopioid_comp, na.rm = TRUE),
@@ -216,6 +230,7 @@ prop_scheduled_non_opioid_meds <- function(obi_dt, by_site = T) {
 #' Max acceptable OME is 0 for vaginal births with no laceration, 75 for vaginal births with 3rd/4th degree laceration, and 113 for cesarean births
 #'
 #' @param obi_dt A data frame containing the necessary columns; current RDS dataframe is sufficient.
+#' @param limit_to_2024 Logical value indicating whether to filter the data to cases with infant dob year ≥ 2024; default is set to T
 #' @param by_site Should the output dataframe be grouped by site? Defaults to true for ease of P4P scoring
 #' @param max_OME_vag_lac_val COMFORT max recommended value for vaginal births with 3rd/4th degree laceration. Default is 75 for now, learned in mid-September 2024 that final COMFORT recommendation will by 37.5 (38 for OBI purposes)
 #'
@@ -226,6 +241,7 @@ prop_scheduled_non_opioid_meds <- function(obi_dt, by_site = T) {
 #' @export
 
 prop_births_mtg_COMFORT_compliance <- function(obi_dt,
+                                               limit_to_2024 = T,
                                                by_site = T,
                                                max_OME_vag_lac_val = 75) {
   # max acceptable OME by mode of delivery
@@ -233,15 +249,20 @@ prop_births_mtg_COMFORT_compliance <- function(obi_dt,
   max_OME_vag_lac <- max_OME_vag_lac_val
   max_OME_ces <- 113
   
-  # filter to ≥ year 2024 cases and push through create_opioid_cohort
-  obi_dt_2024 <- obi_dt |>
-    filter(infant_year >= 2024,
-           opioid_denom_flg == 1)
+  if (limit_to_2024) {
+    # filter to ≥ year 2024 cases and push through create_opioid_cohort
+    obi_df <- obi_dt |>
+      filter(infant_year >= 2024, opioid_denom_flg == 1)
+    
+    cli::cli_alert_warning("cases are filtered to infant dob year ≥ 2024")
+  }
   
-  cli::cli_alert_warning("cases are filtered to infant dob year ≥ 2024")
+  else{
+    obi_df <- obi_dt |> filter(opioid_denom_flg == 1)
+  }
   
   if (by_site) {
-    obi_dt_2024 |>
+    obi_df |>
       # mode of delivery groups
       mutate(
         # max acceptable OME per COMFORT
@@ -259,7 +280,7 @@ prop_births_mtg_COMFORT_compliance <- function(obi_dt,
         .by = c(site_name, external_mdhhs_site_id, opioid_group)
       )
   } else {
-    obi_dt_2024 |>
+    obi_df |>
       # mode of delivery groups
       mutate(
         # max acceptable OME per COMFORT

@@ -4,10 +4,12 @@
 \alias{prop_scheduled_non_opioid_meds}
 \title{Function to calculate compliance with scheduled acetaminophen and oral NSAID}
 \usage{
-prop_scheduled_non_opioid_meds(obi_dt, by_site = T)
+prop_scheduled_non_opioid_meds(obi_dt, limit_to_2024 = T, by_site = T)
 }
 \arguments{
 \item{obi_dt}{A data frame containing the necessary columns (patientid, site_name, deliv_to_submit_max_days_int)}
+
+\item{limit_to_2024}{Logical value indicating whether to filter the data to cases with infant dob year ≥ 2024; default is set to T}
 
 \item{by_site}{Should the dataframe be parse by site? Default to YES since for ease of P4P scoring}
 }

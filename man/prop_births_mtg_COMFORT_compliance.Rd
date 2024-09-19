@@ -6,12 +6,15 @@
 \usage{
 prop_births_mtg_COMFORT_compliance(
   obi_dt,
+  limit_to_2024 = T,
   by_site = T,
   max_OME_vag_lac_val = 75
 )
 }
 \arguments{
 \item{obi_dt}{A data frame containing the necessary columns; current RDS dataframe is sufficient.}
+
+\item{limit_to_2024}{Logical value indicating whether to filter the data to cases with infant dob year ≥ 2024; default is set to T}
 
 \item{by_site}{Should the output dataframe be grouped by site? Defaults to true for ease of P4P scoring}
 
