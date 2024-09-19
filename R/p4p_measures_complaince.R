@@ -216,6 +216,8 @@ prop_scheduled_non_opioid_meds <- function(obi_dt, by_site = T) {
 #' Max acceptable OME is 0 for vaginal births with no laceration, 75 for vaginal births with 3rd/4th degree laceration, and 113 for cesarean births
 #'
 #' @param obi_dt A data frame containing the necessary columns; current RDS dataframe is sufficient.
+#' @param by_site Should the output dataframe be grouped by site? Defaults to true for ease of P4P scoring
+#' @param max_OME_vag_lac_val COMFORT max recommended value for vaginal births with 3rd/4th degree laceration. Default is 75 for now, learned in mid-September 2024 that final COMFORT recommendation will by 37.5 (38 for OBI purposes)
 #'
 #' @return A data frame with the proportion of eligible births with opioid prescribing consistent with the COMFORT guideline by mode of delivery
 #' 
@@ -224,10 +226,11 @@ prop_scheduled_non_opioid_meds <- function(obi_dt, by_site = T) {
 #' @export
 
 prop_births_mtg_COMFORT_compliance <- function(obi_dt,
-                                               by_site = T) {
+                                               by_site = T,
+                                               max_OME_vag_lac_val = 75) {
   # max acceptable OME by mode of delivery
   max_OME_vag <- 0
-  max_OME_vag_lac <- 75
+  max_OME_vag_lac <- max_OME_vag_lac_val
   max_OME_ces <- 113
   
   # filter to ≥ year 2024 cases and push through create_opioid_cohort

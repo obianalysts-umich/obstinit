@@ -4,10 +4,18 @@
 \alias{prop_births_mtg_COMFORT_compliance}
 \title{Function to calculate compliance with COMFORT guideline by mode of delivery}
 \usage{
-prop_births_mtg_COMFORT_compliance(obi_dt, by_site = T)
+prop_births_mtg_COMFORT_compliance(
+  obi_dt,
+  by_site = T,
+  max_OME_vag_lac_val = 75
+)
 }
 \arguments{
 \item{obi_dt}{A data frame containing the necessary columns; current RDS dataframe is sufficient.}
+
+\item{by_site}{Should the output dataframe be grouped by site? Defaults to true for ease of P4P scoring}
+
+\item{max_OME_vag_lac_val}{COMFORT max recommended value for vaginal births with 3rd/4th degree laceration. Default is 75 for now, learned in mid-September 2024 that final COMFORT recommendation will by 37.5 (38 for OBI purposes)}
 }
 \value{
 A data frame with the proportion of eligible births with opioid prescribing consistent with the COMFORT guideline by mode of delivery
