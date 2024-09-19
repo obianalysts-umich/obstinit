@@ -4,10 +4,12 @@
 \alias{prop_scheduled_non_opioid_meds}
 \title{Function to calculate compliance with scheduled acetaminophen and oral NSAID}
 \usage{
-prop_scheduled_non_opioid_meds(obi_dt, by_site = T, drop_vaginal = T)
+prop_scheduled_non_opioid_meds(obi_dt, by_site = T)
 }
 \arguments{
 \item{obi_dt}{A data frame containing the necessary columns (patientid, site_name, deliv_to_submit_max_days_int)}
+
+\item{by_site}{Should the dataframe be parse by site? Default to YES since for ease of P4P scoring}
 }
 \value{
 A data frame with the proportion of eligible births with scheduled acetaminophen and oral NSAID per site
@@ -19,7 +21,7 @@ This function takes OBI data as input and calculates what proportion of eligible
 data <- data.frame(patientid = c(1, 2, 3),
                    site_name = c("Site A", "Site B", "Site A"),
                    deliv_to_submit_max_days_int = c(5, 7, 3))
-prop_scheduled_acetaminophen_and_NSAID(data)
+prop_scheduled_non_opioid_meds(data)
 
 }
 \seealso{
