@@ -37,7 +37,9 @@ A saved CSV file that can be uploaded to the OBI website.
 }
 \description{
 To create the CSV needed to upload reports to the OBI website. The CSV files should be in the following \href{https://docs.google.com/spreadsheets/d/19Ua83FMIsT9RjrugrvPD4NJEZcfI8e_cBFfrudDSDeM/edit#gid=141729511}{format}
-(see the \href{https://docs.google.com/document/d/1g0BcXkA-rcm0AAtkTjK9uE7Bh2o5NzB_fBr_UDr_niw/edit}{SOP} for more details)
+(see the \href{https://docs.google.com/document/d/1g0BcXkA-rcm0AAtkTjK9uE7Bh2o5NzB_fBr_UDr_niw/edit}{SOP} for more details). If you are uploading a report multiple times in a month and would like to overwrite past versions,
+you do not need to re-run this function; you can reuse the previous CSV as long as the report name remains unchanged. If you do NOT want to overwrite previous versions uploaded in the same month, you will need to ensure
+the report does not have the same name as the previous version.
 }
 \examples{
 /dontrun{

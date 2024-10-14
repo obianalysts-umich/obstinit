@@ -1,7 +1,9 @@
 #' Create website upload CSV
 #' 
 #' To create the CSV needed to upload reports to the OBI website. The CSV files should be in the following [format](https://docs.google.com/spreadsheets/d/19Ua83FMIsT9RjrugrvPD4NJEZcfI8e_cBFfrudDSDeM/edit#gid=141729511) 
-#' (see the [SOP](https://docs.google.com/document/d/1g0BcXkA-rcm0AAtkTjK9uE7Bh2o5NzB_fBr_UDr_niw/edit) for more details)
+#' (see the [SOP](https://docs.google.com/document/d/1g0BcXkA-rcm0AAtkTjK9uE7Bh2o5NzB_fBr_UDr_niw/edit) for more details). If you are uploading a report multiple times in a month and would like to overwrite past versions, 
+#' you do not need to re-run this function; you can reuse the previous CSV as long as the report name remains unchanged. If you do NOT want to overwrite previous versions uploaded in the same month, you will need to ensure
+#' the report does not have the same name as the previous version.
 #' 
 #' @param report_name A character string that is the tile of the report excluding the site names. The report filename must be formatted as "[filename] - [sitename]". 
 #' @param tags A character vector that contains the tags for the report. The available tags on the website are "Data Request", "NTSV Performance Report", "NTSV Summary Report", "P4P Progress Report", "Weekly Dystocia Report", or "Other". Default is an empty vector.
