@@ -14,7 +14,7 @@
 
 #' Site name list for website upload
 #'
-#' Used in create_website_upload_csv() as a list of site names. 
+#' Used in create_website_upload_csv() as a list of site names. Update 10/25 to change site name of  "Ascension Providence Rochester Hospital" to "Henry Ford Rochester Hospital" 
 #'
 #' @format ## `site_names`
 #' A data frame with 1 column:
