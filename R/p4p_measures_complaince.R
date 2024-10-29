@@ -187,6 +187,8 @@ average_days_to_submit <- function(obi_dt) {
 #' @family {2024 P4P measures}
 #'
 #' @export
+#' 
+#' Updated 10/29/2024 to drop all births with a hysterectomy AND vaginal births with a tubal ligation
 
 prop_scheduled_non_opioid_meds <- function(obi_dt,
                                            limit_to_2024 = T,
@@ -249,16 +251,32 @@ prop_births_mtg_COMFORT_compliance <- function(obi_dt,
   max_OME_vag_lac <- max_OME_vag_lac_val
   max_OME_ces <- 113
   
+  # first dataframe
+  obi_df <- obi_dt |>
+    # create varaible for vaginal births with tubal ligation
+    mutate(
+      vaginal_birth_with_tubal = ifelse(
+        mode_of_delivery_cd %in% c(1:3) &
+          contraceptive_initiated_e == 4,
+        1,
+        0
+      )
+    ) |>
+    filter(
+      # birth should be in opioid denominator
+      opioid_denom_flg == 1,
+      # no hysterectomy
+      str_detect(severe_procedure_e, "7", negate = T),
+      # not a vaginal birth with a tubal ligation
+      vaginal_birth_with_tubal %in% c(NA, 0)
+    )
+  
   if (limit_to_2024) {
-    # filter to ≥ year 2024 cases and push through create_opioid_cohort
-    obi_df <- obi_dt |>
-      filter(infant_year >= 2024, opioid_denom_flg == 1)
+    # filter to ≥ year 2024 cases
+    obi_df <- obi_df |>
+      filter(infant_year >= 2024)
     
     cli::cli_alert_warning("cases are filtered to infant dob year ≥ 2024")
-  }
-  
-  else{
-    obi_df <- obi_dt |> filter(opioid_denom_flg == 1)
   }
   
   if (by_site) {
