@@ -188,8 +188,6 @@ average_days_to_submit <- function(obi_dt) {
 #' @family {2024 P4P measures}
 #'
 #' @export
-#' 
-#' Updated 10/29/2024 to drop all births with a hysterectomy AND vaginal births with a tubal ligation
 
 prop_scheduled_non_opioid_meds <- function(obi_dt,
                                            ...,
