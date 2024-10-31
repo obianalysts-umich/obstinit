@@ -173,8 +173,9 @@ average_days_to_submit <- function(obi_dt) {
 #' This function takes OBI data as input and calculates what proportion of eligible births got scheduled acetaminophen and oral NSAID
 #'
 #' @param obi_dt A data frame containing the necessary columns (patientid, site_name, deliv_to_submit_max_days_int)
+#' @param ... Grouping arguments. By default includes opioid_group; other variables can be added as needed.
 #' @param limit_to_2024 Logical value indicating whether to filter the data to cases with infant dob year ≥ 2024; default is set to T
-#' @param by_site Should the dataframe be parse by site? Default to YES since for ease of P4P scoring
+#' @param by_site Should the dataframe be parse by site? Default to YES since for ease of P4P scoring. DEPRECTAED OCTOBER 2024.
 #'
 #' @return A data frame with the proportion of eligible births with scheduled acetaminophen and oral NSAID per site
 #'
@@ -191,8 +192,15 @@ average_days_to_submit <- function(obi_dt) {
 #' Updated 10/29/2024 to drop all births with a hysterectomy AND vaginal births with a tubal ligation
 
 prop_scheduled_non_opioid_meds <- function(obi_dt,
+                                           ...,
                                            limit_to_2024 = T,
-                                           by_site = T) {
+                                           by_site = lifecycle::deprecated()) {
+  if (lifecycle::is_present(by_site)) {
+    lifecycle::deprecate_warn(when = "November 2024",
+                              what = "prop_scheduled_non_opioid_meds(by_site)",
+                              details = "Please pass any desired grouping variables to the function using the ... argument in the format 'c(var1, var2, ...)'")
+  }
+  
   if (limit_to_2024) {
     # filter to ≥ year 2024 cases and opioid cohort
     obi_df <- obi_dt |>
@@ -206,22 +214,12 @@ prop_scheduled_non_opioid_meds <- function(obi_dt,
       filter(scheduled_nonopioid_denom_flg == 1)
   }
   
-  if (by_site) {
-    obi_df |> summarise(
-      n_pt = n(),
-      n_scheduled_non_opioid = sum(mtg_scheduled_nonopioid_comp, na.rm = TRUE),
-      scheduled_non_opioid_pct = round(n_scheduled_non_opioid / n_pt, 3),
-      .by = c(site_name, external_mdhhs_site_id, opioid_group)
-    )
-  } else {
-    obi_df |>
-      summarise(
-        n_pt = n(),
-        n_scheduled_non_opioid = sum(mtg_scheduled_nonopioid_comp, na.rm = TRUE),
-        scheduled_non_opioid_pct = round(n_scheduled_non_opioid / n_pt, 3),
-        .by = opioid_group
-      )
-  }
+  obi_df |> summarise(
+    n_pt = n(),
+    n_scheduled_non_opioid = sum(mtg_scheduled_nonopioid_comp, na.rm = TRUE),
+    scheduled_non_opioid_pct = round(n_scheduled_non_opioid / n_pt, 3),
+    .by = c(opioid_group, ...)
+  )
 }
 
 
@@ -232,8 +230,9 @@ prop_scheduled_non_opioid_meds <- function(obi_dt,
 #' Max acceptable OME is 0 for vaginal births with no laceration, 75 for vaginal births with 3rd/4th degree laceration, and 113 for cesarean births
 #'
 #' @param obi_dt A data frame containing the necessary columns; current RDS dataframe is sufficient.
+#' @param ... Grouping arguments. By default includes opioid_group; other variables can be added as needed.
 #' @param limit_to_2024 Logical value indicating whether to filter the data to cases with infant dob year ≥ 2024; default is set to T
-#' @param by_site Should the output dataframe be grouped by site? Defaults to true for ease of P4P scoring
+#' @param by_site Should the output dataframe be grouped by site? Defaults to true for ease of P4P scoring. DEPRECTAED OCTOBER 2024.
 #' @param max_OME_vag_lac_val COMFORT max recommended value for vaginal births with 3rd/4th degree laceration. Default is 75 for now, learned in mid-September 2024 that final COMFORT recommendation will by 37.5 (38 for OBI purposes)
 #'
 #' @return A data frame with the proportion of eligible births with opioid prescribing consistent with the COMFORT guideline by mode of delivery
@@ -243,9 +242,16 @@ prop_scheduled_non_opioid_meds <- function(obi_dt,
 #' @export
 
 prop_births_mtg_COMFORT_compliance <- function(obi_dt,
+                                               ...,
                                                limit_to_2024 = T,
-                                               by_site = T,
+                                               by_site = lifecycle::deprecated(),
                                                max_OME_vag_lac_val = 75) {
+  if (lifecycle::is_present(by_site)) {
+    lifecycle::deprecate_warn(when = "November 2024",
+                              what = "prop_births_mtg_COMFORT_compliance(by_site)",
+                              details = "Please pass any desired grouping variables to the function using the ... argument in the format 'c(var1, var2, ...)'")
+  }
+  
   # max acceptable OME by mode of delivery
   max_OME_vag <- 0
   max_OME_vag_lac <- max_OME_vag_lac_val
@@ -279,42 +285,21 @@ prop_births_mtg_COMFORT_compliance <- function(obi_dt,
     cli::cli_alert_warning("cases are filtered to infant dob year ≥ 2024")
   }
   
-  if (by_site) {
-    obi_df |>
-      # mode of delivery groups
-      mutate(
-        # max acceptable OME per COMFORT
-        max_acceptable_OME = case_when(
-          opioid_group == "Vaginal" ~ max_OME_vag,
-          opioid_group == "Vaginal with laceration" ~ max_OME_vag_lac,
-          opioid_group == "Cesarean" ~ max_OME_ces,
-          TRUE ~ NA
-        )
-      ) |>
-      summarise(
-        n_pt = n(),
-        n_mtg_COMFORT = sum(opioid_OME_total <= max_acceptable_OME, na.rm = TRUE),
-        n_mtg_COMFORT_pct = round(n_mtg_COMFORT / n_pt, 3),
-        .by = c(site_name, external_mdhhs_site_id, opioid_group)
+  obi_df |>
+    # mode of delivery groups
+    mutate(
+      # max acceptable OME per COMFORT
+      max_acceptable_OME = case_when(
+        opioid_group == "Vaginal" ~ max_OME_vag,
+        opioid_group == "Vaginal with laceration" ~ max_OME_vag_lac,
+        opioid_group == "Cesarean" ~ max_OME_ces,
+        TRUE ~ NA
       )
-  } else {
-    obi_df |>
-      # mode of delivery groups
-      mutate(
-        # max acceptable OME per COMFORT
-        max_acceptable_OME = case_when(
-          opioid_group == "Vaginal" ~ max_OME_vag,
-          opioid_group == "Vaginal with laceration" ~ max_OME_vag_lac,
-          opioid_group == "Cesarean" ~ max_OME_ces,
-          TRUE ~ NA
-        )
-      ) |>
-      summarise(
-        n_pt = n(),
-        n_mtg_COMFORT = sum(opioid_OME_total <= max_acceptable_OME, na.rm = TRUE),
-        n_mtg_COMFORT_pct = round(n_mtg_COMFORT / n_pt, 3),
-        .by = c(opioid_group)
-      )
-  }
-  
+    ) |>
+    summarise(
+      n_pt = n(),
+      n_mtg_COMFORT = sum(opioid_OME_total <= max_acceptable_OME, na.rm = TRUE),
+      n_mtg_COMFORT_pct = round(n_mtg_COMFORT / n_pt, 3),
+      .by = c(opioid_group, ...)
+    )
 }

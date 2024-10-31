@@ -6,17 +6,20 @@
 \usage{
 prop_births_mtg_COMFORT_compliance(
   obi_dt,
+  ...,
   limit_to_2024 = T,
-  by_site = T,
+  by_site = lifecycle::deprecated(),
   max_OME_vag_lac_val = 75
 )
 }
 \arguments{
 \item{obi_dt}{A data frame containing the necessary columns; current RDS dataframe is sufficient.}
 
+\item{...}{Grouping arguments. By default includes opioid_group; other variables can be added as needed.}
+
 \item{limit_to_2024}{Logical value indicating whether to filter the data to cases with infant dob year ≥ 2024; default is set to T}
 
-\item{by_site}{Should the output dataframe be grouped by site? Defaults to true for ease of P4P scoring}
+\item{by_site}{Should the output dataframe be grouped by site? Defaults to true for ease of P4P scoring. DEPRECTAED OCTOBER 2024.}
 
 \item{max_OME_vag_lac_val}{COMFORT max recommended value for vaginal births with 3rd/4th degree laceration. Default is 75 for now, learned in mid-September 2024 that final COMFORT recommendation will by 37.5 (38 for OBI purposes)}
 }
