@@ -17,6 +17,6 @@ A data frame with 1 column:
 site_names
 }
 \description{
-Used in create_website_upload_csv() as a list of site names. Update 10/25 to change site name of  "Ascension Providence Rochester Hospital" to "Henry Ford Rochester Hospital"
+Used in create_website_upload_csv() as a list of site names. Update 11/07 to change Ascensions to Henry Fords
 }
 \keyword{datasets}

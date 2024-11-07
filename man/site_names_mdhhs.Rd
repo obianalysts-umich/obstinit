@@ -19,6 +19,6 @@ A data frame with 3 columns:
 site_names_mdhhs
 }
 \description{
-Used in create_website_upload_csv() to map site names to MDHHS IDs. Update 10/25 to change site name of  "Ascension Providence Rochester Hospital" to "Henry Ford Rochester Hospital"
+Used in create_website_upload_csv() to map site names to MDHHS IDs. Update 11/07 to change Ascensions to Henry Fords
 }
 \keyword{datasets}
