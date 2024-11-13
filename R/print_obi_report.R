@@ -5,9 +5,10 @@
 #' @param input_path A character string that is the file path of the html report.  
 #' @param output_pdf_path A character string that is the file path of the final PDF report. 
 #' @param top_margin A numeric that indicates the top margin of the PDF. Default is 0.4.
-#' @param bottom_margin A numeric that indicates the bottom margin of the PDF. Default is 0.4.
+#' @param bottom_margin A numeric that indicates the bottom margin of the PDF. Default is 0.5.
 #' @param page_number A logical that indicates if the page number should be included in the PDF. Default is FALSE.
 #' @param page_range A character string that indicates the page range of the PDF. Default is "", which prings all pages. 
+#' @param phe_footer A logical that indicates if the PHE footer should be included in the PDF. Default is FALSE.
 #'
 #' @return Creates a PDF containing the BCBSM logo and language in a footnote. The file is a PDF copy of the HTML verson of the report.. 
 #' @examples 
@@ -15,7 +16,7 @@
 #' print_obi_report("report.html", 
 #' "PRO Patient Voices Report.pdf", 
 #' top_margin = 0.4, 
-#' bottom_margin = 0.4,
+#' bottom_margin = 0.5,
 #' page_number = TRUE)
 #' }
 #' 
@@ -25,21 +26,37 @@
 print_obi_report <- function(input_path, 
                      output_pdf_path, 
                      top_margin = 0.4, 
-                     bottom_margin = 0.4,
+                     bottom_margin = 0.5,
                      page_number = FALSE,
-                     page_range = "") {
+                     page_range = "",
+                     phe_footer = FALSE) {
   
-  footer <- htmltools::tags$footer(
-    style = "width: 100%",
-    htmltools::img(
-      src = knitr::image_uri("reports/BCBSM BCN_ProcessBlue_B.png"), 
-      style = 'display: inline-block; vertical-align: middle; line-height: 1; margin:10px 20px; height: 29px; width: 83.43px'
-    ), htmltools::div(
-      style = "display: inline-block; vertical-align: middle; line-height: 1; font-size: 6pt; width: 670px; font-style: italic; color: #ededed;  font-family: Arial", 
-      "Support for the Obstetrics Initiative is provided by Blue Cross Blue Shield of Michigan and Blue Care Network as part of the BCBSM Value Partnerships program. Although Blue Cross Blue Shield of Michigan and the Obstetrics Initiative work collaboratively, the opinions, beliefs and viewpoints expressed by the author do not necessarily reflect the opinions, beliefs and viewpoints of BCBSM or any of its employees."
+  if (phe_footer == TRUE){
+    footer <- htmltools::tags$footer(
+      style = "width: 100%",
+      htmltools::img(
+        src = knitr::image_uri("reports/BCBSM BCN_ProcessBlue_B.png"), 
+        style = 'display: inline-block; vertical-align: middle; line-height: 1; margin:10px 20px; height: 29px; width: 83.43px'
+      ), htmltools::div(
+        style = "display: inline-block; vertical-align: middle; line-height: 1; font-size: 6pt; width: 535px; font-style: italic; color: #ededed;  font-family: Arial", 
+        "Support for the Obstetrics Initiative is provided by Blue Cross Blue Shield of Michigan and Blue Care Network as part of the BCBSM Value Partnerships program. Although Blue Cross Blue Shield of Michigan and the Obstetrics Initiative work collaboratively, the opinions, beliefs and viewpoints expressed by the author do not necessarily reflect the opinions, beliefs and viewpoints of BCBSM or any of its employees."
+      ), htmltools::img(
+        src = knitr::image_uri("reports/PHElogo.png"), 
+        style = 'display: inline-block; vertical-align: middle; line-height: 1; margin:10px 20px; height: 29px; width: 115.60px'
+      )
     )
-  )
-  
+  } else{
+    footer <- htmltools::tags$footer(
+      style = "width: 100%",
+      htmltools::img(
+        src = knitr::image_uri("reports/BCBSM BCN_ProcessBlue_B.png"), 
+        style = 'display: inline-block; vertical-align: middle; line-height: 1; margin:10px 20px; height: 29px; width: 83.43px'
+      ), htmltools::div(
+        style = "display: inline-block; vertical-align: middle; line-height: 1; font-size: 6pt; width: 670px; font-style: italic; color: #ededed;  font-family: Arial", 
+        "Support for the Obstetrics Initiative is provided by Blue Cross Blue Shield of Michigan and Blue Care Network as part of the BCBSM Value Partnerships program. Although Blue Cross Blue Shield of Michigan and the Obstetrics Initiative work collaboratively, the opinions, beliefs and viewpoints expressed by the author do not necessarily reflect the opinions, beliefs and viewpoints of BCBSM or any of its employees."
+      )
+    )
+  }
   
   if (page_number == TRUE) {
     header <- htmltools::div(
@@ -52,7 +69,6 @@ print_obi_report <- function(input_path,
       " "
     )
   }
-  
   
   pagedown::chrome_print(
     input = here::here(input_path),
