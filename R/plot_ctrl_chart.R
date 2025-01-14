@@ -2,6 +2,7 @@
 #' Plot control chart
 #'
 #' @param df A data frame in wide format, created by the structure_data function
+#' @param point_size The size of the points on the plot, default value is 3
 #' @param plot_center_line If TRUE, the center line will be added to the plot
 #' @param quarterly If TRUE, the x axis will be formatted as quarterly; if FALSE, x axis is formatted monthly. Default value is FALSE (formatted monthly).
 #' @import data.table
@@ -11,6 +12,7 @@
 
 
 plot_ctrl_chart <- function(df,
+                            point_size = 3,
                             plot_center_line = T,
                             fmt_x_quarterly = F) {
   line_values = unique(df$col_ID)
@@ -41,7 +43,7 @@ plot_ctrl_chart <- function(df,
                 alpha = 0.4) +
     geom_point(
       aes(y = rate, fill = point_color),
-      size = 3,
+      size = point_size,
       shape = 21,
       stroke = NA
     ) +

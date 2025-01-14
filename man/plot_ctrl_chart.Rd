@@ -4,10 +4,12 @@
 \alias{plot_ctrl_chart}
 \title{Plot control chart}
 \usage{
-plot_ctrl_chart(df, plot_center_line = T, fmt_x_quarterly = F)
+plot_ctrl_chart(df, point_size = 3, plot_center_line = T, fmt_x_quarterly = F)
 }
 \arguments{
 \item{df}{A data frame in wide format, created by the structure_data function}
+
+\item{point_size}{The size of the points on the plot, default value is 3}
 
 \item{plot_center_line}{If TRUE, the center line will be added to the plot}
 
