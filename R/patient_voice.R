@@ -78,7 +78,7 @@ create_pv_response_dt <- function(obi_dt,
   obi_dt_pro_flg <- obi_dt |> 
     dplyr::filter(patientid %in% pro_survey_sent_complete_dt$patientid) |> 
     dplyr::left_join(pro_survey_sent_complete_dt, by = c("patientid")) |>  
-    dplyr::select(patientid, site_name, infant_dob_dt, complete_pro_survey_flg, survey_informed_consent_b_0) 
+    dplyr::select(patientid, site_name, external_mdhhs_site_id, infant_dob_dt, complete_pro_survey_flg, survey_informed_consent_b_0) 
   
   if (pro_survey_expired == TRUE) { 
     # PRO survey expiration date 
