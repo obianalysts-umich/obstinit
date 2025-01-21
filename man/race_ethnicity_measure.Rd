@@ -4,14 +4,20 @@
 \alias{race_ethnicity_measure}
 \title{Calculate race and ethnicity missing measure}
 \usage{
-race_ethnicity_measure(obi_dt, limit_to_2024 = T, by_site = TRUE)
+race_ethnicity_measure(
+  obi_dt,
+  ...,
+  limit_to_2024 = T,
+  by_site = lifecycle::deprecated()
+)
 }
 \arguments{
-\item{obi_dt}{Dataframe to be piped into the function}
+\item{obi_dt}{Dataframe to be piped into the function
+#' @param ... Grouping arguments.}
 
 \item{limit_to_2024}{Logical value indicating whether to filter the data to cases with infant dob year ≥ 2024; default is set to T}
 
-\item{by_site}{Should the output dataframe be parsed by site? Default is T}
+\item{by_site}{Should the output dataframe be parsed by site? Default is T. DEPRECATED JANUARY 2025.}
 }
 \value{
 A summarized data table with the calculated measures.

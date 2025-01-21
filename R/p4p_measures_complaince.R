@@ -12,7 +12,8 @@
 #'
 #' @param obi_dt The input dataset containing patient information. If you only need a certain infant dob
 #' range, you can filter the dataset before passing it to this function.
-#' @param by_site A logical value indicating whether to calculate the email submission rate by site.
+#' @param ... Grouping arguments.
+#' @param by_site A logical value indicating whether to calculate the email submission rate by site. DEPRECATED JANUARY 2025.
 #'
 #' @return A data frame with the following columns:
 #'   - n_pt: The total number of patients in the dataset.
@@ -31,16 +32,13 @@
 #' 
 #' @export
 
-pv_email_submission_rate <- function(
-    obi_dt,
-    by_site = TRUE) {
-  
-  # find opt out emails 
+pv_email_submission_rate <- function(obi_dt, ..., by_site = lifecycle::deprecated()) {
+  # find opt out emails
   obi_dt_opt_out <- obi_dt |>
     mutate(
       email_txt = tolower(email_txt),
       pro_opt_out_e_new = case_when(
-        pro_opt_out_e == 1 ~ 1, 
+        pro_opt_out_e == 1 ~ 1,
         email_txt == "ptnoemail@optout.com" ~ 1,
         email_txt == "optout@noemail.com" ~ 1,
         email_txt == "obicustomersupport@med.umich.edu" ~ 1,
@@ -50,29 +48,27 @@ pv_email_submission_rate <- function(
         TRUE ~ NA
       )
     )
-
+  
   # create flg for pts with emails
   obi_dt_consent <- obi_dt_opt_out |>
     filter(is.na(pro_opt_out_e_new)) |>
     mutate(pt_with_emails_flg = ifelse(!is.na(email_txt), 1, 0))
-
+  
   # response rate -----------------------------
-  if (by_site) {
-    obi_dt_consent |>
-      summarise(
-        n_pt = n(),
-        n_submitted_email = sum(pt_with_emails_flg),
-        n_submitted_pct = round(n_submitted_email / n_pt, 3),
-        .by = c(site_name, external_mdhhs_site_id)
-      )
-  } else {
-    obi_dt_consent |>
-      summarise(
-        n_pt = n(),
-        n_submitted_email = sum(pt_with_emails_flg),
-        n_submitted_pct = round(n_submitted_email / n_pt, 3)
-      )
+  
+  if (lifecycle::is_present(by_site)) {
+    lifecycle::deprecate_warn(when = "January 2025",
+                              what = "pv_email_submission_rate(by_site)",
+                              details = "Please pass any desired grouping variables to the function using the ... argument in the format 'c(var1, var2, ...)'")
   }
+  
+  obi_dt_consent |>
+    summarise(
+      n_pt = n(),
+      n_submitted_email = sum(pt_with_emails_flg),
+      n_submitted_pct = round(n_submitted_email / n_pt, 3),
+      .by = c(...)
+    )
 }
 
 
@@ -91,8 +87,9 @@ pv_email_submission_rate <- function(
 #' race_ethnicity_measure(obi_dt, by_site = TRUE)
 #' }
 #' @param obi_dt Dataframe to be piped into the function
+#' #' @param ... Grouping arguments.
 #' @param limit_to_2024 Logical value indicating whether to filter the data to cases with infant dob year ≥ 2024; default is set to T
-#' @param by_site Should the output dataframe be parsed by site? Default is T
+#' @param by_site Should the output dataframe be parsed by site? Default is T. DEPRECATED JANUARY 2025.
 #' @family {2024 P4P measures}
 #'
 #' @importFrom dplyr filter summarise
@@ -103,34 +100,34 @@ pv_email_submission_rate <- function(
 #' @export
 
 race_ethnicity_measure <- function(obi_dt,
+                                   ...,
                                    limit_to_2024 = T,
-                                   by_site = TRUE){
-
-  if(limit_to_2024){
-  # filter to ≥ year 2024 cases
-  obi_df <- obi_dt |>
-    filter(infant_year >= 2024)
-  
-  cli::cli_alert_warning("cases are filtered to infant dob year ≥ 2024")}
-  
-  else{obi_df <- obi_dt}
-
-  if (by_site) {
-    obi_df |>
-      summarise(
-        n_pt = n(),
-        n_no_doc_race_ethnicity = sum(race_ethnicity_cd == "{99}", na.rm = TRUE),
-        n_missing_pct = round(n_no_doc_race_ethnicity / n_pt, 3),
-        .by = c(site_name, external_mdhhs_site_id)
-      )
-  } else {
-    obi_df |>
-      summarise(
-        n_pt = n(),
-        n_no_doc_race_ethnicity = sum(race_ethnicity_cd == "{99}", na.rm = TRUE),
-        n_missing_pct = round(n_no_doc_race_ethnicity / n_pt, 3)
-      )
+                                   by_site = lifecycle::deprecated()) {
+  if (lifecycle::is_present(by_site)) {
+    lifecycle::deprecate_warn(when = "January 2025",
+                              what = "race_ethnicity_measure(by_site)",
+                              details = "Please pass any desired grouping variables to the function using the ... argument in the format 'c(var1, var2, ...)'")
   }
+  
+  if (limit_to_2024) {
+    # filter to ≥ year 2024 cases
+    obi_df <- obi_dt |>
+      filter(infant_year >= 2024)
+    
+    cli::cli_alert_warning("cases are filtered to infant dob year ≥ 2024")
+  }
+  
+  else{
+    obi_df <- obi_dt
+  }
+  
+  obi_df |>
+    summarize(
+      n_pt = n(),
+      n_no_doc_race_ethnicity = sum(race_ethnicity_cd == "{99}", na.rm = TRUE),
+      n_missing_pct = round(n_no_doc_race_ethnicity / n_pt, 3),
+      .by = c(...)
+    )
 }
 
 

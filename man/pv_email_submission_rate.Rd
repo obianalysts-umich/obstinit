@@ -4,13 +4,15 @@
 \alias{pv_email_submission_rate}
 \title{Calculate the email submission rate for PRO}
 \usage{
-pv_email_submission_rate(obi_dt, by_site = TRUE)
+pv_email_submission_rate(obi_dt, ..., by_site = lifecycle::deprecated())
 }
 \arguments{
 \item{obi_dt}{The input dataset containing patient information. If you only need a certain infant dob
 range, you can filter the dataset before passing it to this function.}
 
-\item{by_site}{A logical value indicating whether to calculate the email submission rate by site.}
+\item{...}{Grouping arguments.}
+
+\item{by_site}{A logical value indicating whether to calculate the email submission rate by site. DEPRECATED JANUARY 2025.}
 }
 \value{
 A data frame with the following columns:
