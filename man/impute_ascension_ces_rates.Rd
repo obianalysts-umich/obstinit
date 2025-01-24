@@ -12,3 +12,11 @@ impute_ascension_ces_rates(df)
 \description{
 This function uses the Ascension Hospitals' NTSV birth and cesarean volumes from January 2024 to April 2024 to calculate their average cesarean rate and imputes those values for the months of May and June 2024, when there was a data breach impacing case abstraction. Once this dataset has been created, it can be joined to any hospital-level dataset using MDHHS ID.
 }
+\examples{
+/dontrun{
+obi <- read_current_dt()
+obi_cohort <- obi |> create_obi_cohort()
+ascension_ces_rates <- obi_cohort |> impute_ascension_ces_rates()
+}
+
+}
