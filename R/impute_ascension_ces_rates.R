@@ -20,6 +20,17 @@ impute_ascension_ces_rates <- function(df) {
   ## list of ascension sites
   ascensions <- c("39001", "63029", "25006", "50014", "63019", "63020", "82053")
   
+  ##last month of 2024 data we have
+  last_month_dt <- df  |>
+    # limit to ascension sites in 2024
+    filter(infant_year == 2024, external_mdhhs_site_id %in% ascensions) |>
+    summarize(max_month = max(infant_month)) |>
+    pull()
+  
+  last_ces_mo <- paste0("ces_vol_month_", last_month_dt)
+  
+  last_birth_mo <- paste0("birth_vol_month_", last_month_dt)
+  
   ## impute birth and cesarean volume for ascension sites
   monthly_vol_ascension <- df  |>
     # limit to ascension sites in 2024
@@ -45,14 +56,14 @@ impute_ascension_ces_rates <- function(df) {
       # estimate 2024 birth volume - use observed number Jan - April and July - September, use Jan - April avg for May and June
       birth_vol_24_est = rowSums(across(
         c(birth_vol_month_1:birth_vol_month_4)
-      )) + rowSums(across(
-        c(birth_vol_month_7:birth_vol_month_9)
-      )) + (avg_birth_vol * 2),
+      )) + rowSums(across(c(
+        birth_vol_month_7:{{last_birth_mo}}
+      ))) + (avg_birth_vol * 2),
       # estimate 2024 ccesarean volume  - use observed number Jan - April and July - September, use Jan - April avg for May and June
       ces_vol_24_est = rowSums(across(c(
         ces_vol_month_1:ces_vol_month_4
       ))) + rowSums(across(c(
-        ces_vol_month_7:ces_vol_month_9
+        ces_vol_month_7:{{last_ces_mo}}
       ))) + (avg_ces_vol * 2),
       ces_rate_24_est = ces_vol_24_est / birth_vol_24_est
     ) |>
