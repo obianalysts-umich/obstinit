@@ -4,10 +4,12 @@
 \alias{impute_ascension_ces_rates}
 \title{Impute Cesarean rates for Ascension Hospitals (data breach)}
 \usage{
-impute_ascension_ces_rates(df)
+impute_ascension_ces_rates(df, drop_months = T)
 }
 \arguments{
 \item{df}{An UNGROUPED (patient-level) dataframe that includes MDHHS ID}
+
+\item{drop_months}{Should the columns with monthly numerators and denominators be dropped? Defaults to TRUE}
 }
 \description{
 This function uses the Ascension Hospitals' NTSV birth and cesarean volumes from January 2024 to April 2024 to calculate their average cesarean rate and imputes those values for the months of May and June 2024, when there was a data breach impacing case abstraction. Once this dataset has been created, it can be joined to any hospital-level dataset using MDHHS ID.

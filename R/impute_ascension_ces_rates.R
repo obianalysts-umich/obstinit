@@ -4,6 +4,7 @@
 #' This function uses the Ascension Hospitals' NTSV birth and cesarean volumes from January 2024 to April 2024 to calculate their average cesarean rate and imputes those values for the months of May and June 2024, when there was a data breach impacing case abstraction. Once this dataset has been created, it can be joined to any hospital-level dataset using MDHHS ID.
 #' 
 #' @param df An UNGROUPED (patient-level) dataframe that includes MDHHS ID
+#' @param drop_months Should the columns with monthly numerators and denominators be dropped? Defaults to TRUE
 #' 
 #' @import tidyverse
 #' 
@@ -16,7 +17,7 @@
 #' 
 #' @export
 
-impute_ascension_ces_rates <- function(df) {
+impute_ascension_ces_rates <- function(df, drop_months = T) {
   ## list of ascension sites
   ascensions <- c("39001", "63029", "25006", "50014", "63019", "63020", "82053")
   
@@ -67,11 +68,18 @@ impute_ascension_ces_rates <- function(df) {
       ))) + (avg_ces_vol * 2),
       ces_rate_24_est = ces_vol_24_est / birth_vol_24_est
     ) |>
-    ungroup() |>
-    # select only necessary var
-    select(external_mdhhs_site_id,
-           birth_vol_24_est,
-           ces_vol_24_est,
-           ces_rate_24_est)
+    ungroup()
+  
+  
+  if (drop_months == T) {
+    monthly_vol_ascension |>
+      # select only necessary var
+      select(external_mdhhs_site_id,
+             birth_vol_24_est,
+             ces_vol_24_est,
+             ces_rate_24_est)
+  } else{
+    monthly_vol_ascension
+  }
   
 }
