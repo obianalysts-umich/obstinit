@@ -139,8 +139,8 @@ create_website_upload_csv <- function(report_name,
     )
   )
   
-  if (!(tags %in% c("Data Request", "NTSV Performance Report", "NTSV Summary Report", "P4P Progress Report", "Weekly Dystocia Report", "Other"))) {
-    stop("Tags must be one of the following: Data Request, NTSV Performance Report, NTSV Summary Report, P4P Progress Report, Weekly Dystocia Report, or Other.")
+  if (!(tags %in% c("Data Request", "NTSV Performance Report", "NTSV Summary Report", "P4P Progress Report", "Weekly Dystocia Report", "Annual P4P Scorecards", "Other"))) {
+    stop("Tags must be one of the following: Data Request, NTSV Performance Report, NTSV Summary Report, P4P Progress Report, Weekly Dystocia Report, Annual P4P Scorecards or Other.")
   }
   
   message("Site list based on active sites in 2024.")
