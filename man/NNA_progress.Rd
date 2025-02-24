@@ -4,16 +4,22 @@
 \alias{NNA_progress}
 \title{NNA Progress}
 \usage{
-NNA_progress(obi_dt, start_date, end_date, OE_output, ...)
+NNA_progress(
+  obi_dt,
+  start_date = "2024-10-01",
+  end_date = "2025-10-01",
+  OE_output = "OE_ratios/2025/current_OE_ratio_dt.xlsx",
+  ...
+)
 }
 \arguments{
 \item{obi_dt}{OBI nightly export data.}
 
-\item{start_date}{The start date of the time period for which you are interested in seeing NNA progress. Must be formatted as "YYYY-MM-DD".}
+\item{start_date}{The start date of the time period for which you are interested in seeing NNA progress. Must be formatted as "YYYY-MM-DD". Default is "2024-10-01".}
 
-\item{end_date}{The end date of the time period for which you are interested in seeing NNA progress. Must be formatted as "YYYY-MM-DD".}
+\item{end_date}{The end date of the time period for which you are interested in seeing NNA progress. Must be formatted as "YYYY-MM-DD". Default is "2025-10-01".}
 
-\item{OE_output}{A dataframe that contains the data read in from the O:E ratio .csv file.}
+\item{OE_output}{The .csv file path to the O:E output. Default is the path for the 2025 O:E output: "OE_ratios/2025/current_OE_ratio_dt.xlsx". The turbo root path is automatically included.}
 
 \item{...}{Grouping arguments. By default includes external_mdhhs_site_id and site_name.}
 }
@@ -25,7 +31,7 @@ To calculate progress towards the NNA goal.
 }
 \examples{
 /dontrun{
-NNA_progress(
+NNA_output <- NNA_progress(
 obi_dt, 
 start_date = "2024-10-01", 
 end_date = "2024-11-10", 

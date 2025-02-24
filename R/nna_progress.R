@@ -3,15 +3,15 @@
 #' To calculate progress towards the NNA goal.
 #' 
 #' @param  obi_dt OBI nightly export data. 
-#' @param start_date The start date of the time period for which you are interested in seeing NNA progress. Must be formatted as "YYYY-MM-DD".
-#' @param end_date The end date of the time period for which you are interested in seeing NNA progress. Must be formatted as "YYYY-MM-DD".
-#' @param OE_output A dataframe that contains the data read in from the O:E ratio .csv file.
+#' @param start_date The start date of the time period for which you are interested in seeing NNA progress. Must be formatted as "YYYY-MM-DD". Default is "2024-10-01".
+#' @param end_date The end date of the time period for which you are interested in seeing NNA progress. Must be formatted as "YYYY-MM-DD". Default is "2025-10-01".
+#' @param OE_output The .csv file path to the O:E output. Default is the path for the 2025 O:E output: "OE_ratios/2025/current_OE_ratio_dt.xlsx". The turbo root path is automatically included.
 #' @param ... Grouping arguments. By default includes external_mdhhs_site_id and site_name.
 #' 
 #' @return A dataframe with the progress towards the NNA goals during the selected timeframe.
 #' @examples 
 #' /dontrun{
-#' NNA_progress(
+#' NNA_output <- NNA_progress(
 #' obi_dt, 
 #' start_date = "2024-10-01", 
 #' end_date = "2024-11-10", 
@@ -25,10 +25,13 @@
 #' 
 
 
-NNA_progress <- function(obi_dt, start_date, end_date, OE_output, ...){
+NNA_progress <- function(
+    obi_dt, start_date = "2024-10-01", 
+    end_date = "2025-10-01", 
+    OE_output = "OE_ratios/2025/current_OE_ratio_dt.xlsx", 
+    ...){
   
-  OE_output_nonames <- OE_output |> 
-    select(-site_name) 
+  OE_output_nonames <- readxl::read_excel(paste0(turbo_root_path(), OE_output))
   
   obi_dt |> 
     filter(infant_dob_dt >= start_date, infant_dob_dt < end_date) |> 
