@@ -31,7 +31,8 @@ NNA_progress <- function(
     OE_output = "OE_ratios/2025/current_OE_ratio_dt.xlsx", 
     ...){
   
-  OE_output_nonames <- readxl::read_excel(paste0(turbo_root_path(), OE_output))
+  OE_output_nonames <- readxl::read_excel(paste0(turbo_root_path(), OE_output)) |> 
+    select(-c(site_name))
   
   obi_dt |> 
     filter(infant_dob_dt >= start_date, infant_dob_dt < end_date) |> 
