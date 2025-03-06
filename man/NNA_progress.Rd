@@ -9,7 +9,8 @@ NNA_progress(
   start_date = "2024-10-01",
   end_date = "2025-10-01",
   OE_output = "OE_ratios/2025/current_OE_ratio_dt.xlsx",
-  ...
+  ...,
+  imputed_24 = FALSE
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ NNA_progress(
 \item{OE_output}{The .csv file path to the O:E output. Default is the path for the 2025 O:E output: "OE_ratios/2025/current_OE_ratio_dt.xlsx". The turbo root path is automatically included.}
 
 \item{...}{Grouping arguments. By default includes external_mdhhs_site_id and site_name.}
+
+\item{imputed_24}{Logical. If TRUE, the baseline cesarean rate will use imputed rates where available. Default is FALSE.}
 }
 \value{
 A dataframe with the progress towards the NNA goals during the selected timeframe.
