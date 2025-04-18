@@ -6,6 +6,7 @@
 \usage{
 gt_obi(
   gt_obj,
+  full_width = FALSE,
   heading.title.font.size = 14,
   heading.subtitle.font.size = 12,
   column_labels.font.size = 12,
@@ -17,6 +18,8 @@ gt_obi(
 }
 \arguments{
 \item{gt_obj}{A gt object to be formatted.}
+
+\item{full_width}{Logical indicating whether to set the table width to 100\%. Default is FALSE}
 
 \item{heading.title.font.size}{Size for table title. Default is 14.}
 
@@ -34,4 +37,21 @@ gt_obi(
 }
 \description{
 Format GT table
+}
+\examples{
+library(gt)
+df <- data.frame(
+  Name = c("Alice", "Bob", "Charlie"),
+  Age = c(25, 30, 35),
+  Score = c(90, 85, 95)
+)
+
+df |>
+  gt() |>
+  gt_obi(full_width = TRUE) |> 
+  # title
+  tab_header(
+    title = "Student Information",
+   subtitle = "A brief overview of students' details"
+ ) 
 }
