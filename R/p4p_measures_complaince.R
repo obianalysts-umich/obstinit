@@ -240,7 +240,7 @@ prop_births_mtg_COMFORT_compliance <- function(obi_dt,
                                                ...,
                                                limit_to_2024 = T,
                                                by_site = lifecycle::deprecated(),
-                                               max_OME_vag_lac_val = 75) {
+                                               max_OME_vag_lac_val = 38) {
   if (lifecycle::is_present(by_site)) {
     lifecycle::deprecate_warn(when = "November 2024",
                               what = "prop_births_mtg_COMFORT_compliance(by_site)",
