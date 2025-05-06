@@ -9,7 +9,7 @@ prop_births_mtg_COMFORT_compliance(
   ...,
   limit_to_2024 = T,
   by_site = lifecycle::deprecated(),
-  max_OME_vag_lac_val = 75
+  max_OME_vag_lac_val = 38
 )
 }
 \arguments{
