@@ -1,23 +1,23 @@
 library(obstinit)
-
+library(tidyverse)
 
 # change site name to match website name ----------------------------------
-site_names |> filter(grepl("Dickinson", site_name)) |> distinct(site_name) |> select(site_name)
+site_names |> filter(grepl("Jackson", site_name)) |> distinct(site_name) |> select(site_name)
 
 site_names <- site_names |> 
   dplyr::mutate(
     site_name = dplyr::case_when(
-      site_name == "Dickinson County Hospital Iron Mountain" ~ "Marshfield Medical Center Dickinson",
+      site_name == "Henry Ford Allegiance Health Jackson" ~ "Henry Ford Jackson Hospital",
       TRUE ~ site_name
     )
   )
 
-site_names_mdhhs |> filter(grepl("Dickinson", site_name)) |> distinct(site_name) |> select(site_name)
+site_names_mdhhs |> filter(grepl("Jackson", site_name)) |> distinct(site_name) |> select(site_name)
 
 site_names_mdhhs <- site_names_mdhhs |> 
   dplyr::mutate(
     site_name = dplyr::case_when(
-      site_name == "Marshfield Medical Center- Dickinson" ~ "Marshfield Medical Center Dickinson",
+      site_name == "Henry Ford Allegiance Health Jackson" ~ "Henry Ford Jackson Hospital",
       TRUE ~ site_name
     )
   )
