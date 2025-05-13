@@ -247,11 +247,6 @@ prop_births_mtg_COMFORT_compliance <- function(obi_dt,
                               details = "Please pass any desired grouping variables to the function using the ... argument in the format 'c(var1, var2, ...)'")
   }
   
-  # max acceptable OME by mode of delivery
-  max_OME_vag <- 0
-  max_OME_vag_lac <- max_OME_vag_lac_val
-  max_OME_ces <- 113
-  
   # first dataframe
   obi_df <- obi_dt |>
     # create varaible for vaginal births with tubal ligation
@@ -285,9 +280,10 @@ prop_births_mtg_COMFORT_compliance <- function(obi_dt,
     mutate(
       # max acceptable OME per COMFORT
       max_acceptable_OME = case_when(
-        opioid_group == "Vaginal" ~ max_OME_vag,
-        opioid_group == "Vaginal with laceration" ~ max_OME_vag_lac,
-        opioid_group == "Cesarean" ~ max_OME_ces,
+        opioid_group == "Vaginal" ~ 0,
+        infant_year <= 2024 & opioid_group == "Vaginal with laceration" ~ 75,
+        infant_year >= 2025 & opioid_group == "Vaginal with laceration" ~ 38,
+        opioid_group == "Cesarean" ~ 113,
         TRUE ~ NA
       )
     ) |>
