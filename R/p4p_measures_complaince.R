@@ -240,11 +240,17 @@ prop_births_mtg_COMFORT_compliance <- function(obi_dt,
                                                ...,
                                                limit_to_2024 = T,
                                                by_site = lifecycle::deprecated(),
-                                               max_OME_vag_lac_val = 38) {
+                                               max_OME_vag_lac_val = lifecycle::deprecated()) {
   if (lifecycle::is_present(by_site)) {
     lifecycle::deprecate_warn(when = "November 2024",
                               what = "prop_births_mtg_COMFORT_compliance(by_site)",
                               details = "Please pass any desired grouping variables to the function using the ... argument in the format 'c(var1, var2, ...)'")
+  }
+  
+  if (lifecycle::is_present(max_OME_vag_lac_val)) {
+    lifecycle::deprecate_warn(when = "May 2025",
+                              what = "prop_births_mtg_COMFORT_compliance(max_OME_vag_lac_val)",
+                              details = "Max OME for vaginal laceration is now hard-coded into the function")
   }
   
   # first dataframe
