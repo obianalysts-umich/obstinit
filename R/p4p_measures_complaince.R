@@ -124,7 +124,7 @@ race_ethnicity_measure <- function(obi_dt,
   obi_df |>
     summarize(
       n_pt = n(),
-      n_no_doc_race_ethnicity = sum(race_ethnicity_cd == "{99}", na.rm = TRUE),
+      n_no_doc_race_ethnicity = sum(is.na(race_ethnicity_cd) | race_ethnicity_cd == "{99}"),
       n_missing_pct = round(n_no_doc_race_ethnicity / n_pt, 3),
       .by = c(...)
     )
