@@ -8,7 +8,7 @@
 #' @param report_name A character string that is the tile of the report excluding the site names. The report filename must be formatted as "[filename] - [sitename]". 
 #' @param tags A character vector that contains the tags for the report. The available tags on the website are "Data Request", "NTSV Performance Report", "NTSV Summary Report", "P4P Progress Report", "Weekly Dystocia Report", or "Other". Default is an empty vector.
 #' @param members_only A logical value that indicates whether the report is for members only. Default is 1.
-#' @param site_year An integer that indicates the year used to determine the sites that have reports. Default is 2023.
+#' @param site_year An integer that indicates the year used to determine the sites that have reports. Default is 2025.
 #' @param site_list A data frame that contains the site names. Default is the `site_names` data frame.
 #' @param site_mdhhs A data frame that contains the site names, AMx IDs, and MDHHS IDs. Default is the `site_names_mdhhs` data frame.
 #' @param exclude_site A character vector that contains any sites to exclude. Default is an empty vector.
@@ -28,7 +28,7 @@
 create_website_upload_csv <- function(report_name,
                                       tags,
                                       members_only = 1,
-                                      site_year = 2024,
+                                      site_year = 2025,
                                       site_list = site_names,
                                       site_mdhhs = site_names_mdhhs,
                                       exclude_site = c(""),
@@ -143,6 +143,6 @@ create_website_upload_csv <- function(report_name,
     stop("Tags must be one of the following: Data Request, NTSV Performance Report, NTSV Summary Report, P4P Progress Report, Weekly Dystocia Report, Annual P4P Scorecards or Other.")
   }
   
-  message("Site list based on active sites in 2024.")
+  message("Site list based on active sites in 2025.")
   message("CSV file saved to: ", output_path)
 }
