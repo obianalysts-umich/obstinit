@@ -19,6 +19,6 @@ A data frame with 3 columns:
 site_names_mdhhs
 }
 \description{
-Used in create_website_upload_csv() to map site names to MDHHS IDs. Update 11/07/24 to change Ascensions to Henry Fords. Update 2/14/25 to correct Marshfield Dickinson.
+Used in create_website_upload_csv() to map site names to MDHHS IDs. Update 11/07/24 to change Ascensions to Henry Fords. Update 2/14/25 to correct Marshfield Dickinson. Update 6/4/25 to add McLaren Petoskey.
 }
 \keyword{datasets}

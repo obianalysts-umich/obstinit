@@ -8,7 +8,7 @@ create_website_upload_csv(
   report_name,
   tags,
   members_only = 1,
-  site_year = 2024,
+  site_year = 2025,
   site_list = site_names,
   site_mdhhs = site_names_mdhhs,
   exclude_site = c(""),
@@ -22,7 +22,7 @@ create_website_upload_csv(
 
 \item{members_only}{A logical value that indicates whether the report is for members only. Default is 1.}
 
-\item{site_year}{An integer that indicates the year used to determine the sites that have reports. Default is 2023.}
+\item{site_year}{An integer that indicates the year used to determine the sites that have reports. Default is 2025.}
 
 \item{site_list}{A data frame that contains the site names. Default is the \code{site_names} data frame.}
 

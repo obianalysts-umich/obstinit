@@ -26,5 +26,5 @@ Suggests:
 Config/testthat/edition: 3
 URL: https://obianalysts-umich.github.io/obstinit/
 Depends: 
-    R (>= 2.10)
+    R (>= 3.5)
 LazyData: true

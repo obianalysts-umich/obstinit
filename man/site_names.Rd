@@ -17,6 +17,6 @@ A data frame with 1 column:
 site_names
 }
 \description{
-Used in create_website_upload_csv() as a list of site names. Update 11/07/24 to change Ascensions to Henry Fords. Update 2/14/25 to correct Marshfield Dickinson.
+Used in create_website_upload_csv() as a list of site names. Update 11/07/24 to change Ascensions to Henry Fords. Update 2/14/25 to correct Marshfield Dickinson. Update 6/4/25 to add McLaren Petoskey.
 }
 \keyword{datasets}
