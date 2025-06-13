@@ -255,22 +255,9 @@ prop_births_mtg_COMFORT_compliance <- function(obi_dt,
   
   # first dataframe
   obi_df <- obi_dt |>
-    # create varaible for vaginal births with tubal ligation
-    mutate(
-      vaginal_birth_with_tubal = ifelse(
-        mode_of_delivery_cd %in% c(1:3) &
-          contraceptive_initiated_e == 4,
-        1,
-        0
-      )
-    ) |>
     filter(
       # birth should be in opioid denominator
-      opioid_denom_flg == 1,
-      # no hysterectomy
-      str_detect(severe_procedure_e, "7", negate = T),
-      # not a vaginal birth with a tubal ligation
-      vaginal_birth_with_tubal %in% c(NA, 0)
+      opioid_denom_flg == 1
     )
   
   if (limit_to_2024) {
@@ -282,17 +269,6 @@ prop_births_mtg_COMFORT_compliance <- function(obi_dt,
   }
   
   obi_df |>
-    # mode of delivery groups
-    mutate(
-      # max acceptable OME per COMFORT
-      max_acceptable_OME = case_when(
-        opioid_group == "Vaginal" ~ 0,
-        infant_year <= 2024 & opioid_group == "Vaginal with laceration" ~ 75,
-        infant_year >= 2025 & opioid_group == "Vaginal with laceration" ~ 38,
-        opioid_group == "Cesarean" ~ 113,
-        TRUE ~ NA
-      )
-    ) |>
     summarise(
       n_pt = n(),
       n_mtg_COMFORT = sum(opioid_OME_total <= max_acceptable_OME, na.rm = TRUE),
