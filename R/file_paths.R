@@ -69,7 +69,7 @@ gdrive_root_path <- function() {
   if (Sys.info()["sysname"] == "Windows") {
     google_root_path <- "G:/"
   } else if (Sys.info()["sysname"] == "Darwin") {
-    google_root_path <- paste0("/Library/CloudStorage/GoogleDrive-",
+    google_root_path <- paste0("~/Library/CloudStorage/GoogleDrive-",
                                Sys.getenv("USERNAME"),
                                "@umich.edu/")
   }
