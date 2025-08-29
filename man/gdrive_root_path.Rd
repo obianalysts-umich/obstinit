@@ -4,7 +4,10 @@
 \alias{gdrive_root_path}
 \title{OBI Google Drive root path}
 \usage{
-gdrive_root_path()
+gdrive_root_path(uniqname)
+}
+\arguments{
+\item{uniqname}{uniqname to use for mac users}
 }
 \description{
 Find Google Drive root path based on whether machine is Mac or PC and username (if Mac)

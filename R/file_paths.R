@@ -62,15 +62,16 @@ turbo_root_path <- function() {
 #' @title OBI Google Drive root path
 #' @description
 #' Find Google Drive root path based on whether machine is Mac or PC and username (if Mac)  
+#' @param uniqname uniqname to use for mac users
 #' 
 #' @export
 #' 
-gdrive_root_path <- function() {
+gdrive_root_path <- function(uniqname) {
   if (Sys.info()["sysname"] == "Windows") {
     google_root_path <- "G:/"
   } else if (Sys.info()["sysname"] == "Darwin") {
-    google_root_path <- paste0("~/Library/CloudStorage/GoogleDrive-",
-                               Sys.getenv("USERNAME"),
-                               "@umich.edu/")
+    google_root_path <- paste0("~/Library/CloudStorage/GoogleDrive-", {{uniqname}}, "@umich.edu/")
   }
+  
+  print(google_root_path)
 }
