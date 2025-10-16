@@ -36,7 +36,7 @@ plot_ctrl_hchart <- function(df, title, ymin = NA, ymax = NA) {
       ),
       line = list(
         color = OBI.color::prim_dark_blue(),
-        marker = list(symbol = "circle", radius = 5),
+        marker = list(enabled = TRUE, symbol = "circle", radius = 5),
         tooltip = list(pointFormat = "<b>Alert: {point.p_chart_alert}</b> <br> <b>Rate</b>: {point.rate}% <br> <b>Num:</b> {point.num} <br> <b>Denom:</b> {point.denom}")
       )
     ) %>%
