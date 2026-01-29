@@ -13,17 +13,19 @@ create_incident_case_site_df <- function(df, current_year) {
   # variable names for pivot
   ces_var_thisyear <- paste0("ces_rate_", current_year)
   ces_var_lastyear <- paste0("ces_rate_", last_year)
-  vol_var_thisyear <- paste0("n_", current_year)
+  vol_var_thisyear <- paste0("birth_vol_", current_year)
   
   df |>
     # filter down to this year and last year
     filter(infant_year >= last_year) |>
     summarize(
-      n = n(),
+      birth_vol = n(),
+      ces_vol = sum(cesarean_flg, na.rm = T),
       ces_rate = mean(cesarean_flg, na.rm = T),
       .by = c(infant_year, external_mdhhs_site_id)
     ) |>
-    pivot_wider(names_from = infant_year, values_from = c(n, ces_rate)) |>
+    pivot_wider(names_from = infant_year,
+                values_from = c(birth_vol, ces_vol, ces_rate)) |>
     mutate(
       incident_cases = (eval(parse(text = ces_var_thisyear)) - eval(parse(text = ces_var_lastyear))) * eval(parse(text = vol_var_thisyear)),
       incident_cases = if_else(
