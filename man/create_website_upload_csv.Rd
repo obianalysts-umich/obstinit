@@ -8,27 +8,18 @@ create_website_upload_csv(
   report_name,
   tags,
   members_only = 1,
-  site_year = 2025,
-  site_list = site_names,
-  site_mdhhs = site_names_mdhhs,
-  exclude_site = c(""),
+  site_list,
   output_path
 )
 }
 \arguments{
-\item{report_name}{A character string that is the tile of the report excluding the site names. The report filename must be formatted as "\link{filename} - \link{sitename}".}
+\item{report_name}{A character string that is the tile of the report excluding the site names. The report filename must be formatted as "filename - sitename".}
 
-\item{tags}{A character vector that contains the tags for the report. The available tags must be one of the following: Data Request, NTSV Performance Report, NTSV Summary Report, Annual P4P Scorecards, Other, or Site-Specific Patient Voices Resources.}
+\item{tags}{A character vector that contains the tags for the report. The available tags must be one of the following: Data Request, NTSV Performance Report, NTSV Summary Report, Annual P4P Scorecards, PRIME Reports, Other, or Site-Specific Patient Voices Resources.}
 
 \item{members_only}{A logical value that indicates whether the report is for members only. Default is 1.}
 
-\item{site_year}{An integer that indicates the year used to determine the sites that have reports. Default is 2025.}
-
-\item{site_list}{A data frame that contains the site names. Default is the \code{site_names} data frame.}
-
-\item{site_mdhhs}{A data frame that contains the site names, AMx IDs, and MDHHS IDs. Default is the \code{site_names_mdhhs} data frame.}
-
-\item{exclude_site}{A character vector that contains any sites to exclude. Default is an empty vector.}
+\item{site_list}{A character vector that contains site names for hospitals with reports.}
 
 \item{output_path}{Path to output the CSV file to (must end in /).}
 }
@@ -44,7 +35,12 @@ the report does not have the same name as the previous version.
 \examples{
 /dontrun{
 library(tidyverse)
+
+site_list <- c("Michigan Medicine Ann Arbor", "Hurley Medical Center Flint")
+
 create_website_upload_csv(report_name = "test report - Michigan Medicine",
+                         tags = "NTSV Performance Report",
+                          site_list = site_list,
                           output_path = "test_report.csv")
 }
 
