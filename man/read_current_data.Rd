@@ -4,11 +4,15 @@
 \alias{read_current_data}
 \title{Read current OBI data}
 \usage{
-read_current_data(sas_processed_dt = FALSE)
+read_current_data(sas_processed_dt = lifecycle::deprecated())
 }
 \arguments{
-\item{sas_processed_dt}{if read SAS processed data or not; default to FALSE}
+\item{sas_processed_dt}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+SAS processed data is not supported (SAS processing stopped in Aug 2024).}
+}
+\value{
+A data frame containing the current OBI data.
 }
 \description{
-read OBI analytic data from Turbo
+Reads OBI analytic data from Turbo.
 }
