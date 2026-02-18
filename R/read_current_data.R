@@ -21,7 +21,7 @@ read_current_data <- function(sas_processed_dt = lifecycle::deprecated()) {
     current_dt_path <-
       "P:/OBI_abstracted_data/Current_Data/output/obi_data_R.Rds"
     downloaded_dt_path <-
-      "P:/OBI_abstracted_data/Current_Data/output/obi_data_R_downloaded.Rds"
+      "P:/OBI_abstracted_data/Current_Data/CSV"
   } else if (.Platform$OS.type == "unix") {
     current_dt_path <-
       "/Volumes/nur-kanelow/OBI_abstracted_data/Current_Data/output/obi_data_R.Rds"
