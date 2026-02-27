@@ -4,22 +4,28 @@
 \alias{read_obi_data_by_date}
 \title{Read OBI Data by Date}
 \usage{
-read_obi_data_by_date(date_folder_name = "2025-07-21")
+read_obi_data_by_date(date_folder_name = "2026-02-27")
 }
 \arguments{
 \item{date_folder_name}{Character string specifying the date folder name
-(default: "2025-07-21"). Should be in YYYY-MM-DD format.}
+(default: "2026-02-27"). Should be in YYYY-MM-DD format.}
 }
 \value{
 A data frame containing the OBI data from the specified date folder
 }
 \description{
 Reads OBI data from a specified date folder based on the operating system.
+The function automatically adjusts the file path structure based on the date:
+dates before 2026-01-27 use the legacy path structure (/data/output/),
+while dates on or after 2026-01-27 use the new AR transition path structure (/output/).
 }
 \examples{
 \dontrun{
 # Load OBI data for a specific date
-obi_data <- read_obi_date_by_date("2025-07-21")
+obi_data <- read_obi_data_by_date("2026-02-27")
+
+# Load older data (uses legacy path structure)
+obi_data_old <- read_obi_data_by_date("2026-01-20")
 }
 
 }
