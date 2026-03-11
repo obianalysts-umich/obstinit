@@ -36,7 +36,7 @@ create_website_upload_csv <- function(report_name,
 
   # tags validation --------------------------------------------------------------
   
-    if (!(tags %in% c("Data Request", "NTSV Performance Report",  "NTSV Summary Report", "Annual P4P Scorecards", "Other", "Site-Specific Patient Voices Resources"))) {
+    if (!(tags %in% c("Data Request", "NTSV Performance Report",  "NTSV Summary Report", "Annual P4P Scorecards", "Other", "Site-Specific Patient Voices Resources", "Prime Reports"))) {
       stop("Tags must be one of the following: Data Request, NTSV Performance Report, Weekly Dystocia Report, Annual P4P Scorecards, Prime Reports, Other, or Site-Specific Patient Voices Resources.")
     }
     
