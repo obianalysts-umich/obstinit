@@ -28,6 +28,11 @@ read_ecqm_data <- function(limit_to_denominator = TRUE) {
   # read R processed data
   dt <- readRDS(current_dt_path)
   
+  if (limit_to_denominator == TRUE) {
+    dt <- dt |> 
+      filter(denominator_flg == 1)
+  } 
+  
   if (limit_to_denominator == FALSE) {
     # message after done reading
     message("Current full eCQM data are loaded. Note the data are not limited to the eCQM denominator criteria.")
