@@ -4,10 +4,10 @@
 \alias{read_ecqm_data}
 \title{Read current eCQM data}
 \usage{
-read_ecqm_data(risk_adjust = FALSE)
+read_ecqm_data(limit_to_denominator = TRUE)
 }
 \arguments{
-\item{risk_adjust}{if reading only risk adjustment data; default to FALSE}
+\item{limit_to_denominator}{if TRUE then dataset is limited to only eCQM denominator cases. Default is TRUE.}
 }
 \description{
 read eCQM data from Turbo
