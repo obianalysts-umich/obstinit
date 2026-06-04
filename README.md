@@ -10,7 +10,7 @@ Install the development version directly from GitHub:
 
 ``` r
 # install.packages("pak")
-pak::pak("user/repo")
+pak::pak("obianalysts-umich/obstinit")
 ```
 
 ## Functions
