@@ -9,8 +9,8 @@ Obstinit is our OBI "tools" package, meant to provide a series of tools we regul
 Install the development version directly from GitHub:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("obianalysts-umich/obstinit")
+# install.packages("pak")
+pak::pak("user/repo")
 ```
 
 ## Functions
