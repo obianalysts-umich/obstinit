@@ -27,6 +27,34 @@
 
 iol_ebp_missingness <- function(main_data, cervical_data, induction_data, group = F, ...) {
   
+  # process data
+  cerv_cangrow <- cervical_data |> 
+    filter(
+      !(if_all(c(cervical_exam_offer_dttm:amniotomy_not_offered_reason_e_5_Other), is.na))
+    ) |> 
+    mutate(
+      cervical_exam_dilation_no = as.numeric(cervical_exam_dilation_no),
+      cervical_exam_dttm = ymd_hms(cervical_exam_dttm),
+      cervical_exam_offer_dttm = ymd_hms(cervical_exam_offer_dttm),
+      cervical_exam_offer_dttm_ND = as.numeric(cervical_exam_offer_dttm_ND),
+      cervical_exam_dttm_ND = as.numeric(cervical_exam_dttm_ND),
+      patientid = as.numeric(PatientID)
+    )
+  
+  iol_cangrow <-  induction_data |> 
+    filter(
+      !(if_all(c(method_e:method_offered_result_e_99_Other), is.na))
+    ) |> 
+    mutate(
+      method_offered_e = as.numeric(method_offered_e),
+      method_offered_e_dttm = ymd_hms(method_offered_e_dttm),
+      method_offered_e_dttm_not_doc_b = as.numeric(method_offered_e_dttm_not_doc_b),
+      start_dttm = ymd_hms(start_dttm),
+      start_dttm_not_documented_b = as.numeric(start_dttm_not_documented_b),
+      cervical_exam_timing_dttm = ymd_hms(cervical_exam_timing_dttm),
+      patientid = as.numeric(PatientID)
+    )
+  
   missingness_main_dt <- main_data |> 
     filter(infant_year >= 2026) |> 
     mutate(
@@ -168,7 +196,7 @@ iol_ebp_missingness <- function(main_data, cervical_data, induction_data, group 
     ) |> 
     select(patientid, main_iol_missing_ct, main_iol_var_ct)
   
-  cerv_missingness_dt <- cervical_data |> 
+  cerv_missingness_dt <- cerv_cangrow |> 
     right_join(
       obi_26_dt |> 
         select(
@@ -193,11 +221,11 @@ iol_ebp_missingness <- function(main_data, cervical_data, induction_data, group 
       # required variables - start with 0 and add as appropriate
       cerv_iol_var_ct = 0,
       ## cervical dilation 
-      ## needed for patients in the IOL denominator for all exams between admit date
+      ## needed for patients in the IOL denominator for all exams between first 4cm exam
       ## and ROM or 4.5 hours after 4cm exam. 
       cerv_iol_var_ct = case_when(
         iol_ebp_denom_flg == 1 & 
-          cerv_exam_combined_dttm > admission_dt & 
+          cerv_exam_combined_dttm >= first_cerv_exam_4cm_dttm & 
           (cerv_exam_combined_dttm < rupt_mem_dt |
              time_first_4cm_exam_to_other_exams < 270) ~ cerv_iol_var_ct + 1,
         TRUE ~ cerv_iol_var_ct
@@ -209,22 +237,22 @@ iol_ebp_missingness <- function(main_data, cervical_data, induction_data, group 
         TRUE ~ cerv_iol_var_ct
       ),
       ## Amniotomy offered with cervical exam
-      ## needed for pts in IOL denominator for all exams > 0 between admit date
+      ## needed for pts in IOL denominator for all exams > 0 between first 4cm exam
       ## and ROM or 4.5 hours after 4cm exam
       cerv_iol_var_ct = case_when(
         iol_ebp_denom_flg == 1 & 
-          cerv_exam_combined_dttm > admission_dt & 
+          cerv_exam_combined_dttm >= first_cerv_exam_4cm_dttm & 
           (cerv_exam_combined_dttm < rupt_mem_dt |
              time_first_4cm_exam_to_other_exams < 270) & 
           cervical_exam_dilation_no > 0 ~ cerv_iol_var_ct + 1,
         TRUE ~ cerv_iol_var_ct
       ),
       ## Primary reason that amniotomy was not offered
-      ## needed for pts in IOL denominator for all exams > 0 between admit date
+      ## needed for pts in IOL denominator for all exams > 0 between first 4 cm exam
       ## and ROM or 4.5 hours after 4cm exam where amnio not offered
       cerv_iol_var_ct = case_when(
         iol_ebp_denom_flg == 1 & 
-          cerv_exam_combined_dttm > admission_dt & 
+          cerv_exam_combined_dttm >= first_cerv_exam_4cm_dttm & 
           (cerv_exam_combined_dttm < rupt_mem_dt |
              time_first_4cm_exam_to_other_exams < 270) & 
           cervical_exam_dilation_no > 0 &
@@ -232,11 +260,11 @@ iol_ebp_missingness <- function(main_data, cervical_data, induction_data, group 
         TRUE ~ cerv_iol_var_ct
       ),
       ## Attending/CNM at the time of cervical exam offer
-      ## needed for pts in IOL denominator for all exams > 0 between admit date
+      ## needed for pts in IOL denominator for all exams > 0 between first 4cm exam
       ## and ROM or 4.5 hours after 4cm exam
       cerv_iol_var_ct = case_when(
         iol_ebp_denom_flg == 1 & 
-          cerv_exam_combined_dttm > admission_dt & 
+          cerv_exam_combined_dttm >= first_cerv_exam_4cm_dttm & 
           (cerv_exam_combined_dttm < rupt_mem_dt |
              time_first_4cm_exam_to_other_exams < 270) & 
           cervical_exam_dilation_no > 0 ~ cerv_iol_var_ct + 1,
@@ -246,7 +274,7 @@ iol_ebp_missingness <- function(main_data, cervical_data, induction_data, group 
       ## cervical dilation 
       cerv_exam_missing_flg = case_when(
         iol_ebp_denom_flg == 1 & 
-          cerv_exam_combined_dttm > admission_dt & 
+          cerv_exam_combined_dttm >= first_cerv_exam_4cm_dttm & 
           (cerv_exam_combined_dttm < rupt_mem_dt |
              time_first_4cm_exam_to_other_exams < 270) & 
           cervical_exam_dilation_not_doc_b == 1 ~ 1, 
@@ -262,7 +290,7 @@ iol_ebp_missingness <- function(main_data, cervical_data, induction_data, group 
       ## Amniotomy offered with cervical exam
       amnio_offer_missing_flg = case_when(
         iol_ebp_denom_flg == 1 & 
-          cerv_exam_combined_dttm > admission_dt & 
+          cerv_exam_combined_dttm >= first_cerv_exam_4cm_dttm & 
           (cerv_exam_combined_dttm < rupt_mem_dt |
              time_first_4cm_exam_to_other_exams < 270) & 
           cervical_exam_dilation_no > 0 & 
@@ -272,7 +300,7 @@ iol_ebp_missingness <- function(main_data, cervical_data, induction_data, group 
       ## Primary reason that amniotomy was not offered
       reason_amnio_not_offer_missing_flg = case_when(
         iol_ebp_denom_flg == 1 & 
-          cerv_exam_combined_dttm > admission_dt & 
+          cerv_exam_combined_dttm >= first_cerv_exam_4cm_dttm & 
           (cerv_exam_combined_dttm < rupt_mem_dt |
              time_first_4cm_exam_to_other_exams < 270) & 
           cervical_exam_dilation_no > 0 &
@@ -283,7 +311,7 @@ iol_ebp_missingness <- function(main_data, cervical_data, induction_data, group 
       ## Attending/CNM at the time of cervical exam offer
       attending_cerv_exam_missing_flg = case_when(
         iol_ebp_denom_flg == 1 & 
-          cerv_exam_combined_dttm > admission_dt & 
+          cerv_exam_combined_dttm >= first_cerv_exam_4cm_dttm & 
           (cerv_exam_combined_dttm < rupt_mem_dt |
              time_first_4cm_exam_to_other_exams < 270) & 
           cervical_exam_dilation_no > 0 & 
@@ -310,7 +338,7 @@ iol_ebp_missingness <- function(main_data, cervical_data, induction_data, group 
     ) |> 
     distinct(patientid, cerv_iol_missing_ct, cerv_iol_var_ct)
   
-  iol_missingness_dt <- induction_data |> 
+  iol_missingness_dt <- iol_cangrow |> 
     # method offered must be chemical/mechanical
     filter(method_offered_e %in% c(1, 4, 5, 6, 9)) |> 
     right_join(
@@ -320,7 +348,7 @@ iol_ebp_missingness <- function(main_data, cervical_data, induction_data, group 
         filter(
           iol_ebp_denom_flg == 1 & 
             (chem_first_iol_flg == 1 |
-            mech_first_iol_flg == 1)
+               mech_first_iol_flg == 1)
         ) |> 
         select(
           patientid,
@@ -357,7 +385,7 @@ iol_ebp_missingness <- function(main_data, cervical_data, induction_data, group 
       ## Result of intervention method offer
       method_offer_result_missing_flg = case_when(
         time_from_first_iol_agent <= 270 &
-          method_offered_result_e == 99 ~ 1,
+          method_offered_result_e == 4 ~ 1,
         TRUE ~ 0 
       )
     ) |> 
@@ -387,7 +415,7 @@ iol_ebp_missingness <- function(main_data, cervical_data, induction_data, group 
       method_iol_var_ct = ifelse(is.na(method_iol_var_ct), 0, method_iol_var_ct),
       iol_missing_ct = main_iol_missing_ct + cerv_iol_missing_ct + method_iol_missing_ct,
       iol_var_ct = main_iol_var_ct + cerv_iol_var_ct + method_iol_var_ct
-    ) 
+    )  
   
   if(group) {
     missingness_all_dt |> 
