@@ -43,7 +43,7 @@ iol_ebp_missingness <- function(main_data, cervical_data, induction_data, group 
   
   iol_cangrow <-  induction_data |> 
     filter(
-      !(if_all(c(method_e:method_offered_result_e_99_Other), is.na))
+      !(if_all(c(method_e:method_offered_result_e), is.na))
     ) |> 
     mutate(
       method_offered_e = as.numeric(method_offered_e),
@@ -84,8 +84,8 @@ iol_ebp_missingness <- function(main_data, cervical_data, induction_data, group 
       ## needed for pts who are noncompliant for early amnnio 4.5 hours after first 
       ## 4 cm exam
       main_iol_var_ct = case_when(
-        amnio_offer_before_4cm_flg == 0 & 
-          amnio_not_offered_before_4cm_acceptable_flg == 1 &
+        amnio_offer_at_4cm_flg == 0 & 
+          amnio_not_offered_at_4cm_acceptable_flg == 1 &
           amnio_offer_after_4cm_flg == 0 & 
           amnio_not_offered_after_4cm_acceptable_flg == 0 ~ main_iol_var_ct + 1,
         TRUE ~ main_iol_var_ct
@@ -139,8 +139,8 @@ iol_ebp_missingness <- function(main_data, cervical_data, induction_data, group 
       ),
       ## Attending/CNM 4.5 hours after first 4cm exam
       missing_attending_4h_amnio_flg = case_when(
-        amnio_offer_before_4cm_flg == 0 & 
-          amnio_not_offered_before_4cm_acceptable_flg == 1 &
+        amnio_offer_at_4cm_flg == 0 & 
+          amnio_not_offered_at_4cm_acceptable_flg == 1 &
           amnio_offer_after_4cm_flg == 0 & 
           amnio_not_offered_after_4cm_acceptable_flg == 0 & 
           attending_amnio_4H_not_recommend_not_doc_b ~ 1,
@@ -198,7 +198,7 @@ iol_ebp_missingness <- function(main_data, cervical_data, induction_data, group 
   
   cerv_missingness_dt <- cerv_cangrow |> 
     right_join(
-      obi_26_dt |> 
+      main_data |> 
         select(
           patientid, 
           iol_ebp_denom_flg,
@@ -342,7 +342,7 @@ iol_ebp_missingness <- function(main_data, cervical_data, induction_data, group 
     # method offered must be chemical/mechanical
     filter(method_offered_e %in% c(1, 4, 5, 6, 9)) |> 
     right_join(
-      obi_26_dt |> 
+      main_data |> 
         # must be in the IOL denominator AND 
         # first method administered must be mechanical/chemical
         filter(
