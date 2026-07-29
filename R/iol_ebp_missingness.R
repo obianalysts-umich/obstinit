@@ -143,7 +143,7 @@ iol_ebp_missingness <- function(main_data, cervical_data, induction_data, group 
           amnio_not_offered_at_4cm_acceptable_flg == 1 &
           amnio_offer_after_4cm_flg == 0 & 
           amnio_not_offered_after_4cm_acceptable_flg == 0 & 
-          attending_amnio_4H_not_recommend_not_doc_b ~ 1,
+          attending_amnio_4H_not_recommend_not_doc_b == 1 ~ 1,
         TRUE ~ 0
       ),
       ## Reason mech agent not attempted w/in 30 min of first chem agent 
@@ -197,7 +197,7 @@ iol_ebp_missingness <- function(main_data, cervical_data, induction_data, group 
     select(patientid, main_iol_missing_ct, main_iol_var_ct)
   
   cerv_missingness_dt <- cerv_cangrow |> 
-    right_join(
+    inner_join(
       main_data |> 
         select(
           patientid, 
@@ -341,7 +341,7 @@ iol_ebp_missingness <- function(main_data, cervical_data, induction_data, group 
   iol_missingness_dt <- iol_cangrow |> 
     # method offered must be chemical/mechanical
     filter(method_offered_e %in% c(1, 4, 5, 6, 9)) |> 
-    right_join(
+    inner_join(
       main_data |> 
         # must be in the IOL denominator AND 
         # first method administered must be mechanical/chemical
@@ -427,7 +427,6 @@ iol_ebp_missingness <- function(main_data, cervical_data, induction_data, group 
       mutate(missing_rate = total_missing/total_var) |> 
       arrange(desc(missing_rate))
   } else {
-    main_data |>
-      left_join(missingness_all_dt)
+    missingness_all_dt
   }
 }
