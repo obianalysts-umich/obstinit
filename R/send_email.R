@@ -52,6 +52,7 @@ send_email <- function(email_message = "<p> This is an automatic message. </p> <
     outMail[["subject"]] = email_subject
     outMail[["HTMLBody"]] = email_message
     outMail[["SentOnBehalfOfName"]] <- email_from
+    outMail[["SendUsingAccount"]] <- email_from
     
     if (!is.null(attachment)) {
       outMail[["attachments"]]$Add(attachment)
