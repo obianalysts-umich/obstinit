@@ -3,16 +3,18 @@
 #' To calculate dystocia compliance, overall and by type
 #' @param df A data frame, preferably one that has already been run through obstint::create_obi_cohort()
 #' @param include_types If TRUE, calculates compliance for individual types of dystocia
+#' @param return rates by groupby_col if a column name is passed
 #' @import tidyverse
 #' @export
 #' @rdname calculate_dys_comp
 
-calculate_dys_comp <- function(df, include_types = F) {
+calculate_dys_comp <- function(df, include_types = F, groupby_col = NULL) {
   df1 = df |>
     summarize(
       dys_comp_num = sum(dystocia_noncompliant_flg == 0, na.rm = T),
       dys_comp_denom = sum(!is.na(dystocia_noncompliant_flg)),
-      dys_comp_rate = dys_comp_num / dys_comp_denom
+      dys_comp_rate = dys_comp_num / dys_comp_denom,
+      .by = groupby_col
     )
   
   if (include_types) {
@@ -30,7 +32,8 @@ calculate_dys_comp <- function(df, include_types = F) {
           num = ~ sum(.x == 0, na.rm = T),
           rate = ~ mean(.x == 0, na.rm = T)
         )
-      ))
+      ),
+      .by = groupby_col)
   } else
     (return(df1))
 }
